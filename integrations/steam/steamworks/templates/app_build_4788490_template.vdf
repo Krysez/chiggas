@@ -1,0 +1,22 @@
+"AppBuild"
+{
+    "AppID" "4788490"
+    "Desc" "Chiggas Steam depot test build"
+    "Preview" "0"
+    "Local" ""
+    "SetLive" ""
+    "ContentRoot" "..\\steam_depot_build\\windows"
+    "BuildOutput" "..\\steam_build_output"
+    "Depots"
+    {
+        "REPLACE_WITH_WINDOWS_DEPOT_ID"
+        {
+            "FileMapping"
+            {
+                "LocalPath" "*"
+                "DepotPath" "."
+                "recursive" "1"
+            }
+        }
+    }
+}

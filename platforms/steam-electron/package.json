@@ -1,0 +1,71 @@
+{
+  "name": "chiggas-steam-desktop-wrapper",
+  "version": "0.26.0",
+  "private": true,
+  "description": "Clean Steam/Electron runtime for Chiggas, synced from the unified game source.",
+  "main": "main.js",
+  "author": "Krysez",
+  "license": "UNLICENSED",
+  "scripts": {
+    "sync:game": "node ../../scripts/sync/sync-game-to-steam.js",
+    "check": "node ../../scripts/checks/check-steam-electron-runtime.js",
+    "start": "npm run check && electron .",
+    "start:dev": "npm run check && set CHIGGAS_DEVTOOLS=1&& electron .",
+    "pack:win": "npm run check && electron-builder --dir --win",
+    "dist:win": "npm run check && electron-builder --win portable",
+    "steam:check": "npm run check",
+    "steam:leaderboards:check": "node ../../scripts/steam/check-leaderboards-source.js",
+    "steam:cloud:check": "node -e \"const m=require('./steam-cloud-save-export-pass-98a'); console.log(JSON.stringify({ok:!!m,status:'cloud_export_module_loaded'},null,2))\""
+  },
+  "devDependencies": {
+    "electron": "42.3.3",
+    "electron-builder": "26.8.1",
+    "phaser": "3.70.0"
+  },
+  "build": {
+    "appId": "com.krysez.chiggas.steam",
+    "productName": "Chiggas - Survival of the Mitiest",
+    "copyright": "Copyright © 2026 Krysez",
+    "asar": true,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "package.json",
+      "steamworksBridgeCore.js",
+      "steamworksBridgeSkeleton.js",
+      "steam-cloud-save-export-pass-98a.js",
+      "steam-leaderboards-pass-96a.js",
+      "steam-leaderboards-backend-pass-96b.js",
+      "steam-leaderboard-capture-pass-96c.js",
+      "ControllerDisconnectPausePass101D.js",
+      "ControllerPromptsPass101C.js",
+      "ControllerRealPauseCursorPass101E.js",
+      "ControllerReviewCompliancePass100A1.js",
+      "ForceDisconnectPausePass101F.js",
+      "StableControllerCursorPass101H.js",
+      "SteamInputCompatibilityPass101B.js",
+      "SteamInputRuntimeInspectorPass101A.js",
+      "WalletFailedStateFixPass102B.js",
+      "WalletNoticeOverlayFixPass102A.js",
+      "runtime/**/*.js",
+      "scripts/**/*.js",
+      "game/**/*",
+      "steam_input/**/*",
+      "steam_achievements/**/*",
+      "steamworks/**/*"
+    ],
+    "win": {
+      "target": [
+        "dir",
+        "portable"
+      ],
+      "artifactName": "Chiggas-Survival-of-the-Mitiest-${version}-${arch}.${ext}"
+    }
+  },
+  "optionalDependencies": {
+    "steamworks.js": "0.4.0"
+  }
+}

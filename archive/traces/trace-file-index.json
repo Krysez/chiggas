@@ -1,0 +1,320 @@
+﻿[
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass100a-controller-review-compliance-trace.json",
+        "Name":  "pass100a-controller-review-compliance-trace.json",
+        "Length":  2471,
+        "LastWriteTime":  "\/Date(1780517796048)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass100a1-controller-loader-trace.json",
+        "Name":  "pass100a1-controller-loader-trace.json",
+        "Length":  2640,
+        "LastWriteTime":  "\/Date(1780518060742)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass101a-steam-input-runtime-inspector-trace.json",
+        "Name":  "pass101a-steam-input-runtime-inspector-trace.json",
+        "Length":  1951,
+        "LastWriteTime":  "\/Date(1780525341980)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass101b-steam-input-compatibility-trace.json",
+        "Name":  "pass101b-steam-input-compatibility-trace.json",
+        "Length":  1984,
+        "LastWriteTime":  "\/Date(1780526036738)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass101c-controller-prompts-trace.json",
+        "Name":  "pass101c-controller-prompts-trace.json",
+        "Length":  846,
+        "LastWriteTime":  "\/Date(1780529565251)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass101d-controller-disconnect-pause-trace.json",
+        "Name":  "pass101d-controller-disconnect-pause-trace.json",
+        "Length":  864,
+        "LastWriteTime":  "\/Date(1780530310226)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass101e-real-pause-cursor-trace.json",
+        "Name":  "pass101e-real-pause-cursor-trace.json",
+        "Length":  1024,
+        "LastWriteTime":  "\/Date(1780530573614)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass101f-force-disconnect-pause-trace.json",
+        "Name":  "pass101f-force-disconnect-pause-trace.json",
+        "Length":  941,
+        "LastWriteTime":  "\/Date(1780530778548)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass101h-cleanup-stable-cursor-trace.json",
+        "Name":  "pass101h-cleanup-stable-cursor-trace.json",
+        "Length":  1044,
+        "LastWriteTime":  "\/Date(1780531551022)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass102a-wallet-notice-overlay-trace.json",
+        "Name":  "pass102a-wallet-notice-overlay-trace.json",
+        "Length":  939,
+        "LastWriteTime":  "\/Date(1780532459774)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass102b-wallet-failed-state-trace.json",
+        "Name":  "pass102b-wallet-failed-state-trace.json",
+        "Length":  1040,
+        "LastWriteTime":  "\/Date(1780533450423)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass96a-leaderboard-trace.json",
+        "Name":  "pass96a-leaderboard-trace.json",
+        "Length":  228,
+        "LastWriteTime":  "\/Date(1780196503765)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass96c-leaderboard-capture-history.jsonl",
+        "Name":  "pass96c-leaderboard-capture-history.jsonl",
+        "Length":  15205,
+        "LastWriteTime":  "\/Date(1780196504697)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass96c-leaderboard-capture-trace.json",
+        "Name":  "pass96c-leaderboard-capture-trace.json",
+        "Length":  1919,
+        "LastWriteTime":  "\/Date(1780196504697)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass96c2a-leaderboard-probe-trace.json",
+        "Name":  "pass96c2a-leaderboard-probe-trace.json",
+        "Length":  214665,
+        "LastWriteTime":  "\/Date(1780193333383)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass96f-leaderboard-watchdog-submit-trace.json",
+        "Name":  "pass96f-leaderboard-watchdog-submit-trace.json",
+        "Length":  40248,
+        "LastWriteTime":  "\/Date(1780196004349)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass96h-fullscreen-launch-trace.json",
+        "Name":  "pass96h-fullscreen-launch-trace.json",
+        "Length":  6276,
+        "LastWriteTime":  "\/Date(1780542744025)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass97a-tick-twins-stage-video-fix-trace.json",
+        "Name":  "pass97a-tick-twins-stage-video-fix-trace.json",
+        "Length":  2185,
+        "LastWriteTime":  "\/Date(1780277773234)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass98a-steam-cloud-save-export-trace.json",
+        "Name":  "pass98a-steam-cloud-save-export-trace.json",
+        "Length":  2523,
+        "LastWriteTime":  "\/Date(1780511359676)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass98b-steam-cloud-robust-save-trace.json",
+        "Name":  "pass98b-steam-cloud-robust-save-trace.json",
+        "Length":  2817,
+        "LastWriteTime":  "\/Date(1780511776261)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass99b-wallet-smoke-scripts-trace.json",
+        "Name":  "pass99b-wallet-smoke-scripts-trace.json",
+        "Length":  1135,
+        "LastWriteTime":  "\/Date(1780514624081)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass99b1-wallet-smoke-common-helper-trace.json",
+        "Name":  "pass99b1-wallet-smoke-common-helper-trace.json",
+        "Length":  432,
+        "LastWriteTime":  "\/Date(1780515333256)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass99c-wallet-store-bridge-trace.json",
+        "Name":  "pass99c-wallet-store-bridge-trace.json",
+        "Length":  2422,
+        "LastWriteTime":  "\/Date(1780517495984)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass99d-production-backend-url-trace.json",
+        "Name":  "pass99d-production-backend-url-trace.json",
+        "Length":  2243,
+        "LastWriteTime":  "\/Date(1780521807978)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass99e-block-itemstore-external-trace.json",
+        "Name":  "pass99e-block-itemstore-external-trace.json",
+        "Length":  2315,
+        "LastWriteTime":  "\/Date(1780522051711)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass99f-block-legacy-itemstore-trace.json",
+        "Name":  "pass99f-block-legacy-itemstore-trace.json",
+        "Length":  2327,
+        "LastWriteTime":  "\/Date(1780522229595)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass99g-cancel-and-item-names-trace.json",
+        "Name":  "pass99g-cancel-and-item-names-trace.json",
+        "Length":  2518,
+        "LastWriteTime":  "\/Date(1780522630729)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass99g1-wallet-stability-fix-trace.json",
+        "Name":  "pass99g1-wallet-stability-fix-trace.json",
+        "Length":  2032,
+        "LastWriteTime":  "\/Date(1780523007661)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass99h-wallet-guard-and-backend-names-trace.json",
+        "Name":  "pass99h-wallet-guard-and-backend-names-trace.json",
+        "Length":  2006,
+        "LastWriteTime":  "\/Date(1780523529999)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\pass99h1-backend-safe-itemdef-trace.json",
+        "Name":  "pass99h1-backend-safe-itemdef-trace.json",
+        "Length":  925,
+        "LastWriteTime":  "\/Date(1780523874296)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-event-bridge-pass-32.log",
+        "Name":  "steam-achievement-event-bridge-pass-32.log",
+        "Length":  28087,
+        "LastWriteTime":  "\/Date(1780196503235)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-first-death-pass-65.log",
+        "Name":  "steam-achievement-first-death-pass-65.log",
+        "Length":  9191,
+        "LastWriteTime":  "\/Date(1780196503691)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-first-game-started-third-interaction-pass-42.log",
+        "Name":  "steam-achievement-first-game-started-third-interaction-pass-42.log",
+        "Length":  85813,
+        "LastWriteTime":  "\/Date(1780196507683)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-first-legendary-tryon-pass-68.log",
+        "Name":  "steam-achievement-first-legendary-tryon-pass-68.log",
+        "Length":  9308,
+        "LastWriteTime":  "\/Date(1780196503519)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-first-munch-pass-56.log",
+        "Name":  "steam-achievement-first-munch-pass-56.log",
+        "Length":  21228,
+        "LastWriteTime":  "\/Date(1780196503517)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-first-shot-fired-pass-54.log",
+        "Name":  "steam-achievement-first-shot-fired-pass-54.log",
+        "Length":  8866,
+        "LastWriteTime":  "\/Date(1780196503516)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-first-speed-boost-pass-53.log",
+        "Name":  "steam-achievement-first-speed-boost-pass-53.log",
+        "Length":  16836,
+        "LastWriteTime":  "\/Date(1780196503516)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-first-store-visit-click-map-pass-44.log",
+        "Name":  "steam-achievement-first-store-visit-click-map-pass-44.log",
+        "Length":  181245,
+        "LastWriteTime":  "\/Date(1780196507792)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-first-store-visit-coordinate-pass-46.log",
+        "Name":  "steam-achievement-first-store-visit-coordinate-pass-46.log",
+        "Length":  16778,
+        "LastWriteTime":  "\/Date(1780196503689)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-first-weapon-pickup-map-pass-48.log",
+        "Name":  "steam-achievement-first-weapon-pickup-map-pass-48.log",
+        "Length":  39799343,
+        "LastWriteTime":  "\/Date(1780196507843)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-first-weapon-pickup-pass-52c.log",
+        "Name":  "steam-achievement-first-weapon-pickup-pass-52c.log",
+        "Length":  9126,
+        "LastWriteTime":  "\/Date(1780196503515)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-five-minute-run-pass-75.log",
+        "Name":  "steam-achievement-five-minute-run-pass-75.log",
+        "Length":  8970,
+        "LastWriteTime":  "\/Date(1780196503520)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-keyboard-test-trace-pass-33.json",
+        "Name":  "steam-achievement-keyboard-test-trace-pass-33.json",
+        "Length":  510,
+        "LastWriteTime":  "\/Date(1780196503407)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-keyboard-test-trace-pass-33.log",
+        "Name":  "steam-achievement-keyboard-test-trace-pass-33.log",
+        "Length":  6383,
+        "LastWriteTime":  "\/Date(1780196503407)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-launch-trace-pass-30.json",
+        "Name":  "steam-achievement-launch-trace-pass-30.json",
+        "Length":  1462,
+        "LastWriteTime":  "\/Date(1780196503380)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-launch-trace-pass-30.log",
+        "Name":  "steam-achievement-launch-trace-pass-30.log",
+        "Length":  12207,
+        "LastWriteTime":  "\/Date(1780196503381)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-mitiest-survivor-pass-77.log",
+        "Name":  "steam-achievement-mitiest-survivor-pass-77.log",
+        "Length":  9386,
+        "LastWriteTime":  "\/Date(1780196503521)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-revenge-run-pass-66c.log",
+        "Name":  "steam-achievement-revenge-run-pass-66c.log",
+        "Length":  66300,
+        "LastWriteTime":  "\/Date(1780196503518)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-achievement-runtime-scene-observer-pass-38.log",
+        "Name":  "steam-achievement-runtime-scene-observer-pass-38.log",
+        "Length":  135111,
+        "LastWriteTime":  "\/Date(1780196503689)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-leaderboard-pass-96b-list-trace.json",
+        "Name":  "steam-leaderboard-pass-96b-list-trace.json",
+        "Length":  3505,
+        "LastWriteTime":  "\/Date(1780192034164)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-leaderboard-pass-96b-submit-trace.json",
+        "Name":  "steam-leaderboard-pass-96b-submit-trace.json",
+        "Length":  1221,
+        "LastWriteTime":  "\/Date(1780192065315)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-leaderboard-pass-96d-preview-trace.json",
+        "Name":  "steam-leaderboard-pass-96d-preview-trace.json",
+        "Length":  1597,
+        "LastWriteTime":  "\/Date(1780193628675)\/"
+    },
+    {
+        "FullName":  "C:\\ChiggaStreamWrapper\\steam-leaderboard-pass-96d-submit-trace.json",
+        "Name":  "steam-leaderboard-pass-96d-submit-trace.json",
+        "Length":  5220,
+        "LastWriteTime":  "\/Date(1780193630716)\/"
+    }
+]

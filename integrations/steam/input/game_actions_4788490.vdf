@@ -1,0 +1,148 @@
+"Action Manifest"
+{
+    "configurations"
+    {
+    }
+
+    "actions"
+    {
+        "menu"
+        {
+            "title" "#Set_Menu"
+            "StickPadGyro"
+            {
+                "navigate" { "title" "#Action_Navigate" "input_mode" "joystick_move" }
+            }
+            "AnalogTrigger"
+            {
+            }
+            "Button"
+            {
+                "confirm" "#Action_Confirm"
+                "back" "#Action_Back"
+                "scroll_up" "#Action_ScrollUp"
+                "scroll_down" "#Action_ScrollDown"
+                "pause" "#Action_Pause"
+            }
+        }
+
+        "gameplay"
+        {
+            "title" "#Set_Gameplay"
+            "StickPadGyro"
+            {
+                "move" { "title" "#Action_Move" "input_mode" "joystick_move" }
+                "aim" { "title" "#Action_Aim" "input_mode" "joystick_move" }
+            }
+            "AnalogTrigger"
+            {
+            }
+            "Button"
+            {
+                "recruit" "#Action_Recruit"
+                "eat" "#Action_Eat"
+                "charge" "#Action_Charge"
+                "shoot" "#Action_Shoot"
+                "pause" "#Action_Pause"
+                "back" "#Action_Back"
+                "confirm" "#Action_Confirm"
+            }
+        }
+
+        "wardrobe"
+        {
+            "title" "#Set_Wardrobe"
+            "StickPadGyro"
+            {
+                "navigate" { "title" "#Action_Navigate" "input_mode" "joystick_move" }
+            }
+            "AnalogTrigger"
+            {
+            }
+            "Button"
+            {
+                "confirm" "#Action_Confirm"
+                "equip" "#Action_Equip"
+                "back" "#Action_Back"
+                "scroll_up" "#Action_ScrollUp"
+                "scroll_down" "#Action_ScrollDown"
+                "switch_player_tab" "#Action_PlayerTab"
+                "switch_soldier_tab" "#Action_SoldierTab"
+                "open_legendary_store" "#Action_LegendaryStore"
+            }
+        }
+
+        "legendaryStore"
+        {
+            "title" "#Set_LegendaryStore"
+            "StickPadGyro"
+            {
+                "navigate" { "title" "#Action_Navigate" "input_mode" "joystick_move" }
+            }
+            "AnalogTrigger"
+            {
+            }
+            "Button"
+            {
+                "confirm" "#Action_Confirm"
+                "purchase" "#Action_Purchase"
+                "restore_purchases" "#Action_RestorePurchases"
+                "back" "#Action_Back"
+                "scroll_up" "#Action_ScrollUp"
+                "scroll_down" "#Action_ScrollDown"
+                "debug_toggle" "#Action_DebugToggle"
+            }
+        }
+
+        "miniGame"
+        {
+            "title" "#Set_MiniGame"
+            "StickPadGyro"
+            {
+                "move" { "title" "#Action_Move" "input_mode" "joystick_move" }
+                "navigate" { "title" "#Action_Navigate" "input_mode" "joystick_move" }
+            }
+            "AnalogTrigger"
+            {
+            }
+            "Button"
+            {
+                "confirm" "#Action_Confirm"
+                "back" "#Action_Back"
+                "pause" "#Action_Pause"
+            }
+        }
+    }
+
+    "localization"
+    {
+        "english"
+        {
+            "Set_Gameplay" "Gameplay"
+            "Set_Menu" "Menu"
+            "Set_Wardrobe" "Chigga Wear"
+            "Set_LegendaryStore" "Legendary Store"
+            "Set_MiniGame" "Mini Game"
+
+            "Action_Move" "Move"
+            "Action_Aim" "Aim"
+            "Action_Navigate" "Navigate"
+            "Action_Recruit" "Recruit"
+            "Action_Eat" "Eat"
+            "Action_Charge" "Charge"
+            "Action_Shoot" "Shoot"
+            "Action_Pause" "Pause"
+            "Action_Back" "Back"
+            "Action_Confirm" "Confirm"
+            "Action_ScrollUp" "Scroll Up"
+            "Action_ScrollDown" "Scroll Down"
+            "Action_Equip" "Equip"
+            "Action_PlayerTab" "Player Tab"
+            "Action_SoldierTab" "Soldier Tab"
+            "Action_LegendaryStore" "Legendary Store"
+            "Action_Purchase" "Purchase"
+            "Action_RestorePurchases" "Restore Purchases"
+            "Action_DebugToggle" "Debug Toggle"
+        }
+    }
+}

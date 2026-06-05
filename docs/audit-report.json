@@ -1,0 +1,55 @@
+{
+  "ok": true,
+  "status": "audit_report_clean",
+  "generatedAt": "2026-06-05T20:38:06.884Z",
+  "projects": [
+    {
+      "name": "steam-electron",
+      "cwd": "C:\\ChiggasUnified\\platforms\\steam-electron",
+      "ok": true,
+      "status": "audit_clean",
+      "exitStatus": 0,
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "advisories": []
+    },
+    {
+      "name": "android-capacitor",
+      "cwd": "C:\\ChiggasUnified\\platforms\\android-capacitor",
+      "ok": true,
+      "status": "audit_clean",
+      "exitStatus": 0,
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "advisories": []
+    },
+    {
+      "name": "steam-entitlement-backend",
+      "cwd": "C:\\ChiggasUnified\\integrations\\steam\\entitlement-backend",
+      "ok": true,
+      "status": "audit_clean",
+      "exitStatus": 0,
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "advisories": []
+    }
+  ]
+}

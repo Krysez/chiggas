@@ -1,0 +1,62 @@
+{
+  "pass": "steam_desktop_wrapper_pass_20",
+  "appId": 4788490,
+  "achievementsArmed": false,
+  "status": "achievement_map_ready_locked",
+  "notes": [
+    "Create these exact API names in Steamworks before any unlock code is armed.",
+    "Do not change API names after they are published unless the game-side map is updated too.",
+    "Unlock calls remain locked in this pass."
+  ],
+  "achievements": [
+    {
+      "id": "FIRST_RUN",
+      "displayName": "First Crawl",
+      "description": "Start your first survival run.",
+      "trigger": "When the player starts gameplay for the first time.",
+      "hidden": false
+    },
+    {
+      "id": "FIRST_RECRUIT",
+      "displayName": "Squad Up",
+      "description": "Recruit your first soldier.",
+      "trigger": "When the player recruits one soldier.",
+      "hidden": false
+    },
+    {
+      "id": "FIRST_TURF",
+      "displayName": "Claim The Skin",
+      "description": "Capture your first turf.",
+      "trigger": "When the player captures one turf point.",
+      "hidden": false
+    },
+    {
+      "id": "FIRST_BOSS",
+      "displayName": "Boss Biter",
+      "description": "Defeat your first boss.",
+      "trigger": "When the player defeats any boss for the first time.",
+      "hidden": false
+    },
+    {
+      "id": "FIRST_LEGENDARY_UNLOCK",
+      "displayName": "Legendary Drip",
+      "description": "Unlock your first Legendary Chigga Wear item.",
+      "trigger": "When a Legendary cosmetic entitlement is unlocked. Keep locked until real billing exists.",
+      "hidden": false
+    },
+    {
+      "id": "SURVIVE_STAGE_5",
+      "displayName": "Mighty Survivor",
+      "description": "Survive through Stage 5.",
+      "trigger": "When the player reaches or clears Stage 5.",
+      "hidden": false
+    },
+    {
+      "id": "SURVIVE_STAGE_10",
+      "displayName": "Mite Nightmare",
+      "description": "Survive through Stage 10.",
+      "trigger": "When the player reaches or clears Stage 10.",
+      "hidden": false
+    }
+  ]
+}

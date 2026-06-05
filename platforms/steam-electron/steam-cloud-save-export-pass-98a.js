@@ -1,0 +1,17 @@
+const fs=require('fs');const path=require('path');const os=require('os');
+const PASS='steam_desktop_wrapper_pass_98a';
+const CLOUD_DIR_NAME='Chiggas - Survival of the Mitiest';
+const CLOUD_FILE_NAME='chiggas-cloud-save.sav';
+function getRoamingAppDataPath(){return process.env.APPDATA||path.join(os.homedir(),'AppData','Roaming');}
+function getCloudDir(){return path.join(getRoamingAppDataPath(),CLOUD_DIR_NAME);}
+function getCloudFilePath(){return path.join(getCloudDir(),CLOUD_FILE_NAME);}
+function ensureDir(d){fs.mkdirSync(d,{recursive:true});}
+function safeReadJson(p){try{if(!fs.existsSync(p))return null;const raw=fs.readFileSync(p,'utf8');return raw.trim()?JSON.parse(raw):null;}catch(_){return null;}}
+function safeWriteJson(p,obj){ensureDir(path.dirname(p));const t=p+'.tmp';fs.writeFileSync(t,JSON.stringify(obj,null,2),'utf8');fs.renameSync(t,p);}
+function collectState(app){const out={electronUserDataPath:null,userDataFiles:{},notes:[]};try{if(app&&typeof app.getPath==='function')out.electronUserDataPath=app.getPath('userData');}catch(e){out.notes.push(String(e&&e.message?e.message:e));}
+try{const d=out.electronUserDataPath;if(d&&fs.existsSync(d)){['Preferences','Local State',path.join('Local Storage','leveldb','CURRENT'),path.join('Local Storage','leveldb','LOG')].forEach(rel=>{const f=path.join(d,rel);if(fs.existsSync(f)){const st=fs.statSync(f);out.userDataFiles[rel]={exists:true,size:st.size,mtime:st.mtime.toISOString()};}else out.userDataFiles[rel]={exists:false};});}}catch(e){out.notes.push(String(e&&e.message?e.message:e));}return out;}
+function exportCloudSave(reason,app,extra={}){const dir=getCloudDir(),file=getCloudFilePath(),backup=path.join(dir,'chiggas-cloud-save-backup.sav');ensureDir(dir);try{if(fs.existsSync(file))fs.copyFileSync(file,backup);}catch(_){}
+const prev=safeReadJson(file);const payload={pass:PASS,format:'chiggas_cloud_save_v1',reason,appId:4788490,game:'Chiggas - Survival of the Mitiest',updatedAt:new Date().toISOString(),createdAt:prev&&prev.createdAt?prev.createdAt:new Date().toISOString(),launchCount:prev&&Number.isFinite(prev.launchCount)?prev.launchCount+(reason==='launch'?1:0):(reason==='launch'?1:0),electronState:collectState(app),extra,cloudInstructions:{steamAutoCloudRoot:'Win AppData Roaming',steamAutoCloudSubdirectory:'Chiggas - Survival of the Mitiest/',steamAutoCloudPattern:'*.sav',expectedFullPath:file}};
+safeWriteJson(file,payload);const st=fs.statSync(file);return{ok:true,pass:PASS,status:'steam_cloud_save_export_written',reason,cloudDir:dir,cloudFile:file,backupFile:backup,exists:true,sizeBytes:st.size,mtime:st.mtime.toISOString(),payloadPreview:{format:payload.format,updatedAt:payload.updatedAt,launchCount:payload.launchCount,electronUserDataPath:payload.electronState.electronUserDataPath}};}
+function readCloudSaveStatus(){const file=getCloudFilePath();if(!fs.existsSync(file))return{ok:false,pass:PASS,status:'steam_cloud_save_file_missing',cloudDir:getCloudDir(),cloudFile:file};const st=fs.statSync(file);return{ok:true,pass:PASS,status:'steam_cloud_save_file_found',cloudDir:getCloudDir(),cloudFile:file,exists:true,sizeBytes:st.size,mtime:st.mtime.toISOString(),payload:safeReadJson(file)};}
+module.exports={PASS,CLOUD_DIR_NAME,CLOUD_FILE_NAME,getCloudDir,getCloudFilePath,exportCloudSave,readCloudSaveStatus};

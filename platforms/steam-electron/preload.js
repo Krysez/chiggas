@@ -1,0 +1,59 @@
+const { contextBridge, ipcRenderer } = require('electron');
+
+// CHIGGAS_STEAM_BRIDGE_PRELOAD_RUNTIME_BEGIN
+try {
+  require('./runtime/steam-bridge-preload').exposeSteamBridgePreload(contextBridge, ipcRenderer);
+} catch (error) {
+  console.warn('[Chiggas] Steam bridge preload runtime failed to expose:', error);
+}
+// CHIGGAS_STEAM_BRIDGE_PRELOAD_RUNTIME_END
+
+// CHIGGAS_STEAM_ACHIEVEMENTS_PRELOAD_RUNTIME_API_BEGIN
+try {
+  require('./runtime/achievements-preload').exposeAchievementApis();
+} catch (error) {
+  console.warn('[Chiggas] Steam achievements preload API runtime failed to expose:', error);
+}
+// CHIGGAS_STEAM_ACHIEVEMENTS_PRELOAD_RUNTIME_API_END
+
+// CHIGGAS_STEAM_ACHIEVEMENTS_PRELOAD_OBSERVERS_RUNTIME_BEGIN
+try {
+  require('./runtime/achievements-preload-observers').installAchievementObserverPreloadListeners();
+} catch (error) {
+  console.warn('[Chiggas] Steam achievements preload observer runtime failed to install:', error);
+}
+// CHIGGAS_STEAM_ACHIEVEMENTS_PRELOAD_OBSERVERS_RUNTIME_END
+// CHIGGAS_STEAM_ACHIEVEMENTS_PRELOAD_DIRECT_RUNTIME_BEGIN
+try {
+  require('./runtime/achievements-preload-direct').installDirectAchievementPreloadListeners();
+} catch (error) {
+  console.warn('[Chiggas] Steam achievements direct preload runtime failed to install:', error);
+}
+// CHIGGAS_STEAM_ACHIEVEMENTS_PRELOAD_DIRECT_RUNTIME_END
+
+// CHIGGAS_STEAM_ACHIEVEMENTS_PRELOAD_PROGRESSION_RUNTIME_BEGIN
+try {
+  require('./runtime/achievements-preload-progression').installProgressionAchievementPreloadListeners();
+} catch (error) {
+  console.warn('[Chiggas] Steam achievements progression preload runtime failed to install:', error);
+}
+// CHIGGAS_STEAM_ACHIEVEMENTS_PRELOAD_PROGRESSION_RUNTIME_END
+
+
+// CHIGGAS_STEAM_ITEM_STORE_PRELOAD_RUNTIME_BEGIN
+try {
+  require('./runtime/item-store-preload').exposeSteamItemStoreExternalBridge(contextBridge, ipcRenderer);
+} catch (error) {
+  console.warn('[Chiggas] Steam Item Store preload runtime failed to install:', error);
+}
+// CHIGGAS_STEAM_ITEM_STORE_PRELOAD_RUNTIME_END
+
+
+
+// CHIGGAS_STEAM_LEADERBOARDS_PRELOAD_RUNTIME_BEGIN
+try {
+  require('./runtime/leaderboards-preload').installLeaderboardPreloadRuntime();
+} catch (error) {
+  console.warn('[Chiggas] Steam leaderboards preload runtime failed to install:', error);
+}
+// CHIGGAS_STEAM_LEADERBOARDS_PRELOAD_RUNTIME_END

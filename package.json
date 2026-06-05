@@ -1,0 +1,25 @@
+{
+  "name": "chiggas-unified",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Unified source workspace for Chiggas shared game, Steam Electron wrapper, and Android Capacitor wrapper.",
+  "scripts": {
+    "verify": "node scripts/checks/verify-source.js",
+    "check": "node scripts/checks/check-unified-project.js",
+    "android:check": "node scripts/checks/check-android-capacitor-platform.js",
+    "android:toolchain": "node scripts/checks/report-android-toolchain.js",
+    "audit:write": "node scripts/checks/write-audit-report.js",
+    "deps:check": "node scripts/checks/check-dependency-policy.js",
+    "diff:platforms": "node scripts/checks/diff-platform-game-payloads.js",
+    "hygiene:check": "node scripts/checks/check-source-hygiene.js",
+    "manifest:write": "node scripts/checks/write-payload-manifest.js",
+    "paths:check": "node scripts/checks/check-active-path-references.js",
+    "runtime:report": "node scripts/checks/report-steam-runtime-modules.js",
+    "steam:check": "node scripts/checks/check-steam-electron-runtime.js",
+    "status:write": "node scripts/checks/write-status-report.js",
+    "structure:report": "node scripts/checks/report-structure.js",
+    "sync:all": "node scripts/sync/sync-all-platforms.js",
+    "sync:steam": "node scripts/sync/sync-game-to-steam.js",
+    "sync:android": "node scripts/sync/sync-game-to-android.js"
+  }
+}

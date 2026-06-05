@@ -1,0 +1,22 @@
+{
+  "name": "chiggas-android-capacitor",
+  "version": "1.0.0",
+  "description": "Android Capacitor wrapper for Chiggas.",
+  "scripts": {
+    "cap:sync": "npx --package @capacitor/cli@8.3.4 cap sync android",
+    "cap:copy": "npx --package @capacitor/cli@8.3.4 cap copy android",
+    "android:assemble:debug": "node ../../scripts/android/run-gradle.js assembleDebug",
+    "android:test": "node ../../scripts/android/run-gradle.js testDebugUnitTest",
+    "check": "node ../../scripts/checks/check-android-capacitor-platform.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "type": "commonjs",
+  "dependencies": {
+    "@capacitor/android": "8.3.4",
+    "@capacitor/app": "8.1.0",
+    "@capacitor/cli": "8.3.4",
+    "@capacitor/core": "8.3.4"
+  }
+}

@@ -1,0 +1,8 @@
+api_name,display_name,description,hidden,icon_file,icon_gray_file,progress_trigger
+FIRST_RUN,First Crawl,Start your first survival run.,false,steam_achievements/icons/first_run_color.png,steam_achievements/icons/first_run_gray.png,When the player starts gameplay for the first time.
+FIRST_RECRUIT,Squad Up,Recruit your first soldier.,false,steam_achievements/icons/first_recruit_color.png,steam_achievements/icons/first_recruit_gray.png,When the player recruits one soldier.
+FIRST_TURF,Claim The Skin,Capture your first turf.,false,steam_achievements/icons/first_turf_color.png,steam_achievements/icons/first_turf_gray.png,When the player captures one turf point.
+FIRST_BOSS,Boss Biter,Defeat your first boss.,false,steam_achievements/icons/first_boss_color.png,steam_achievements/icons/first_boss_gray.png,When the player defeats any boss for the first time.
+FIRST_LEGENDARY_UNLOCK,Legendary Drip,Unlock your first Legendary Chigga Wear item.,false,steam_achievements/icons/first_legendary_unlock_color.png,steam_achievements/icons/first_legendary_unlock_gray.png,When a Legendary cosmetic entitlement is unlocked. Keep locked until real billing exists.
+SURVIVE_STAGE_5,Mighty Survivor,Survive through Stage 5.,false,steam_achievements/icons/survive_stage_5_color.png,steam_achievements/icons/survive_stage_5_gray.png,When the player reaches or clears Stage 5.
+SURVIVE_STAGE_10,Mite Nightmare,Survive through Stage 10.,false,steam_achievements/icons/survive_stage_10_color.png,steam_achievements/icons/survive_stage_10_gray.png,When the player reaches or clears Stage 10.

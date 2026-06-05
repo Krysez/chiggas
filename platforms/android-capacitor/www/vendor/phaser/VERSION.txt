@@ -1,0 +1,2 @@
+phaser@3.70.0
+source=C:\ChiggasUnified\game\vendor\phaser\phaser.esm.js

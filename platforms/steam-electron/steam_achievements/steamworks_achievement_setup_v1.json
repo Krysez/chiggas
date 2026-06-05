@@ -1,0 +1,83 @@
+{
+  "pass": "steam_desktop_wrapper_pass_22",
+  "appId": 4788490,
+  "status": "steamworks_achievement_setup_package_ready",
+  "instruction": "Create these exact achievement API names in Steamworks before arming game-side unlocks.",
+  "achievements": [
+    {
+      "apiName": "FIRST_RUN",
+      "displayName": "First Crawl",
+      "description": "Start your first survival run.",
+      "hidden": false,
+      "iconFile": "steam_achievements/icons/first_run_color.png",
+      "iconGrayFile": "steam_achievements/icons/first_run_gray.png",
+      "progressTrigger": "When the player starts gameplay for the first time.",
+      "gameSideAliasExamples": []
+    },
+    {
+      "apiName": "FIRST_RECRUIT",
+      "displayName": "Squad Up",
+      "description": "Recruit your first soldier.",
+      "hidden": false,
+      "iconFile": "steam_achievements/icons/first_recruit_color.png",
+      "iconGrayFile": "steam_achievements/icons/first_recruit_gray.png",
+      "progressTrigger": "When the player recruits one soldier.",
+      "gameSideAliasExamples": []
+    },
+    {
+      "apiName": "FIRST_TURF",
+      "displayName": "Claim The Skin",
+      "description": "Capture your first turf.",
+      "hidden": false,
+      "iconFile": "steam_achievements/icons/first_turf_color.png",
+      "iconGrayFile": "steam_achievements/icons/first_turf_gray.png",
+      "progressTrigger": "When the player captures one turf point.",
+      "gameSideAliasExamples": []
+    },
+    {
+      "apiName": "FIRST_BOSS",
+      "displayName": "Boss Biter",
+      "description": "Defeat your first boss.",
+      "hidden": false,
+      "iconFile": "steam_achievements/icons/first_boss_color.png",
+      "iconGrayFile": "steam_achievements/icons/first_boss_gray.png",
+      "progressTrigger": "When the player defeats any boss for the first time.",
+      "gameSideAliasExamples": []
+    },
+    {
+      "apiName": "FIRST_LEGENDARY_UNLOCK",
+      "displayName": "Legendary Drip",
+      "description": "Unlock your first Legendary Chigga Wear item.",
+      "hidden": false,
+      "iconFile": "steam_achievements/icons/first_legendary_unlock_color.png",
+      "iconGrayFile": "steam_achievements/icons/first_legendary_unlock_gray.png",
+      "progressTrigger": "When a Legendary cosmetic entitlement is unlocked. Keep locked until real billing exists.",
+      "gameSideAliasExamples": []
+    },
+    {
+      "apiName": "SURVIVE_STAGE_5",
+      "displayName": "Mighty Survivor",
+      "description": "Survive through Stage 5.",
+      "hidden": false,
+      "iconFile": "steam_achievements/icons/survive_stage_5_color.png",
+      "iconGrayFile": "steam_achievements/icons/survive_stage_5_gray.png",
+      "progressTrigger": "When the player reaches or clears Stage 5.",
+      "gameSideAliasExamples": []
+    },
+    {
+      "apiName": "SURVIVE_STAGE_10",
+      "displayName": "Mite Nightmare",
+      "description": "Survive through Stage 10.",
+      "hidden": false,
+      "iconFile": "steam_achievements/icons/survive_stage_10_color.png",
+      "iconGrayFile": "steam_achievements/icons/survive_stage_10_gray.png",
+      "progressTrigger": "When the player reaches or clears Stage 10.",
+      "gameSideAliasExamples": []
+    }
+  ],
+  "notes": [
+    "Steamworks API names must exactly match apiName values.",
+    "Icons are placeholders in this setup package; create/upload final 64x64 achievement art in Steamworks.",
+    "Achievement unlocks remain locked until Steamworks achievements are created and a later arming pass is intentionally applied."
+  ]
+}

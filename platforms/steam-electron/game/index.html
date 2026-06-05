@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content" />
+    <title>Chiggas - Survival of the Mitiest</title>    <script type="importmap">
+      {
+        "imports": {
+          "phaser": "./vendor/phaser/phaser-default-shim.js"
+        }
+      }
+    </script>
+    <style>
+      :root {
+        --safe-area-inset-top: env(safe-area-inset-top, 0px);
+        --safe-area-inset-right: env(safe-area-inset-right, 0px);
+        --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
+        --safe-area-inset-left: env(safe-area-inset-left, 0px);
+        --app-viewport-width: 100vw;
+        --app-viewport-height: 100dvh;
+      }
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        min-height: 100vh;
+        min-height: 100svh;
+        min-height: 100dvh;
+        overflow: hidden;
+        background-color: #000000;
+        font-family: Arial, Helvetica, sans-serif;
+        touch-action: none;
+        overscroll-behavior: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+        user-select: none;
+        box-sizing: border-box;
+      }
+      body {
+        position: fixed;
+        inset: 0;
+      }
+      #game-container {
+        position: fixed;
+        inset: 0;
+        width: var(--app-viewport-width, 100vw);
+        height: var(--app-viewport-height, 100dvh);
+        min-height: 100svh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        background: #000000;
+        touch-action: none;
+        box-sizing: border-box;
+      }
+      canvas {
+        display: block;
+        touch-action: none;
+        image-rendering: auto;
+      }
+    </style>
+    <script>
+      (() => {
+        const root = document.documentElement;
+        let lastW = 0;
+        let lastH = 0;
+
+        const updateViewportSize = () => {
+          const vv = window.visualViewport;
+          const width = Math.round(vv?.width || window.innerWidth || root.clientWidth || 0);
+          const height = Math.round(vv?.height || window.innerHeight || root.clientHeight || 0);
+
+          if (!width || !height) return;
+
+          root.style.setProperty('--app-viewport-width', `${width}px`);
+          root.style.setProperty('--app-viewport-height', `${height}px`);
+
+          if (Math.abs(width - lastW) > 1 || Math.abs(height - lastH) > 1) {
+            lastW = width;
+            lastH = height;
+            window.dispatchEvent(new CustomEvent('chiggasViewportResized', { detail: { width, height } }));
+          }
+        };
+
+        updateViewportSize();
+        window.addEventListener('resize', updateViewportSize, { passive: true });
+        window.addEventListener('orientationchange', () => window.setTimeout(updateViewportSize, 80), { passive: true });
+        window.visualViewport?.addEventListener('resize', updateViewportSize, { passive: true });
+      })();
+    </script>
+  
+<style>
+    #rosebud-exported-splash {
+        position: fixed;
+        inset: 0;
+        z-index: 2147483647;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #000;
+        opacity: 1;
+        transition: opacity 500ms ease-in-out;
+    }
+
+    #rosebud-exported-splash.is-hiding {
+        opacity: 0;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        text-align: center;
+        color: #fff;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__logo {
+        width: 100px;
+        height: 100px;
+        animation: rosebud-exported-splash-breathe 2.4s ease-in-out infinite;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__text {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        font-size: 16px;
+        line-height: 1.25;
+        letter-spacing: 0.06em;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__text strong {
+        font-weight: 700;
+    }
+
+    #rosebud-exported-splash .rosebud-exported-splash__text span:last-child {
+        opacity: 0.88;
+    }
+
+    @keyframes rosebud-exported-splash-breathe {
+        0%,
+        100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+</style><!-- CHIGGAS_CLEANUP_PASS_80A_HIDE_ROSEBUD_SPLASH_CSS_BEGIN -->
+<style id="chiggas-cleanup-pass-80a-hide-rosebud-splash">
+    #rosebud-exported-splash {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        visibility: hidden !important;
+    }
+</style>
+<!-- CHIGGAS_CLEANUP_PASS_80A_HIDE_ROSEBUD_SPLASH_CSS_END -->
+</head>
+  <body>
+<div id="rosebud-exported-splash" aria-live="polite">
+    <div class="rosebud-exported-splash__content">
+        <img
+            class="rosebud-exported-splash__logo"
+            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3C/svg%3E"
+            alt="Rosebud Logo"
+            width="100"
+            height="100"
+        />
+        <div class="rosebud-exported-splash__text" aria-label="Rosebud.AI Make Games">
+            <strong>Rosebud.AI</strong>
+            <span>Make Games</span>
+        </div>
+    </div>
+</div>
+    <div id="game-container"></div>
+    <script type="module" src="main.js"></script>
+  
+<script>
+    (() => {
+        const splashRoot = document.getElementById('rosebud-exported-splash');
+        if (!splashRoot) return;
+
+        let isReady = false;
+        let isMinimumVisibleTimeElapsed = false;
+        let isHidden = false;
+
+        const maybeHideSplash = () => {
+            if (isHidden || !isReady || !isMinimumVisibleTimeElapsed) return;
+
+            isHidden = true;
+            splashRoot.classList.add('is-hiding');
+            window.setTimeout(() => splashRoot.remove(), 500);
+        };
+
+        const markReady = () => {
+            isReady = true;
+            maybeHideSplash();
+        };
+
+        window.setTimeout(() => {
+            isMinimumVisibleTimeElapsed = true;
+            maybeHideSplash();
+        }, 1000);
+
+        if (document.readyState === 'complete') {
+            markReady();
+        } else {
+            window.addEventListener('load', markReady, { once: true });
+        }
+
+        
+    })();
+</script><!-- CHIGGAS_CLEANUP_PASS_80A_REMOVE_ROSEBUD_SPLASH_SCRIPT_BEGIN -->
+<script id="chiggas-cleanup-pass-80a-remove-rosebud-splash">
+(() => {
+    const removeRosebudSplash = () => {
+        try {
+            const splash = document.getElementById('rosebud-exported-splash');
+            if (splash && splash.parentNode) splash.parentNode.removeChild(splash);
+        } catch (_) {}
+    };
+    removeRosebudSplash();
+    document.addEventListener('DOMContentLoaded', removeRosebudSplash);
+    window.addEventListener('load', removeRosebudSplash);
+    setTimeout(removeRosebudSplash, 0);
+    setTimeout(removeRosebudSplash, 250);
+})();
+</script>
+<!-- CHIGGAS_CLEANUP_PASS_80A_REMOVE_ROSEBUD_SPLASH_SCRIPT_END -->
+  <script src="./SteamWalletPurchaseBridgePass99C.js"></script>
+<!-- CHIGGAS_STEAM_PASS_100A1_HTML_LOADER -->
+  <script src="./ControllerReviewCompliancePass100A1.js?pass=100a1"></script>
+
+  <!-- CHIGGAS_STEAM_PASS_101A_HTML_LOADER -->
+  <script src="./SteamInputRuntimeInspectorPass101A.js?pass=101a"></script>
+
+  <!-- CHIGGAS_STEAM_PASS_101B_HTML_LOADER -->
+  <script src="./SteamInputCompatibilityPass101B.js?pass=101b"></script>
+
+<!-- CHIGGAS_STEAM_PASS_101H_HTML_LOADER --><script src="./StableControllerCursorPass101H.js?pass=101h"></script>
+
+<!-- CHIGGAS_STEAM_PASS_102B_HTML_LOADER --><script src="./WalletFailedStateFixPass102B.js?pass=102b"></script>
+</body>
+</html>

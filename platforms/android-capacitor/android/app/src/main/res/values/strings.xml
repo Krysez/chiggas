@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Chiggas</string>
+    <string name="title_activity_main">Chiggas</string>
+    <string name="package_name">com.krysez.chiggas</string>
+    <string name="custom_url_scheme">com.krysez.chiggas</string>
+</resources>

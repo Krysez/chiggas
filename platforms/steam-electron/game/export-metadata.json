@@ -1,0 +1,18 @@
+{
+  "name": "Chiggas - Survival of the Mitiest",
+  "revisionLabel": "Saved MenuScene.js changes",
+  "description": "A battle to take over a human host and get strong enough to claim back your home",
+  "mode": "Universal",
+  "exportDate": "2026-05-27T19:17:55.050Z",
+  "rosebudBuiltInSplash": {
+    "present": false
+  },
+  "assetCount": 114,
+  "assetTypes": [
+    "video",
+    "image",
+    "audio",
+    "text",
+    "file"
+  ]
+}

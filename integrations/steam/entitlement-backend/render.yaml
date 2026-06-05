@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: chiggas-steam-entitlement-backend
+    env: node
+    rootDir: steam-entitlement-backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: STEAM_APP_ID
+        value: "4788490"
+      - key: STEAM_AUTH_IDENTITY
+        value: chiggas_inventory
+      - key: ALLOWED_ORIGIN
+        value: "*"
+      - key: STEAM_PUBLISHER_WEB_API_KEY
+        sync: false

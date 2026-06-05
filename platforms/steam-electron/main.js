@@ -57,7 +57,8 @@ function createMainWindow() {
     minWidth: 960,
     minHeight: 540,
     backgroundColor: '#000000',
-    show: true,
+    show: false,
+    fullscreen: !IS_DEV,
     fullscreenable: true,
     autoHideMenuBar: true,
     webPreferences: {
@@ -73,6 +74,9 @@ function createMainWindow() {
 
   mainWindow.once('ready-to-show', () => {
     if (!mainWindow) return;
+    if (!IS_DEV && !mainWindow.isFullScreen()) {
+      mainWindow.setFullScreen(true);
+    }
     mainWindow.show();
     if (IS_DEV) mainWindow.webContents.openDevTools({ mode: 'detach' });
   });

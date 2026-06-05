@@ -8,6 +8,7 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 import android.webkit.WebView;
+import android.webkit.JavascriptInterface;
 
 import androidx.activity.OnBackPressedCallback;
 
@@ -24,6 +25,7 @@ public class MainActivity extends BridgeActivity {
         prepareFullscreenWindow();
         hideSystemUI();
         setupGooglePlayBillingBridge();
+        setupAppLifecycleBridge();
 
         chiggasBackCallback = new OnBackPressedCallback(true) {
             @Override
@@ -38,11 +40,24 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onResume() {
         super.onResume();
+        if (this.bridge != null && this.bridge.getWebView() != null) {
+            this.bridge.getWebView().onResume();
+            dispatchLifecycleToGame("chiggasAndroidResume");
+        }
         hideSystemUI();
         if (googlePlayBillingBridge != null) {
             googlePlayBillingBridge.onResume();
             googlePlayBillingBridge.injectJavascriptBridge();
         }
+    }
+
+    @Override
+    public void onPause() {
+        dispatchLifecycleToGame("chiggasAndroidPause");
+        if (this.bridge != null && this.bridge.getWebView() != null) {
+            this.bridge.getWebView().onPause();
+        }
+        super.onPause();
     }
 
     @Override
@@ -75,6 +90,11 @@ public class MainActivity extends BridgeActivity {
         googlePlayBillingBridge.connect();
     }
 
+    private void setupAppLifecycleBridge() {
+        if (this.bridge == null || this.bridge.getWebView() == null) return;
+        this.bridge.getWebView().addJavascriptInterface(new ChiggasAppBridge(), "AndroidChiggasApp");
+    }
+
     private void prepareFullscreenWindow() {
         Window window = getWindow();
         if (window == null) return;
@@ -91,6 +111,23 @@ public class MainActivity extends BridgeActivity {
                 null
             );
             hideSystemUI();
+        }
+    }
+
+    private void dispatchLifecycleToGame(String eventName) {
+        if (this.bridge != null && this.bridge.getWebView() != null) {
+            this.bridge.getWebView().evaluateJavascript(
+                "(function(){"
+                    + "try{"
+                    + "window.dispatchEvent(new Event('" + eventName + "'));"
+                    + "if('" + eventName + "'==='chiggasAndroidPause'){"
+                    + "try{window.__chiggasTitleMusic&&window.__chiggasTitleMusic.pause&&window.__chiggasTitleMusic.pause();}catch(e){}"
+                    + "try{window.game&&window.game.sound&&window.game.sound.pauseAll&&window.game.sound.pauseAll();}catch(e){}"
+                    + "}"
+                    + "}catch(e){}"
+                    + "})();",
+                null
+            );
         }
     }
 
@@ -117,6 +154,19 @@ public class MainActivity extends BridgeActivity {
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             );
+        }
+    }
+
+    private class ChiggasAppBridge {
+        @JavascriptInterface
+        public void exitApp() {
+            MainActivity.this.runOnUiThread(() -> {
+                try {
+                    MainActivity.this.finishAndRemoveTask();
+                } catch (Exception e) {
+                    MainActivity.this.finish();
+                }
+            });
         }
     }
 }

@@ -346,6 +346,11 @@ export default class MenuScene extends Phaser.Scene {
 
 
     _requestExitApp() {
+        if (window.AndroidChiggasApp && typeof window.AndroidChiggasApp.exitApp === 'function') {
+            window.AndroidChiggasApp.exitApp();
+            return;
+        }
+
         const appPlugin = window.Capacitor?.Plugins?.App;
 
         if (appPlugin && typeof appPlugin.exitApp === 'function') {
@@ -1858,9 +1863,7 @@ try {
                         0x661111,
                         () => {
                             try { window.__chiggasPass92IExitGameClicked = true; } catch (_) {}
-                            try { window.close(); return; } catch (_) {}
-                            try { globalThis.close?.(); return; } catch (_) {}
-                            try { this.game?.destroy?.(true); } catch (_) {}
+                            try { this._requestExitApp?.(); return; } catch (_) {}
                         },
                         this.mainBtnContainer,
                         compact ? 132 : 154,

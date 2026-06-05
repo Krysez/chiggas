@@ -14,12 +14,21 @@
     "hygiene:check": "node scripts/checks/check-source-hygiene.js",
     "manifest:write": "node scripts/checks/write-payload-manifest.js",
     "paths:check": "node scripts/checks/check-active-path-references.js",
+    "release:check": "node scripts/checks/check-release-readiness.js",
     "runtime:report": "node scripts/checks/report-steam-runtime-modules.js",
     "steam:check": "node scripts/checks/check-steam-electron-runtime.js",
+    "steam:pack:win": "npm --prefix platforms/steam-electron run pack:win",
+    "steam:dist:win": "npm --prefix platforms/steam-electron run dist:win",
+    "steam:depot:stage": "node scripts/steam/stage-steam-depot.js",
     "status:write": "node scripts/checks/write-status-report.js",
     "structure:report": "node scripts/checks/report-structure.js",
     "sync:all": "node scripts/sync/sync-all-platforms.js",
     "sync:steam": "node scripts/sync/sync-game-to-steam.js",
-    "sync:android": "node scripts/sync/sync-game-to-android.js"
+    "sync:android": "node scripts/sync/sync-game-to-android.js",
+    "android:cap:copy": "npm --prefix platforms/android-capacitor run cap:copy",
+    "android:cap:sync": "npm --prefix platforms/android-capacitor run cap:sync",
+    "android:test": "npm --prefix platforms/android-capacitor run android:test",
+    "android:assemble:debug": "npm --prefix platforms/android-capacitor run android:assemble:debug",
+    "android:assemble:release": "npm --prefix platforms/android-capacitor run android:assemble:release"
   }
 }

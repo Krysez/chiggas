@@ -23,6 +23,8 @@ web_modules/
 platforms/steam-electron/dist/
 platforms/steam-electron/out/
 platforms/steam-electron/build/
+platforms/steam-electron/steam_depot_build/
+platforms/steam-electron/steam_build_output/
 
 # Android and Gradle output
 platforms/android-capacitor/android/.gradle/

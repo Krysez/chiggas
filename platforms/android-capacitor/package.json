@@ -6,6 +6,7 @@
     "cap:sync": "npx --package @capacitor/cli@8.3.4 cap sync android",
     "cap:copy": "npx --package @capacitor/cli@8.3.4 cap copy android",
     "android:assemble:debug": "node ../../scripts/android/run-gradle.js assembleDebug",
+    "android:assemble:release": "node ../../scripts/android/run-gradle.js assembleRelease",
     "android:test": "node ../../scripts/android/run-gradle.js testDebugUnitTest",
     "check": "node ../../scripts/checks/check-android-capacitor-platform.js"
   },

@@ -54,6 +54,8 @@ Verification details are tracked in `C:\ChiggasUnified\docs\verification.md`.
 
 Routine update steps are tracked in `C:\ChiggasUnified\docs\update-workflow.md`.
 
+Release build steps are tracked in `C:\ChiggasUnified\docs\release-workflow.md`.
+
 Folder roles are tracked in `C:\ChiggasUnified\docs\structure-map.md`.
 
 Source hygiene rules are tracked in `C:\ChiggasUnified\docs\source-hygiene.md`.

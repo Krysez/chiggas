@@ -36,7 +36,7 @@ try {
 }
 // CHIGGAS_STEAM_ACHIEVEMENTS_MAIN_RUNTIME_EARLY_END
 
-const { app, BrowserWindow, shell, Menu } = require('electron');
+const { app, BrowserWindow, shell, Menu, ipcMain } = require('electron');
 const path = require('path');
 const { createSteamBridgeRuntime, registerSteamBridgeIpc } = require('./runtime/steam-bridge-main');
 
@@ -149,6 +149,20 @@ registerSteamBridgeIpc({
   getMainWindow: () => mainWindow
 });
 // CHIGGAS_STEAM_BRIDGE_MAIN_IPC_RUNTIME_END
+
+ipcMain.handle('chiggas-desktop-runtime:quitApp', async (_event, payload = {}) => {
+  try {
+    require('./runtime/cloud-save-main').exportCloudSave('renderer_exit_request', app, {
+      source: 'renderer_quit_app_ipc',
+      reason: payload?.reason || 'title_exit_button'
+    });
+  } catch (error) {
+    console.warn('[Chiggas] Cloud save export on renderer quit request failed:', error);
+  }
+
+  app.quit();
+  return { ok: true, status: 'desktop_quit_requested' };
+});
 // CHIGGAS_STEAM_ACHIEVEMENTS_MAIN_RUNTIME_TRACES_BEGIN
 try {
   require('./runtime/achievements-main').installAchievementTraceHandlers();

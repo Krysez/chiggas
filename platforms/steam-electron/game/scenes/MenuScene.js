@@ -358,6 +358,10 @@ export default class MenuScene extends Phaser.Scene {
 
 
     _requestExitApp() {
+        try {
+            this._stopTitleMusic?.();
+        } catch (_) {}
+
         if (window.AndroidChiggasApp && typeof window.AndroidChiggasApp.exitApp === 'function') {
             window.AndroidChiggasApp.exitApp();
             return;
@@ -374,6 +378,17 @@ export default class MenuScene extends Phaser.Scene {
             navigator.app?.exitApp?.();
             return;
         } catch (e) {}
+
+        const desktopRuntime = window.ChiggasDesktopRuntime;
+        if (desktopRuntime && typeof desktopRuntime.quitApp === 'function') {
+            desktopRuntime.quitApp({ reason: 'title_exit_button' }).catch?.(() => {});
+            return;
+        }
+
+        if (desktopRuntime && typeof desktopRuntime.exitApp === 'function') {
+            desktopRuntime.exitApp({ reason: 'title_exit_button' }).catch?.(() => {});
+            return;
+        }
 
         try {
             window.close();
@@ -1379,6 +1394,8 @@ ${samples}`, {
 
         if (this.input?.keyboard) {
             this.input.keyboard.on('keydown', event => {
+                if (this._bindingCapture) return;
+
                 const key = event.key;
                 if (key === 'ArrowUp' || key === 'w' || key === 'W') {
                     this._moveMenuFocus('up');
@@ -1390,9 +1407,6 @@ ${samples}`, {
                     this._moveMenuFocus('right');
                 } else if (key === 'Enter' || key === ' ') {
                     this._activateFocusedMenuButton();
-                } else if (this._bindingCapture) {
-                    event.preventDefault?.();
-                    event.stopPropagation?.();
                 } else if (key === 'Escape' || key === 'Backspace') {
                     this._menuNavBack?.();
                 }
@@ -1401,6 +1415,8 @@ ${samples}`, {
 
         if (this.input?.gamepad) {
             this.input.gamepad.on('down', (pad, button, index) => {
+                if (this._bindingCapture) return;
+
                 const buttonIndex = button?.index ?? index;
                 if (buttonIndex === 0) {
                     this._activateFocusedMenuButton();

@@ -73,7 +73,9 @@ function exposeSteamBridgePreload(contextBridge, ipcRenderer) {
     isElectron: true,
     getInfo: () => ipcRenderer.invoke('chiggas-desktop-runtime:getInfo'),
     setFullscreen: (enabled) => ipcRenderer.invoke('chiggas-desktop-runtime:setFullscreen', !!enabled),
-    getFullscreen: () => ipcRenderer.invoke('chiggas-desktop-runtime:getFullscreen')
+    getFullscreen: () => ipcRenderer.invoke('chiggas-desktop-runtime:getFullscreen'),
+    quitApp: (payload = {}) => ipcRenderer.invoke('chiggas-desktop-runtime:quitApp', payload),
+    exitApp: (payload = {}) => ipcRenderer.invoke('chiggas-desktop-runtime:quitApp', payload)
   });
   
   contextBridge.exposeInMainWorld('ChiggasSteamWrapperStatus', {

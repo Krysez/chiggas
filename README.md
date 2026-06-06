@@ -29,6 +29,7 @@ Android cleanup decisions are tracked in `C:\ChiggasUnified\docs\android-capacit
 
 ```powershell
 cd C:\ChiggasUnified
+npm run setup:install
 npm run sync:all
 npm run verify
 npm run android:toolchain
@@ -51,6 +52,8 @@ npm run android:toolchain
 `npm run status:write` writes the current source, structure, and Android toolchain snapshot to `C:\ChiggasUnified\docs\status.md`.
 
 Verification details are tracked in `C:\ChiggasUnified\docs\verification.md`.
+
+Fresh checkout setup is tracked in `C:\ChiggasUnified\docs\fresh-checkout.md`.
 
 Routine update steps are tracked in `C:\ChiggasUnified\docs\update-workflow.md`.
 

@@ -24,6 +24,7 @@
     "steam:vdf:write": "node scripts/steam/write-steampipe-vdf.js",
     "status:write": "node scripts/checks/write-status-report.js",
     "structure:report": "node scripts/checks/report-structure.js",
+    "setup:install": "node scripts/setup/install-workspace-dependencies.js",
     "sync:all": "node scripts/sync/sync-all-platforms.js",
     "sync:steam": "node scripts/sync/sync-game-to-steam.js",
     "sync:android": "node scripts/sync/sync-game-to-android.js",

@@ -1,7 +1,7 @@
 {
   "ok": true,
   "status": "payload_manifest_written",
-  "generatedAt": "2026-06-06T12:18:37.776Z",
+  "generatedAt": "2026-06-06T12:40:11.611Z",
   "exclusions": [
     "vendor/phaser/phaser.esm.js",
     "cordova.js",

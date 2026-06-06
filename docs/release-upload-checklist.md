@@ -10,6 +10,7 @@ npm run verify
 npm run release:check
 npm run release:versions
 npm run steam:backend:check
+npm run release:artifacts
 ```
 
 ## SteamPipe
@@ -19,6 +20,7 @@ npm run steam:pack:win
 npm run steam:depot:stage
 $env:CHIGGAS_STEAM_WINDOWS_DEPOT_ID="YOUR_WINDOWS_DEPOT_ID"
 npm run steam:vdf:write
+npm run release:artifacts
 ```
 
 Upload this generated VDF with SteamPipe:
@@ -39,6 +41,7 @@ C:\ChiggasUnified\platforms\steam-electron\steam_depot_build\windows
 npm run android:cap:copy
 npm run android:test
 npm run android:bundle:release
+npm run release:artifacts
 ```
 
 The unsigned release bundle is:

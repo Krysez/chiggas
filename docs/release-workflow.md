@@ -9,6 +9,7 @@ npm run sync:all
 npm run verify
 npm run release:check
 npm run release:versions
+npm run release:artifacts
 ```
 
 ## Steam Build For SteamPipe
@@ -18,6 +19,7 @@ npm run steam:pack:win
 npm run steam:depot:stage
 $env:CHIGGAS_STEAM_WINDOWS_DEPOT_ID="YOUR_WINDOWS_DEPOT_ID"
 npm run steam:vdf:write
+npm run release:artifacts
 ```
 
 The staged SteamPipe content lands at:
@@ -53,6 +55,7 @@ For release packaging:
 ```powershell
 npm run android:assemble:release
 npm run android:bundle:release
+npm run release:artifacts
 ```
 
 Use Android Studio for Play signing, bundle generation, SDK management, and upload when that is more convenient.

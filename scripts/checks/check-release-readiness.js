@@ -30,11 +30,11 @@ const checks = [
   },
   {
     label: 'root Steam build scripts',
-    ok: ['steam:pack:win', 'steam:dist:win', 'steam:depot:stage'].every((name) => scriptExists(rootPackage, name))
+    ok: ['steam:pack:win', 'steam:dist:win', 'steam:depot:stage', 'steam:vdf:write'].every((name) => scriptExists(rootPackage, name))
   },
   {
     label: 'root Android build scripts',
-    ok: ['android:cap:copy', 'android:test', 'android:assemble:debug', 'android:assemble:release'].every((name) => scriptExists(rootPackage, name))
+    ok: ['android:cap:copy', 'android:test', 'android:assemble:debug', 'android:assemble:release', 'android:bundle:release'].every((name) => scriptExists(rootPackage, name))
   },
   {
     label: 'Steam package build metadata',
@@ -55,6 +55,10 @@ const checks = [
   {
     label: 'Android release script',
     ok: scriptExists(androidPackage, 'android:assemble:release')
+  },
+  {
+    label: 'Android bundle script',
+    ok: scriptExists(androidPackage, 'android:bundle:release')
   },
   {
     label: 'Android app identity',

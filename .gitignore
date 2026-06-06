@@ -25,12 +25,17 @@ platforms/steam-electron/out/
 platforms/steam-electron/build/
 platforms/steam-electron/steam_depot_build/
 platforms/steam-electron/steam_build_output/
+integrations/steam/steamworks/generated/
 
 # Android and Gradle output
 platforms/android-capacitor/android/.gradle/
 platforms/android-capacitor/android/build/
 platforms/android-capacitor/android/app/build/
 platforms/android-capacitor/android/local.properties
+platforms/android-capacitor/android/*.jks
+platforms/android-capacitor/android/*.keystore
+platforms/android-capacitor/android/keystore.properties
+platforms/android-capacitor/android/app/google-services.json
 platforms/android-capacitor/android/app/src/main/assets/capacitor.config.json
 platforms/android-capacitor/android/app/src/main/assets/capacitor.plugins.json
 platforms/android-capacitor/android/app/src/main/res/xml/config.xml

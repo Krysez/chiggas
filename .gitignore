@@ -29,8 +29,10 @@ integrations/steam/steamworks/generated/
 
 # Android and Gradle output
 platforms/android-capacitor/android/.gradle/
+platforms/android-capacitor/android/.idea/
 platforms/android-capacitor/android/build/
 platforms/android-capacitor/android/app/build/
+platforms/android-capacitor/android/gradle/gradle-daemon-jvm.properties
 platforms/android-capacitor/android/local.properties
 platforms/android-capacitor/android/*.jks
 platforms/android-capacitor/android/*.keystore
@@ -63,3 +65,7 @@ Thumbs.db
 .env
 .env.*
 !.env.example
+*.jks
+*.keystore
+keystore.properties
+secrets/

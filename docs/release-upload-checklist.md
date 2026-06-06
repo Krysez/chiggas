@@ -45,3 +45,5 @@ C:\ChiggasUnified\platforms\android-capacitor\android\app\build\outputs\bundle\r
 ```
 
 Use Android Studio for Play App Signing, keystore management, final signed bundle generation, and upload. Keep keystore files, `keystore.properties`, and `google-services.json` out of Git.
+
+Android signing setup is tracked in `C:\ChiggasUnified\docs\android-signing.md`.

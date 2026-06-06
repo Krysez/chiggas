@@ -69,6 +69,8 @@ Release build steps are tracked in `C:\ChiggasUnified\docs\release-workflow.md`.
 
 Upload checklist steps are tracked in `C:\ChiggasUnified\docs\release-upload-checklist.md`.
 
+Android signing setup is tracked in `C:\ChiggasUnified\docs\android-signing.md`.
+
 Versioning rules are tracked in `C:\ChiggasUnified\docs\versioning.md`.
 
 Folder roles are tracked in `C:\ChiggasUnified\docs\structure-map.md`.

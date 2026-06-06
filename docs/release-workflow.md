@@ -59,4 +59,6 @@ Use Android Studio for Play signing, bundle generation, SDK management, and uplo
 
 Detailed upload steps are tracked in `C:\ChiggasUnified\docs\release-upload-checklist.md`.
 
+Android signing setup is tracked in `C:\ChiggasUnified\docs\android-signing.md`.
+
 Versioning rules are tracked in `C:\ChiggasUnified\docs\versioning.md`.

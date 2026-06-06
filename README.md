@@ -21,6 +21,8 @@ archive\                      Indexes for historical pass folders and traces
 
 The Steam/Electron wrapper now keeps a small active script surface. Its historical package scripts were archived at `C:\ChiggasUnified\archive\steam-passes\steam-electron-legacy-package-scripts.json`.
 
+Historical Steam entitlement backend Pass 87/88 migration files were archived under `C:\ChiggasUnified\archive\steam-passes\`.
+
 Steam runtime cleanup decisions are tracked in `C:\ChiggasUnified\docs\steam-electron-cleanup-notes.md`.
 
 Android cleanup decisions are tracked in `C:\ChiggasUnified\docs\android-capacitor-cleanup-notes.md`.

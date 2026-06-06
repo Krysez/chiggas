@@ -37,6 +37,12 @@ npm run verify
 npm run android:toolchain
 ```
 
+Before a Steam or Android release, run:
+
+```powershell
+npm run release:prep
+```
+
 `npm run paths:check` only scans active source/config files, so archived pass notes and vendor text do not block normal validation.
 
 `npm run runtime:report` lists Steam runtime module sizes, groups, and loader files so future cleanup can stay targeted.

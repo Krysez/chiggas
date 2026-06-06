@@ -10,8 +10,7 @@ function main() {
 
   const integrationCopies = [
     ['input', 'steam_input'],
-    ['achievements', 'steam_achievements'],
-    ['steamworks', 'steamworks']
+    ['achievements', 'steam_achievements']
   ];
 
   const copiedIntegrations = [];

@@ -5,11 +5,7 @@ Run release commands from `C:\ChiggasUnified`.
 ## Before Any Release
 
 ```powershell
-npm run sync:all
-npm run verify
-npm run release:check
-npm run release:versions
-npm run release:artifacts
+npm run release:prep
 ```
 
 ## Steam Build For SteamPipe
@@ -58,6 +54,8 @@ npm run release:artifacts
 ```
 
 Use Android Studio for Play signing, bundle generation, SDK management, and upload when that is more convenient.
+
+`release:prep` does not upload anything. It runs sync, source verification, release readiness, version reporting, Steam backend readiness, and artifact checks.
 
 Detailed upload steps are tracked in `C:\ChiggasUnified\docs\release-upload-checklist.md`.
 

@@ -14,6 +14,7 @@
     "hygiene:check": "node scripts/checks/check-source-hygiene.js",
     "manifest:write": "node scripts/checks/write-payload-manifest.js",
     "paths:check": "node scripts/checks/check-active-path-references.js",
+    "release:prep": "node scripts/build/prepare-release.js",
     "release:check": "node scripts/checks/check-release-readiness.js",
     "release:artifacts": "node scripts/checks/check-release-artifacts.js",
     "release:versions": "node scripts/checks/report-release-versions.js",

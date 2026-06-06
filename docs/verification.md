@@ -19,6 +19,7 @@ npm run paths:check
 npm run diff:platforms
 npm run runtime:report
 npm run release:artifacts
+npm run release:prep
 ```
 
 ## Android Native Toolchain

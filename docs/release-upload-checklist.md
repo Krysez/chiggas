@@ -5,12 +5,7 @@ Run commands from `C:\ChiggasUnified`.
 ## Shared Prep
 
 ```powershell
-npm run sync:all
-npm run verify
-npm run release:check
-npm run release:versions
-npm run steam:backend:check
-npm run release:artifacts
+npm run release:prep
 ```
 
 ## SteamPipe

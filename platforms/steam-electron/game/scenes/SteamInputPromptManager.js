@@ -18,7 +18,7 @@ const ACTION_SETS = {
             move: { glyph: '[L]', label: 'Move' },
             aim: { glyph: '[R]', label: 'Aim' },
             recruit: { glyph: '[A]', label: 'Recruit' },
-            eat: { glyph: '[X]', label: 'Eat' },
+            eat: { glyph: '[X]', label: 'Munch' },
             charge: { glyph: '[Y]', label: 'Charge' },
             shoot: { glyph: '[RT]', label: 'Shoot' },
             pause: { glyph: '[Menu]', label: 'Pause' },

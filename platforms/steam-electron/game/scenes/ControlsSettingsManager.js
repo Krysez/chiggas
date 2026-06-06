@@ -45,7 +45,7 @@ const DEFAULT_CONTROL_BINDINGS = {
 
 const GAMEPLAY_CONTROL_ROWS = [
     { actionSet: 'gameplay', action: 'recruit', label: 'Recruit' },
-    { actionSet: 'gameplay', action: 'eat', label: 'Eat' },
+    { actionSet: 'gameplay', action: 'eat', label: 'Munch' },
     { actionSet: 'gameplay', action: 'charge', label: 'Charge' },
     { actionSet: 'gameplay', action: 'shoot', label: 'Shoot' },
     { actionSet: 'gameplay', action: 'pause', label: 'Pause' },

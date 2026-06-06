@@ -160,6 +160,23 @@ ipcMain.handle('chiggas-desktop-runtime:quitApp', async (_event, payload = {}) =
     console.warn('[Chiggas] Cloud save export on renderer quit request failed:', error);
   }
 
+  try {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.close();
+    }
+  } catch (error) {
+    console.warn('[Chiggas] Main window close on renderer quit request failed:', error);
+  }
+
+  const forceExitTimer = setTimeout(() => {
+    try {
+      app.exit(0);
+    } catch (error) {
+      console.warn('[Chiggas] Forced desktop exit failed:', error);
+    }
+  }, 300);
+  if (typeof forceExitTimer.unref === 'function') forceExitTimer.unref();
+
   app.quit();
   return { ok: true, status: 'desktop_quit_requested' };
 });

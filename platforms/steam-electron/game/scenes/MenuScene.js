@@ -362,37 +362,76 @@ export default class MenuScene extends Phaser.Scene {
             this._stopTitleMusic?.();
         } catch (_) {}
 
-        if (window.AndroidChiggasApp && typeof window.AndroidChiggasApp.exitApp === 'function') {
-            window.AndroidChiggasApp.exitApp();
-            return;
+        const attempts = [];
+        const payload = { reason: 'title_exit_button', source: 'menu_scene' };
+        window.__chiggasLastExitRequest = {
+            requestedAt: new Date().toISOString(),
+            attempts
+        };
+
+        const callExit = (label, fn) => {
+            if (typeof fn !== 'function') return false;
+            const attempt = { label, status: 'started' };
+            attempts.push(attempt);
+            try {
+                const result = fn();
+                attempt.status = 'called';
+                if (result && typeof result.catch === 'function') {
+                    result.catch((error) => {
+                        attempt.status = 'rejected';
+                        attempt.error = error?.message || String(error);
+                    });
+                }
+                return true;
+            } catch (error) {
+                attempt.status = 'failed';
+                attempt.error = error?.message || String(error);
+                return false;
+            }
+        };
+
+        let attempted = false;
+        const desktopRuntime = window.ChiggasDesktopRuntime;
+        if (desktopRuntime?.quitApp) {
+            attempted = callExit('ChiggasDesktopRuntime.quitApp', () => desktopRuntime.quitApp(payload)) || attempted;
+        } else if (desktopRuntime?.exitApp) {
+            attempted = callExit('ChiggasDesktopRuntime.exitApp', () => desktopRuntime.exitApp(payload)) || attempted;
         }
+
+        let androidAttempted = false;
+        ['ChiggasNativeApp', 'ChiggasAndroidApp', 'AndroidChiggasApp'].forEach((bridgeName) => {
+            if (androidAttempted) return;
+            const bridge = window[bridgeName];
+            if (bridge?.exitApp) {
+                androidAttempted = callExit(`${bridgeName}.exitApp`, () => bridge.exitApp());
+                attempted = androidAttempted || attempted;
+            } else if (bridge?.quitApp) {
+                androidAttempted = callExit(`${bridgeName}.quitApp`, () => bridge.quitApp());
+                attempted = androidAttempted || attempted;
+            } else if (bridge?.closeApp) {
+                androidAttempted = callExit(`${bridgeName}.closeApp`, () => bridge.closeApp());
+                attempted = androidAttempted || attempted;
+            }
+        });
 
         const appPlugin = window.Capacitor?.Plugins?.App;
+        attempted = callExit(
+            'Capacitor.App.exitApp',
+            appPlugin?.exitApp ? () => appPlugin.exitApp() : null
+        ) || attempted;
 
-        if (appPlugin && typeof appPlugin.exitApp === 'function') {
-            appPlugin.exitApp();
-            return;
+        attempted = callExit(
+            'navigator.app.exitApp',
+            navigator.app?.exitApp ? () => navigator.app.exitApp() : null
+        ) || attempted;
+
+        if (!attempted) {
+            callExit('window.close', () => window.close());
+        } else {
+            setTimeout(() => {
+                try { window.close(); } catch (_) {}
+            }, 350);
         }
-
-        try {
-            navigator.app?.exitApp?.();
-            return;
-        } catch (e) {}
-
-        const desktopRuntime = window.ChiggasDesktopRuntime;
-        if (desktopRuntime && typeof desktopRuntime.quitApp === 'function') {
-            desktopRuntime.quitApp({ reason: 'title_exit_button' }).catch?.(() => {});
-            return;
-        }
-
-        if (desktopRuntime && typeof desktopRuntime.exitApp === 'function') {
-            desktopRuntime.exitApp({ reason: 'title_exit_button' }).catch?.(() => {});
-            return;
-        }
-
-        try {
-            window.close();
-        } catch (e) {}
     }
 
 

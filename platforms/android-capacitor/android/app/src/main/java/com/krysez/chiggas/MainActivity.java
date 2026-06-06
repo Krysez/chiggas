@@ -52,6 +52,7 @@ public class MainActivity extends BridgeActivity {
             googlePlayBillingBridge.onResume();
             googlePlayBillingBridge.injectJavascriptBridge();
         }
+        injectAppLifecycleBridge();
     }
 
     @Override
@@ -71,6 +72,7 @@ public class MainActivity extends BridgeActivity {
             if (googlePlayBillingBridge != null) {
                 googlePlayBillingBridge.injectJavascriptBridge();
             }
+            injectAppLifecycleBridge();
         }
     }
 
@@ -96,6 +98,22 @@ public class MainActivity extends BridgeActivity {
     private void setupAppLifecycleBridge() {
         if (this.bridge == null || this.bridge.getWebView() == null) return;
         this.bridge.getWebView().addJavascriptInterface(new ChiggasAppBridge(), "AndroidChiggasApp");
+        injectAppLifecycleBridge();
+    }
+
+    private void injectAppLifecycleBridge() {
+        if (this.bridge == null || this.bridge.getWebView() == null) return;
+
+        this.bridge.getWebView().evaluateJavascript(
+            "(function(){"
+                + "try{"
+                + "var callExit=function(){try{window.AndroidChiggasApp&&window.AndroidChiggasApp.exitApp&&window.AndroidChiggasApp.exitApp();return true;}catch(e){return false;}};"
+                + "window.ChiggasNativeApp={exitApp:callExit,quitApp:callExit,closeApp:callExit};"
+                + "window.ChiggasAndroidApp=window.ChiggasNativeApp;"
+                + "}catch(e){}"
+                + "})();",
+            null
+        );
     }
 
     private void prepareFullscreenWindow() {
@@ -192,6 +210,21 @@ public class MainActivity extends BridgeActivity {
                     System.exit(0);
                 }, 250);
             });
+        }
+
+        @JavascriptInterface
+        public void quitApp() {
+            exitApp();
+        }
+
+        @JavascriptInterface
+        public void closeApp() {
+            exitApp();
+        }
+
+        @JavascriptInterface
+        public void finishApp() {
+            exitApp();
         }
     }
 }

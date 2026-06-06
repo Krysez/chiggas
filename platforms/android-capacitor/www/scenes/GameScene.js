@@ -1336,7 +1336,7 @@ export default class GameScene extends Phaser.Scene {
             const prompts = [
                 getSteamInputPromptLabel('move', 'Move', { actionSet: 'gameplay' }),
                 getSteamInputPromptLabel('recruit', 'Recruit', { actionSet: 'gameplay' }),
-                getSteamInputPromptLabel('eat', 'Eat', { actionSet: 'gameplay' }),
+                getSteamInputPromptLabel('eat', 'Munch', { actionSet: 'gameplay' }),
                 getSteamInputPromptLabel('charge', 'Charge', { actionSet: 'gameplay' }),
                 getSteamInputPromptLabel('shoot', 'Shoot', { actionSet: 'gameplay' })
             ];
@@ -1345,7 +1345,7 @@ export default class GameScene extends Phaser.Scene {
 
         if (this.controlMode === 'keyboard') {
             const keyLabel = (action, fallback) => keyboardCodeToLabel(getPrimaryKeyboardCode('gameplay', action) || fallback);
-            return `WASD: Move | ${keyLabel('recruit', 'Space')}: Recruit | ${keyLabel('eat', 'ShiftLeft')}: Eat | ${keyLabel('charge', 'KeyC')}: Charge | ${keyLabel('shoot', 'KeyF')}: Shoot`;
+            return `WASD: Move | ${keyLabel('recruit', 'Space')}: Recruit | ${keyLabel('eat', 'ShiftLeft')}: Munch | ${keyLabel('charge', 'KeyC')}: Charge | ${keyLabel('shoot', 'KeyF')}: Shoot`;
         }
 
         return '';
@@ -4109,22 +4109,34 @@ export default class GameScene extends Phaser.Scene {
             if (pad && pad.axes.length >= 2) {
                 const ax = pad.axes[0].getValue();
                 const ay = pad.axes[1].getValue();
+                const phaserAxesActive = Math.abs(ax) > 0.1 || Math.abs(ay) > 0.1;
                 if (Math.abs(ax) > 0.1) vx = ax;
                 if (Math.abs(ay) > 0.1) vy = ay;
                 gamepadShootHeld = isGamepadActionPressed(pad, 'gameplay', 'shoot');
-                phaserGamepadUsed = true;
+                const phaserActionDown = ['recruit', 'eat', 'charge', 'shoot', 'pause', 'back', 'confirm'].some((action) => (
+                    isGamepadActionPressed(pad, 'gameplay', action)
+                ));
+                phaserGamepadUsed = phaserAxesActive || phaserActionDown;
             }
         }
 
         if (this.controlMode === 'gamepad' && !phaserGamepadUsed) {
             const browserPad = this._getBrowserGamepadFallback();
+            let browserGamepadUsed = false;
             if (browserPad) {
                 const axes = this._readBrowserGamepadAxes(browserPad);
+                const browserAxesActive = Math.abs(axes.x) > 0.12 || Math.abs(axes.y) > 0.12;
                 if (Math.abs(axes.x) > 0.12) vx = axes.x;
                 if (Math.abs(axes.y) > 0.12) vy = axes.y;
                 gamepadShootHeld = this._browserGamepadActionDown('shoot', browserPad);
                 browserGamepadEdges = this._pollBrowserGamepadActionEdges(['recruit', 'eat', 'charge', 'shoot'], browserPad);
-            } else {
+                const browserActionDown = ['recruit', 'eat', 'charge', 'shoot', 'pause', 'back', 'confirm'].some((action) => (
+                    this._browserGamepadActionDown(action, browserPad)
+                ));
+                browserGamepadUsed = browserAxesActive || browserActionDown || Object.values(browserGamepadEdges).some(Boolean);
+            }
+
+            if (!browserGamepadUsed) {
                 const nativeSteam = this._pollNativeSteamActionEdges(['recruit', 'eat', 'charge', 'shoot'], 'gameplay');
                 const nativeState = nativeSteam.state;
                 if (nativeState) {

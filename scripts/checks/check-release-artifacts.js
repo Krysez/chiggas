@@ -35,7 +35,7 @@ const artifacts = [
     label: 'SteamPipe generated VDF',
     platform: 'steam',
     required: false,
-    buildCommand: 'set CHIGGAS_STEAM_WINDOWS_DEPOT_ID, then npm run steam:vdf:write',
+    buildCommand: 'npm run steam:vdf:write',
     file: path.join(STEAM_INTEGRATIONS_DIR, 'steamworks', 'generated', 'app_build_4788490.vdf')
   },
   {

@@ -18,7 +18,6 @@ npm run release:artifacts
 ```powershell
 npm run steam:pack:win
 npm run steam:depot:stage
-$env:CHIGGAS_STEAM_WINDOWS_DEPOT_ID="YOUR_WINDOWS_DEPOT_ID"
 npm run steam:vdf:write
 npm run release:artifacts
 ```

@@ -17,7 +17,6 @@ npm run release:artifacts
 ```powershell
 npm run steam:pack:win
 npm run steam:depot:stage
-$env:CHIGGAS_STEAM_WINDOWS_DEPOT_ID="YOUR_WINDOWS_DEPOT_ID"
 npm run steam:vdf:write
 npm run release:artifacts
 ```
@@ -40,7 +39,7 @@ The source template is:
 C:\ChiggasUnified\integrations\steam\steamworks\templates\app_build_4788490_template.vdf
 ```
 
-`steam:vdf:write` replaces the depot placeholder in a generated ignored file. Do not commit generated SteamPipe upload files.
+`steam:vdf:write` replaces the depot placeholder with Windows depot `4788491` in a generated ignored file. Do not commit generated SteamPipe upload files.
 
 ## Android Build
 

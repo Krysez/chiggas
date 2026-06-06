@@ -22,6 +22,8 @@ const steamTemplate = path.join(
   'app_build_4788490_template.vdf'
 );
 const steamTemplateText = exists(steamTemplate) ? fs.readFileSync(steamTemplate, 'utf8') : '';
+const steamVdfWriter = path.join(ROOT, 'scripts', 'steam', 'write-steampipe-vdf.js');
+const steamVdfWriterText = exists(steamVdfWriter) ? fs.readFileSync(steamVdfWriter, 'utf8') : '';
 
 const checks = [
   {
@@ -49,8 +51,8 @@ const checks = [
     ok: steamTemplateText.includes('"AppID" "4788490"')
   },
   {
-    label: 'SteamPipe depot placeholder visible',
-    ok: steamTemplateText.includes('REPLACE_WITH_WINDOWS_DEPOT_ID')
+    label: 'SteamPipe Windows depot id default',
+    ok: steamVdfWriterText.includes("DEFAULT_WINDOWS_DEPOT_ID = '4788491'")
   },
   {
     label: 'Android release script',
@@ -70,7 +72,7 @@ const failed = checks.filter((check) => !check.ok);
 const warnings = [];
 
 if (steamTemplateText.includes('REPLACE_WITH_WINDOWS_DEPOT_ID')) {
-  warnings.push('SteamPipe template still needs the real Windows depot ID before uploading.');
+  warnings.push('SteamPipe template keeps a depot placeholder; steam:vdf:write replaces it with Windows depot 4788491 by default.');
 }
 
 console.log(JSON.stringify({

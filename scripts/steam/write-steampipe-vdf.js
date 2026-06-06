@@ -11,13 +11,14 @@ const template = path.join(
 const outputDir = path.join(STEAM_INTEGRATIONS_DIR, 'steamworks', 'generated');
 const output = path.join(outputDir, 'app_build_4788490.vdf');
 
-const depotId = process.env.CHIGGAS_STEAM_WINDOWS_DEPOT_ID || process.env.STEAM_WINDOWS_DEPOT_ID || '';
+const DEFAULT_WINDOWS_DEPOT_ID = '4788491';
+const depotId = process.env.CHIGGAS_STEAM_WINDOWS_DEPOT_ID || process.env.STEAM_WINDOWS_DEPOT_ID || DEFAULT_WINDOWS_DEPOT_ID;
 const desc = process.env.CHIGGAS_STEAM_BUILD_DESC || `Chiggas build ${new Date().toISOString().slice(0, 10)}`;
 const setLive = process.env.CHIGGAS_STEAM_SET_LIVE || '';
 const preview = process.env.CHIGGAS_STEAM_PREVIEW || '0';
 
 if (!/^\d+$/.test(depotId)) {
-  console.error('Missing numeric depot ID. Set CHIGGAS_STEAM_WINDOWS_DEPOT_ID before running this command.');
+  console.error('Missing numeric depot ID. Set CHIGGAS_STEAM_WINDOWS_DEPOT_ID or update DEFAULT_WINDOWS_DEPOT_ID.');
   process.exit(1);
 }
 

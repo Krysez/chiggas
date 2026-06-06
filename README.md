@@ -58,6 +58,8 @@ Release build steps are tracked in `C:\ChiggasUnified\docs\release-workflow.md`.
 
 Upload checklist steps are tracked in `C:\ChiggasUnified\docs\release-upload-checklist.md`.
 
+Versioning rules are tracked in `C:\ChiggasUnified\docs\versioning.md`.
+
 Folder roles are tracked in `C:\ChiggasUnified\docs\structure-map.md`.
 
 Source hygiene rules are tracked in `C:\ChiggasUnified\docs\source-hygiene.md`.

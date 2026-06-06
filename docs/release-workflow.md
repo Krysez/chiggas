@@ -8,6 +8,7 @@ Run release commands from `C:\ChiggasUnified`.
 npm run sync:all
 npm run verify
 npm run release:check
+npm run release:versions
 ```
 
 ## Steam Build For SteamPipe
@@ -57,3 +58,5 @@ npm run android:bundle:release
 Use Android Studio for Play signing, bundle generation, SDK management, and upload when that is more convenient.
 
 Detailed upload steps are tracked in `C:\ChiggasUnified\docs\release-upload-checklist.md`.
+
+Versioning rules are tracked in `C:\ChiggasUnified\docs\versioning.md`.

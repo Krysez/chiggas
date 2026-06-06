@@ -8,6 +8,7 @@ Run commands from `C:\ChiggasUnified`.
 npm run sync:all
 npm run verify
 npm run release:check
+npm run release:versions
 ```
 
 ## SteamPipe

@@ -15,6 +15,7 @@
     "manifest:write": "node scripts/checks/write-payload-manifest.js",
     "paths:check": "node scripts/checks/check-active-path-references.js",
     "release:check": "node scripts/checks/check-release-readiness.js",
+    "release:versions": "node scripts/checks/report-release-versions.js",
     "runtime:report": "node scripts/checks/report-steam-runtime-modules.js",
     "steam:check": "node scripts/checks/check-steam-electron-runtime.js",
     "steam:pack:win": "npm --prefix platforms/steam-electron run pack:win",

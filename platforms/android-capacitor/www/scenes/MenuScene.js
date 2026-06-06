@@ -875,12 +875,9 @@ export default class MenuScene extends Phaser.Scene {
 
     _beginKeyboardBindingCapture(row, returnTarget = 'main') {
         const capture = this._startBindingCapture(`PRESS KEY FOR ${row.label.toUpperCase()}`);
-        const armedAt = this.time?.now || Date.now();
 
         const finish = (event) => {
             if (capture !== this._bindingCapture) return;
-            const now = this.time?.now || Date.now();
-            if (now - armedAt < 120) return;
             if (!event?.code) return;
             event.preventDefault?.();
             event.stopPropagation?.();
@@ -900,12 +897,9 @@ export default class MenuScene extends Phaser.Scene {
 
     _beginGamepadBindingCapture(row, returnTarget = 'main') {
         const capture = this._startBindingCapture(`PRESS GAMEPAD BUTTON FOR ${row.label.toUpperCase()}`);
-        const armedAt = this.time?.now || Date.now();
 
         const finish = (pad, button, index) => {
             if (capture !== this._bindingCapture) return;
-            const now = this.time?.now || Date.now();
-            if (now - armedAt < 120) return;
             const buttonIndex = button?.index ?? index;
             if (buttonIndex === undefined || buttonIndex === null) return;
             this._endBindingCapture();

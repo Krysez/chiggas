@@ -3229,19 +3229,21 @@ export default class GameScene extends Phaser.Scene {
         const panelH = Math.min(height - 34, compact ? 420 : 500);
         const panelX = width / 2;
         const panelY = height / 2;
+        const panelTop = panelY - panelH / 2;
+        const panelBottom = panelY + panelH / 2;
 
         const panel = this.add.graphics();
         panel.fillStyle(0x111111, 0.97);
-        panel.fillRoundedRect(panelX - panelW / 2, panelY - panelH / 2, panelW, panelH, 24);
+        panel.fillRoundedRect(panelX - panelW / 2, panelTop, panelW, panelH, 24);
         panel.lineStyle(5, isFinalClear ? 0x39ff14 : 0xffdd00, 0.92);
-        panel.strokeRoundedRect(panelX - panelW / 2, panelY - panelH / 2, panelW, panelH, 24);
+        panel.strokeRoundedRect(panelX - panelW / 2, panelTop, panelW, panelH, 24);
 
         const stageLabel = isFinalClear
             ? 'FINAL STAGE CLEARED!'
             : `STAGE ${this.stageIndex + 1} CLEARED!`;
 
-        const title = this.add.text(panelX, panelY - panelH / 2 + (compact ? 34 : 48), stageLabel, {
-            fontSize: compact ? '32px' : '50px',
+        const title = this.add.text(panelX, panelTop + (compact ? 34 : 48), stageLabel, {
+            fontSize: compact ? '30px' : '46px',
             fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
             color: isFinalClear ? '#39ff14' : '#ffdd00',
             stroke: '#000000',
@@ -3283,19 +3285,19 @@ export default class GameScene extends Phaser.Scene {
 
         const summaryLines = buildSummaryText(0, 0).split('\n');
 
-        const summary = this.add.text(panelX, panelY - (compact ? 46 : 38), summaryLines.join('\n'), {
-            fontSize: compact ? '17px' : '22px',
+        const summary = this.add.text(panelX, panelTop + (compact ? 68 : 92), summaryLines.join('\n'), {
+            fontSize: compact ? '14px' : '20px',
             fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
             color: '#ffffff',
             stroke: '#000000',
             strokeThickness: 4,
             align: 'center',
-            lineSpacing: compact ? 0 : 4,
+            lineSpacing: compact ? 0 : 2,
             wordWrap: { width: panelW - 70 }
-        }).setOrigin(0.5);
+        }).setOrigin(0.5, 0);
 
-        const totalScoreText = this.add.text(panelX, panelY + (compact ? 94 : 118), `TOTAL SCORE: ${preTurfScore}`, {
-            fontSize: compact ? '25px' : '38px',
+        const totalScoreText = this.add.text(panelX, panelTop + (compact ? 236 : 300), `TOTAL SCORE: ${preTurfScore}`, {
+            fontSize: compact ? '22px' : '34px',
             fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
             color: '#ffdd00',
             stroke: '#000000',
@@ -3303,23 +3305,14 @@ export default class GameScene extends Phaser.Scene {
             align: 'center',
             wordWrap: { width: panelW - 50 }
         }).setOrigin(0.5);
-        let unlockVisuals = [];
-        if (cosmeticUnlocks.length > 0) {
-            unlockVisuals = this._createCosmeticUnlockNotification({
-                skins: cosmeticUnlocks,
-                x: width / 2,
-                y: height - (compact ? 106 : 124),
-                maxWidth: Math.min(width - 36, compact ? 360 : 520),
-                compact
-            });
-        }
+        const unlockVisuals = [];
 
         const nextText = isFinalClear
             ? 'NEXT: VICTORY'
             : `NEXT: STAGE ${nextStage?.level ?? nextIndex + 1} - ${(nextStage?.name || 'UNKNOWN').toUpperCase()}`;
 
-        const next = this.add.text(panelX, panelY + panelH / 2 - (compact ? 88 : 104), nextText, {
-            fontSize: compact ? '17px' : '24px',
+        const next = this.add.text(panelX, panelTop + (compact ? 286 : 358), nextText, {
+            fontSize: compact ? '15px' : '21px',
             fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
             color: isFinalClear ? '#39ff14' : '#ffaa44',
             stroke: '#000000',
@@ -3332,8 +3325,8 @@ export default class GameScene extends Phaser.Scene {
             ? 'The infestation has been crushed.'
             : `"${nextStage?.description || 'Keep pushing forward.'}"`;
 
-        const desc = this.add.text(panelX, next.y + (compact ? 26 : 32), descText, {
-            fontSize: compact ? '14px' : '18px',
+        const desc = this.add.text(panelX, next.y + (compact ? 22 : 30), descText, {
+            fontSize: compact ? '12px' : '16px',
             fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
             color: '#cccccc',
             stroke: '#000000',
@@ -3344,13 +3337,13 @@ export default class GameScene extends Phaser.Scene {
 
         const buttonW = compact ? 170 : 230;
         const buttonH = compact ? 38 : 50;
-        const buttonY = panelY + panelH / 2 - (compact ? 24 : 34);
+        const buttonY = panelBottom - (compact ? 48 : 56);
         const continueButton = this._createStageClearButton(panelX, buttonY, isFinalClear ? 'VICTORY' : 'CONTINUE', isFinalClear ? 0x1f7a1f : 0xaa1111, () => {
             finish();
         }, overlay, buttonW, buttonH, compact ? 18 : 24);
 
-        const autoText = this.add.text(panelX, buttonY + (compact ? 34 : 44), 'Counting turf bonus...', {
-            fontSize: compact ? '14px' : '16px',
+        const autoText = this.add.text(panelX, panelBottom - (compact ? 16 : 18), 'Counting turf bonus...', {
+            fontSize: compact ? '12px' : '14px',
             fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
             color: '#aaaaaa',
             stroke: '#000000',

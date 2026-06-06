@@ -1627,14 +1627,7 @@ export default class GameScene extends Phaser.Scene {
         if (this.scoreText) this.scoreText.setPosition(safe.right - 10, safe.top + 44);
         if (this.timeText) this.timeText.setPosition(safe.right - 10, safe.top + 74);
 
-        if (this._bossWarningBg) {
-            this._bossWarningBg.clear();
-            this._bossWarningBg.fillStyle(0x000000, 0.6);
-            const bannerWidth = Math.min(400, safe.width - 20);
-            this._bossWarningBg.fillRoundedRect(safe.centerX - bannerWidth / 2, safe.bottom - 54, bannerWidth, 36, 10);
-        }
-
-        if (this._bossWarningText) this._bossWarningText.setPosition(safe.centerX, safe.bottom - 36);
+        this._layoutBossWarningBanner(safe);
         if (this.bossAlertText) this.bossAlertText.setPosition(safe.centerX, safe.centerY - 60);
         if (this.bossSubText) this.bossSubText.setPosition(safe.centerX, safe.centerY + 10);
         if (this.stageBadge) this.stageBadge.setPosition(safe.centerX, safe.top + 10);
@@ -1660,12 +1653,40 @@ export default class GameScene extends Phaser.Scene {
             this.stageBadge.setVisible(!hideCenterHud);
         }
 
+        const mustShowBossBanner = this._bossCountdownStarted || this.bossPhaseActive;
         if (this._bossWarningText) {
-            this._bossWarningText.setVisible(!hideCenterHud);
+            this._bossWarningText.setVisible(!hideCenterHud || mustShowBossBanner);
         }
 
         if (this._bossWarningBg) {
-            this._bossWarningBg.setVisible(!hideCenterHud);
+            this._bossWarningBg.setVisible(!hideCenterHud || mustShowBossBanner);
+        }
+    }
+
+    _layoutBossWarningBanner(safe = getSafeBounds(this, 10)) {
+        if (!this._bossWarningBg && !this._bossWarningText) return;
+
+        const mobile = this._isMobileHUDLayout(this.scale.width, this.scale.height);
+        const bannerWidth = Math.min(mobile ? 360 : 520, safe.width - 20);
+        const bannerHeight = mobile ? 30 : 36;
+        const bannerY = mobile ? safe.top + 104 : safe.bottom - 36;
+
+        if (this._bossWarningBg) {
+            this._bossWarningBg.clear();
+            this._bossWarningBg.fillStyle(0x000000, mobile ? 0.74 : 0.6);
+            this._bossWarningBg.fillRoundedRect(
+                safe.centerX - bannerWidth / 2,
+                bannerY - bannerHeight / 2,
+                bannerWidth,
+                bannerHeight,
+                mobile ? 8 : 10
+            );
+        }
+
+        if (this._bossWarningText) {
+            this._bossWarningText.setPosition(safe.centerX, bannerY);
+            this._bossWarningText.setFontSize(mobile ? '14px' : '20px');
+            this._bossWarningText.setWordWrapWidth(Math.max(120, bannerWidth - 18));
         }
     }
 
@@ -1893,6 +1914,7 @@ export default class GameScene extends Phaser.Scene {
         this._bossWarningBg = bannerBg;
         this._bossWarningName = bossName;
         this._bossWarningTurfs = turfs;
+        this._layoutBossWarningBanner(safe);
 
         this.tweens.add({
             targets: this._bossWarningText,
@@ -1997,16 +2019,17 @@ export default class GameScene extends Phaser.Scene {
     _updateBossWarning(playerTerritories) {
         if (!this._bossWarningText) return;
 
-        if (this._isMobileHUDLayout()) {
-            this._bossWarningText.setText('');
-            this._bossWarningText.setVisible(false);
-            if (this._bossWarningBg) this._bossWarningBg.setVisible(false);
-            return;
-        }
-
         if (this.bossDefeated || this.isEnding) {
             this._bossWarningText.setText('');
             this._bossWarningBg.setVisible(false);
+            return;
+        }
+
+        const mobile = this._isMobileHUDLayout();
+        if (mobile && !this._bossCountdownStarted && !this.bossPhaseActive) {
+            this._bossWarningText.setText('');
+            this._bossWarningText.setVisible(false);
+            if (this._bossWarningBg) this._bossWarningBg.setVisible(false);
             return;
         }
 
@@ -2015,7 +2038,7 @@ export default class GameScene extends Phaser.Scene {
             this._bossWarningBg.setVisible(true);
             this._bossWarningText.setVisible(true);
             this._bossWarningText.setColor('#ffdd00');
-            this._bossWarningText.setText(`⚠ ${this._bossWarningName} arrives in ${remainingSeconds}s — get strong! ⚠`);
+            this._bossWarningText.setText(`${this._bossWarningName} arrives in ${remainingSeconds}s - get strong!`);
             return;
         }
 
@@ -2025,9 +2048,9 @@ export default class GameScene extends Phaser.Scene {
             this._bossWarningText.setColor('#ff0000');
             if (this.boss && this.boss.active && !this.boss.isDead) {
                 const pct = Math.round((this.boss.health / this.boss.maxHealth) * 100);
-                this._bossWarningText.setText(`☠ ${this._bossWarningName} — ${pct}% HP — FIGHT! ☠`);
+                this._bossWarningText.setText(`${this._bossWarningName} - ${pct}% HP - FIGHT!`);
             } else {
-                this._bossWarningText.setText(`☠ ${this._bossWarningName} INCOMING... ☠`);
+                this._bossWarningText.setText(`${this._bossWarningName} INCOMING...`);
             }
             return;
         }
@@ -2037,17 +2060,16 @@ export default class GameScene extends Phaser.Scene {
             this._bossWarningBg.setVisible(true);
             this._bossWarningText.setVisible(true);
             this._bossWarningText.setColor('#ffdd00');
-            this._bossWarningText.setText(`⚠ ${this._bossWarningName} AWAKENS... ⚠`);
+            this._bossWarningText.setText(`${this._bossWarningName} AWAKENS...`);
         } else {
             this._bossWarningBg.setVisible(true);
             this._bossWarningText.setVisible(true);
             this._bossWarningText.setColor('#ff4400');
             this._bossWarningText.setText(
-                `⚠ ${this._bossWarningName} AWAITS — ${remaining} turf${remaining !== 1 ? 's' : ''} left`
+                `${this._bossWarningName} AWAITS - ${remaining} turf${remaining !== 1 ? 's' : ''} left`
             );
         }
     }
-
     _getSpawnEconomySettings() {
         const stage = this.stageIndex || 0;
 

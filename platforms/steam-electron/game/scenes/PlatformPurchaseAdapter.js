@@ -24,6 +24,7 @@ const EXPECTED_LEGENDARY_PRODUCT_COUNT = 29;
 const SUPPORTED_LIVE_BILLING_PLATFORMS = ['google_play', 'steam'];
 const NATIVE_PURCHASE_TIMEOUT_MS = 45000;
 const MAX_PENDING_REQUESTS = 20;
+const LOCKED_PLATFORM_PURCHASES = ['google_play'];
 
 const pendingNativeRequests = new Map();
 let callbacksRegistered = false;
@@ -479,11 +480,11 @@ export function getNativeBillingBridgeDetectionReport() {
             'Leave REAL_BILLING_ARMED false until live billing testing is intentionally started.'
         ),
         makeReleaseGuardCheck(
-            'store_still_test_mode',
-            releaseGuard.buttonLabelMode === 'test_buy',
+            'store_locked_until_live_billing',
+            releaseGuard.buttonLabelMode === 'billing_locked',
             true,
             `Store label mode is ${releaseGuard.buttonLabelMode}.`,
-            'Store should stay in TEST BUY mode during Android Billing Bridge Pass 2.'
+            'Store should stay locked until live platform purchases are intentionally armed.'
         )
     ];
 
@@ -747,6 +748,7 @@ export function getBillingReleaseGuardReport() {
     const warnings = checks.filter(check => !check.blocking && !check.ok);
     const canUseNativeBilling = REAL_BILLING_ARMED === true && blockingFailures.length === 0;
     const canShowLiveStoreLabels = canUseNativeBilling;
+    const platformLocked = LOCKED_PLATFORM_PURCHASES.includes(capabilities.platform) && !canUseNativeBilling;
 
     return {
         adapterVersion: PLATFORM_PURCHASE_ADAPTER_VERSION,
@@ -764,13 +766,15 @@ export function getBillingReleaseGuardReport() {
         capabilities,
         validationReport,
         debugHarnessEnabled: debugEnabled,
-        buttonLabelMode: canShowLiveStoreLabels ? 'live_buy_price' : (REAL_BILLING_ARMED ? 'billing_locked' : 'test_buy'),
-        recommendedStoreLabel: canShowLiveStoreLabels ? `BUY ${LEGENDARY_ITEM_PRICE_LABEL}` : (REAL_BILLING_ARMED ? 'BILLING LOCKED' : 'TEST BUY'),
+        buttonLabelMode: canShowLiveStoreLabels ? 'live_buy_price' : (platformLocked || REAL_BILLING_ARMED ? 'billing_locked' : 'test_buy'),
+        recommendedStoreLabel: canShowLiveStoreLabels ? `BUY ${LEGENDARY_ITEM_PRICE_LABEL}` : (platformLocked || REAL_BILLING_ARMED ? 'BILLING LOCKED' : 'TEST BUY'),
         summary: canUseNativeBilling
             ? 'Live billing guard passed. Platform purchase buttons may show live price labels.'
             : (REAL_BILLING_ARMED
                 ? `Live billing is armed but blocked by ${blockingFailures.length} required guard check(s).`
-                : 'Real billing is locked off. TEST BUY mode is expected.')
+                : (platformLocked
+                    ? 'Platform purchases are locked off until live billing is configured.'
+                    : 'Real billing is locked off. TEST BUY mode is expected.'))
     };
 }
 
@@ -800,7 +804,7 @@ export function getPurchaseRuntimeInfo() {
     return {
         adapterVersion: PLATFORM_PURCHASE_ADAPTER_VERSION,
         platform,
-        mode: realBillingReady ? platform : (REAL_BILLING_ARMED ? 'billing_locked' : 'local_test'),
+        mode: realBillingReady ? platform : (LOCKED_PLATFORM_PURCHASES.includes(platform) ? 'billing_locked' : (REAL_BILLING_ARMED ? 'billing_locked' : 'local_test')),
         realBillingArmed: REAL_BILLING_ARMED,
         bridgeDetected: !!bridge,
         bridgeFunctionNames: getBridgeFunctionNames(bridge),
@@ -824,11 +828,13 @@ export function getPurchaseRuntimeInfo() {
         priceLabel: LEGENDARY_ITEM_PRICE_LABEL,
         storeSubtitle: realBillingReady
             ? `Platform store ready - ${LEGENDARY_ITEM_PRICE_LABEL} each.`
-            : (REAL_BILLING_ARMED
+            : (LOCKED_PLATFORM_PURCHASES.includes(platform)
+                ? 'Platform purchases locked until live billing is configured.'
+                : (REAL_BILLING_ARMED
                 ? `REAL BILLING BLOCKED - ${releaseGuard.blockingFailures.length} release guard check(s) failed.`
                 : (bridge
                     ? `Local test store - native bridge detected, billing locked, validation ready.`
-                    : `Local test store - ${LEGENDARY_ITEM_PRICE_LABEL} each. Billing locked, validation ready.`))
+                    : `Local test store - ${LEGENDARY_ITEM_PRICE_LABEL} each. Billing locked, validation ready.`)))
     };
 }
 function safeJsonClone(value) {
@@ -970,6 +976,10 @@ export function getPurchaseButtonLabel(skinId) {
 
     if (runtime.realBillingReady && runtime.liveButtonLabelsAllowed) {
         return `BUY ${entity?.priceLabel || LEGENDARY_ITEM_PRICE_LABEL}`;
+    }
+
+    if (LOCKED_PLATFORM_PURCHASES.includes(runtime.platform)) {
+        return 'BILLING LOCKED';
     }
 
     if (runtime.realBillingArmed && !runtime.releaseGuardReady) {
@@ -1228,6 +1238,27 @@ export async function purchaseLegendarySkin(skinId) {
 
     if (runtime.realBillingReady) {
         return requestNativePurchase(skin, entity, runtime);
+    }
+
+    if (LOCKED_PLATFORM_PURCHASES.includes(runtime.platform)) {
+        const result = {
+            ok: false,
+            status: 'platform_purchase_locked_until_configured',
+            skinId,
+            skin,
+            entity,
+            runtime,
+            productId: getProductIdForRuntime(entity, runtime.platform),
+            validation
+        };
+        appendPurchaseLog({
+            event: result.status,
+            skinId,
+            productId: result.productId,
+            runtime: safeJsonClone(runtime)
+        });
+        dispatchPurchaseEvent('purchase-locked', result);
+        return result;
     }
 
     // Pass 2 still keeps all store presses in the safe local TEST BUY path.
@@ -1728,6 +1759,7 @@ export function getPurchaseResultMessage(result, fallbackName = 'ITEM') {
             return 'PRODUCT BLOCKED';
         case 'billing_blocked_by_release_guard':
         case 'restore_blocked_by_release_guard':
+        case 'platform_purchase_locked_until_configured':
             return 'BILLING LOCKED';
         case 'platform_restored_with_rejections':
             return `RESTORED ${result.count || 0} VALID PURCHASES`;

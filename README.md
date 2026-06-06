@@ -71,6 +71,8 @@ Upload checklist steps are tracked in `C:\ChiggasUnified\docs\release-upload-che
 
 Android signing setup is tracked in `C:\ChiggasUnified\docs\android-signing.md`.
 
+Steam Input controller planning is tracked in `C:\ChiggasUnified\docs\steam-input-controller-plan.md`.
+
 Versioning rules are tracked in `C:\ChiggasUnified\docs\versioning.md`.
 
 Folder roles are tracked in `C:\ChiggasUnified\docs\structure-map.md`.

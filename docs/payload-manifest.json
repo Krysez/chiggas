@@ -1,12 +1,13 @@
 {
   "ok": true,
   "status": "payload_manifest_written",
-  "generatedAt": "2026-06-06T12:45:59.516Z",
+  "generatedAt": "2026-06-06T14:25:09.346Z",
   "exclusions": [
     "vendor/phaser/phaser.esm.js",
     "cordova.js",
     "cordova_plugins.js",
-    "node_modules/"
+    "node_modules/",
+    "Android payloads omit Steam-only wallet/input helper scripts and use a stripped index.html."
   ],
   "payloads": [
     {
@@ -15,7 +16,7 @@
       "ok": true,
       "status": "payload_manifest_ready",
       "fileCount": 203,
-      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389",
+      "combinedHash": "5e0d7c1c0365dadee8d1f27b5071db7447435dba58fc170c70fa6717823731bc",
       "files": [
         {
           "path": "assets/audio/cartoon-munch.mp3",
@@ -711,7 +712,7 @@
         },
         {
           "path": "scenes/GameScene.js",
-          "sha256": "7724637d40a297cb34451ef0038177b0361a777d6acc6216ca52cac9f5829bce"
+          "sha256": "3ea5ee9b2ed49f4a86fa6e77964b7423fd2e0f526c760cf1abb91d52e049b3fd"
         },
         {
           "path": "scenes/IntroScene.js",
@@ -739,7 +740,7 @@
         },
         {
           "path": "scenes/MenuScene.js",
-          "sha256": "3d5adc96bc6cc154ce0647d1ae46725212bdc680992516b643c077bab080dd40"
+          "sha256": "41f9f00fa6c19d048c495d61f8e19420c0b2c3ca1028f85687ff12f4c07aaeaa"
         },
         {
           "path": "scenes/MiniGamePromptScene.js",
@@ -755,7 +756,7 @@
         },
         {
           "path": "scenes/PlatformPurchaseAdapter.js",
-          "sha256": "545bdd0773c941f43dabe4e3e8485f1f2e215d8e0d1ac08289a21f33f5dfc871"
+          "sha256": "9b58b2bccd6b5562c2298459e3e31fa39110353f7920dd1652e39d4411edf83c"
         },
         {
           "path": "scenes/ResponsiveLayout.js",
@@ -837,7 +838,7 @@
       "ok": true,
       "status": "payload_manifest_ready",
       "fileCount": 203,
-      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389",
+      "combinedHash": "5e0d7c1c0365dadee8d1f27b5071db7447435dba58fc170c70fa6717823731bc",
       "files": [
         {
           "path": "assets/audio/cartoon-munch.mp3",
@@ -1533,7 +1534,7 @@
         },
         {
           "path": "scenes/GameScene.js",
-          "sha256": "7724637d40a297cb34451ef0038177b0361a777d6acc6216ca52cac9f5829bce"
+          "sha256": "3ea5ee9b2ed49f4a86fa6e77964b7423fd2e0f526c760cf1abb91d52e049b3fd"
         },
         {
           "path": "scenes/IntroScene.js",
@@ -1561,7 +1562,7 @@
         },
         {
           "path": "scenes/MenuScene.js",
-          "sha256": "3d5adc96bc6cc154ce0647d1ae46725212bdc680992516b643c077bab080dd40"
+          "sha256": "41f9f00fa6c19d048c495d61f8e19420c0b2c3ca1028f85687ff12f4c07aaeaa"
         },
         {
           "path": "scenes/MiniGamePromptScene.js",
@@ -1577,7 +1578,7 @@
         },
         {
           "path": "scenes/PlatformPurchaseAdapter.js",
-          "sha256": "545bdd0773c941f43dabe4e3e8485f1f2e215d8e0d1ac08289a21f33f5dfc871"
+          "sha256": "9b58b2bccd6b5562c2298459e3e31fa39110353f7920dd1652e39d4411edf83c"
         },
         {
           "path": "scenes/ResponsiveLayout.js",
@@ -1650,6 +1651,780 @@
         {
           "path": "WalletNoticeOverlayFixPass102A.js",
           "sha256": "1202bc735a2e3c48bc3fed61ee8e89f73617e57e5dc141be0bf3960ce1e8220c"
+        }
+      ]
+    },
+    {
+      "label": "android-game-projection",
+      "root": "C:\\ChiggasUnified\\game",
+      "ok": true,
+      "status": "payload_manifest_ready",
+      "fileCount": 191,
+      "combinedHash": "5d0762e1048b242a36a511123dc473d6b85afceb5f09bbb591b60041c5e60022",
+      "files": [
+        {
+          "path": "assets/audio/cartoon-munch.mp3",
+          "sha256": "77c2d8a78d2e90c8a352c63f9ddd1ba3e3c928cef7ce0e22a4e7f4c6860691fb"
+        },
+        {
+          "path": "assets/audio/charge_cry.mp3",
+          "sha256": "5abe1f27d598c3e3df8f271d2873123b26e29af7629cb42bc2c16943c159d87a"
+        },
+        {
+          "path": "assets/audio/gunshot.mp3",
+          "sha256": "a75d4744baa17c9c5a26b4022e2dde990a615cf75bfefbe021a6de5e3be07f02"
+        },
+        {
+          "path": "assets/bandana_bacilius.png",
+          "sha256": "9faa2b71b4d08debc327acab6d8e28e58588e920c6b1c79454a5b6a7ce00ec02"
+        },
+        {
+          "path": "assets/beanie_biter_chigga.png",
+          "sha256": "147cf758a0560ef934012407960af56bf9a26263f49c2ac453f4f4a95cef7b2d"
+        },
+        {
+          "path": "assets/beanie-denim-chigga.png",
+          "sha256": "147cf758a0560ef934012407960af56bf9a26263f49c2ac453f4f4a95cef7b2d"
+        },
+        {
+          "path": "assets/black-beanie-leather-chigga.png",
+          "sha256": "e6ee0aef14c0ac4c6893d7e27076ba68fddb29429cc961bbf939e5bffc69f364"
+        },
+        {
+          "path": "assets/black-hoodie-chain-chigga.png",
+          "sha256": "ef7d576179a4560b02b7dd0ae76f1f33c06963c8d1ece89fda89f8b571015552"
+        },
+        {
+          "path": "assets/brown-skin.png",
+          "sha256": "dce23d57ad7069ec39a062d0039316b4597af246d3b22ca0640a86076b84ae8e"
+        },
+        {
+          "path": "assets/bullet.webp",
+          "sha256": "d33c998c2fbc3404f81cf748f9e06fdcf51241edab461d97672f5756bf08e22e"
+        },
+        {
+          "path": "assets/camo_crawler_chigga.png",
+          "sha256": "b10f6e3c6cf1719f8f920489043a6e4e629de8022be3256dcbf058092bf3e188"
+        },
+        {
+          "path": "assets/camo-hoodie-soldier-chigga.png",
+          "sha256": "b10f6e3c6cf1719f8f920489043a6e4e629de8022be3256dcbf058092bf3e188"
+        },
+        {
+          "path": "assets/capillary_capo.png",
+          "sha256": "0979ac821ebe204d57eb10547899c044c0e2582273683107599c1950dfa761ad"
+        },
+        {
+          "path": "assets/chain_reaction_chigga.png",
+          "sha256": "a50e612abc6801f8bb42c16888089ef114dbb8d90b5aa3aa6b4c6eb6dccbfa10"
+        },
+        {
+          "path": "assets/chigga_bball_team_black.png",
+          "sha256": "f97701acdd6813bd8edfe540f2b9d5a2afb7edc8d54a370f8d108498235fa806"
+        },
+        {
+          "path": "assets/chigga_bball_team_blue.png",
+          "sha256": "866d3cfa28efd4be3776f740ea136a9d5a1076a5685c10f838197734e194d4c6"
+        },
+        {
+          "path": "assets/chigga_bball_team_green.png",
+          "sha256": "0d43a9e7c0038cf84850534f8d0a2658bf5d1aff3f4b2371abccea95e7c318f2"
+        },
+        {
+          "path": "assets/chigga_bball_team_purple.png",
+          "sha256": "11921367e63e4b38ca637beef6750396220d26b6196b74b3bf9afabc72189886"
+        },
+        {
+          "path": "assets/chigga_bball_team_red.png",
+          "sha256": "d74bf955cec1daca767c89891a2b9f49603031dc32e1ad29878b1cf4876dc406"
+        },
+        {
+          "path": "assets/chigga_fball_team_black.png",
+          "sha256": "508e29dec77eeac007e9d5c42bb347f2d378b8329bcf231bb1606905a0ba818a"
+        },
+        {
+          "path": "assets/chigga_fball_team_green.png",
+          "sha256": "f4a0904b9cf285e8bae112ec4e40ce91beb28970d7517dba456e03a77f3ff990"
+        },
+        {
+          "path": "assets/chigga_fball_team_purple.png",
+          "sha256": "ffe2a11fd43ec55fff1c96f4dcdb553ef014f62529627880409c0331bd836b97"
+        },
+        {
+          "path": "assets/chigga_fball_team_red.png",
+          "sha256": "b482ce2bd33cfd595b5b2e6e3eb972a283293666182fb58c84f7d47b195e456e"
+        },
+        {
+          "path": "assets/chigga_vamp.png",
+          "sha256": "a1d967cc8d52efa877c368a14b187b38338ffd73f082d5dd1c66fb05095a73aa"
+        },
+        {
+          "path": "assets/chigga-backscratch-scene.mp4",
+          "sha256": "e5a63bdb8bf1d576d7bbefd19990fe59ad422a814c9c7fde3f2aa7c9defa6aba"
+        },
+        {
+          "path": "assets/chigga-blue-swag-new.webp",
+          "sha256": "933a530e41f59481876c774b7d10d86d97b2d8d40e2595361e5ec7fb00522746"
+        },
+        {
+          "path": "assets/chigga-denim-shades.png",
+          "sha256": "6714394ad16efdd86efc865ae421a6e6edb5bb77d0c257ff205638ea0e1fb1f7"
+        },
+        {
+          "path": "assets/chigga-dj-red.png",
+          "sha256": "9e7f0b57bf2d6fc3d3256a29048a1a676fa7ec06ad2e6f26c3290bfa9140d46c"
+        },
+        {
+          "path": "assets/chigga-foot-party.mp4",
+          "sha256": "9efe8ab52b0fb9c04f269ded800346db35e805d497f907dcd7168ad987570032"
+        },
+        {
+          "path": "assets/chigga-green-swag.webp",
+          "sha256": "aa25104cd105420a5c98f574397c9b492d7d853403905e2c4c261bb830ff535f"
+        },
+        {
+          "path": "assets/chigga-leg-climb.mp4",
+          "sha256": "7d85b7b38df961ecac49c0d3fc36f7fba8089c828cd571da012cfcf818951609"
+        },
+        {
+          "path": "assets/chigga-neutral-swag.webp",
+          "sha256": "d22d74b030f0ad8a352ef59efc134da06773c1bdf4474f4c6682d9b934cc96b1"
+        },
+        {
+          "path": "assets/chigga-rifle.png",
+          "sha256": "039c98d2a955cb506ff7f4c3e9808c089c6a5f2123ab001afe1ed51f382e04e4"
+        },
+        {
+          "path": "assets/chigga-soldier-png.png",
+          "sha256": "341483d377f4bde99d52bd21080f4e6c4ac52be62eeac2d24e7afc654ef63069"
+        },
+        {
+          "path": "assets/chigga-soldier.png",
+          "sha256": "341483d377f4bde99d52bd21080f4e6c4ac52be62eeac2d24e7afc654ef63069"
+        },
+        {
+          "path": "assets/chigga-street-gold.png",
+          "sha256": "a50e612abc6801f8bb42c16888089ef114dbb8d90b5aa3aa6b4c6eb6dccbfa10"
+        },
+        {
+          "path": "assets/chiggas-featured-image.webp",
+          "sha256": "fd93deaee741768a8e86654c90eea3c943b2a94a154cb719c62019137327b6d5"
+        },
+        {
+          "path": "assets/chiggas-intro.mp4",
+          "sha256": "8698bda5858405cf1f8b46d2f05469a9785e614f017159fff85a5b3db494d818"
+        },
+        {
+          "path": "assets/chiggas-title-image.png",
+          "sha256": "c0b788292aabe74410cdc9440350d6bd3f674f21498bdc02e21ee1f81b8ac801"
+        },
+        {
+          "path": "assets/chiggas-title.png",
+          "sha256": "afc4d0504979cbba9dbb45726d4bffd2a26fdfdf9ef898034ded2430b6e9ea43"
+        },
+        {
+          "path": "assets/chiggas-tutorial.png",
+          "sha256": "03fc3d479dd1b0b58ed94effd2244d134283e8078e2ff05162a7584cd0102c5a"
+        },
+        {
+          "path": "assets/chiggas-you-win.mp4",
+          "sha256": "e1b1dcb44ad61347ce7de5afc25b7b76b359fb3034fdacff9a46ef857e4cea2a"
+        },
+        {
+          "path": "assets/cockroach-czar.png",
+          "sha256": "bee7b7d1552ff270c89287111aa2a21d3c5fc0686a90dc4a3229ae5c76197a1e"
+        },
+        {
+          "path": "assets/day_one_chigga.png",
+          "sha256": "9e7f0b57bf2d6fc3d3256a29048a1a676fa7ec06ad2e6f26c3290bfa9140d46c"
+        },
+        {
+          "path": "assets/demin_mite_drip.png",
+          "sha256": "6714394ad16efdd86efc865ae421a6e6edb5bb77d0c257ff205638ea0e1fb1f7"
+        },
+        {
+          "path": "assets/denim_chain_mite.png",
+          "sha256": "3df65a328b0527acf5beb3a528a14cb6374ead9d4de8b69dd3fd2ad5a0edd96f"
+        },
+        {
+          "path": "assets/denim-chain-chigga.png",
+          "sha256": "3df65a328b0527acf5beb3a528a14cb6374ead9d4de8b69dd3fd2ad5a0edd96f"
+        },
+        {
+          "path": "assets/dog-fur.png",
+          "sha256": "6a8eaf12dd01e40ed81b7c82ec0b853e851b3ca9e0afadd77703a3bbea281f03"
+        },
+        {
+          "path": "assets/dog-scratch-to-lawn-2.mp4",
+          "sha256": "2b93918b3c2924e9ff2f34b63e89ad11b382482cd4a538f43d01cd9586b12399"
+        },
+        {
+          "path": "assets/dog-scratch-to-lawn.mp4",
+          "sha256": "d864fec40569ceefbc73f30a9d12fd60b349b7fada65d8d6be269f3f43eef5b4"
+        },
+        {
+          "path": "assets/endless.mp3",
+          "sha256": "7e87f2f23317063e151494ee2e1a61f10a3d91bb175c5f631331b1f747c75c29"
+        },
+        {
+          "path": "assets/forearm-scratch.mp4",
+          "sha256": "9d4b19b459cdbbf2931e2281c14139826e34b707a9f8fe1a7f7362b4e7407181"
+        },
+        {
+          "path": "assets/formal_fine_flea.png",
+          "sha256": "41d3441e865c7f19cc2c0d06a02180b5ed854dd6fe3f7c8f6f55bdec8ec4e27b"
+        },
+        {
+          "path": "assets/grass-lawn.webp",
+          "sha256": "03ce471f4eae8d09a6fe557bf45ef05d86e341e41cbb96fe364ac215bb4098e7"
+        },
+        {
+          "path": "assets/hoodie_hookworm.png",
+          "sha256": "ef7d576179a4560b02b7dd0ae76f1f33c06963c8d1ece89fda89f8b571015552"
+        },
+        {
+          "path": "assets/hud-avatar-panel.png",
+          "sha256": "a90a8ac10315525a35415c3f7f81add8cc9d99a229e4189a22a20839549a4931"
+        },
+        {
+          "path": "assets/hud-soldier-circle.png",
+          "sha256": "d91996cb36c35d97bcd504938829a3caace2a4adb1efcda56cc3061aebd4a31b"
+        },
+        {
+          "path": "assets/leather_louse_legend.png",
+          "sha256": "e6ee0aef14c0ac4c6893d7e27076ba68fddb29429cc961bbf939e5bffc69f364"
+        },
+        {
+          "path": "assets/leather-cap-chigga.png",
+          "sha256": "0979ac821ebe204d57eb10547899c044c0e2582273683107599c1950dfa761ad"
+        },
+        {
+          "path": "assets/legendary_chigga_wear_purchase_entities.csv",
+          "sha256": "9ba66eb8c2ff2f9f765bbd3d3fe9091a0c35404aeb361e51c57c3f1fba62aea4"
+        },
+        {
+          "path": "assets/legendary_chigga_wear_purchase_entities.json",
+          "sha256": "b9f559a96299ab582697796f568d63e89e04ef38e3379dc7dd6c3fed477f1f00"
+        },
+        {
+          "path": "assets/lil_vamp_soldier.png",
+          "sha256": "850be2e0fc8ff0a69775af8e9de7bbeffeef6d2ec9502f7977ce2e4018f1faa3"
+        },
+        {
+          "path": "assets/meshy_ai_c0b788292aabe74410cdc9440350d6bd3f674f21498bdc02e21ee1f81b8ac801.png",
+          "sha256": "c0b788292aabe74410cdc9440350d6bd3f674f21498bdc02e21ee1f81b8ac801"
+        },
+        {
+          "path": "assets/mite_1.png",
+          "sha256": "6cff843bbc5e05f8bfbc58ffc27b0c944dc1617766b935211a7765166a0efbde"
+        },
+        {
+          "path": "assets/mite-wild-new.webp",
+          "sha256": "f19c31443f920ec67f0efafadd91f22d1cb5c8e4bdbb4573d063e87b1a35ec75"
+        },
+        {
+          "path": "assets/mobile-btn-charge.png",
+          "sha256": "506e40c1605af58f18aa9f45a6b77b368764f5361e001f96291513ebe5403038"
+        },
+        {
+          "path": "assets/mobile-btn-eat.png",
+          "sha256": "dc2c9b166418420f8687cbc75bd1008999890e73a5c8d55cf18cece5cb007cf1"
+        },
+        {
+          "path": "assets/mobile-btn-recruit.png",
+          "sha256": "17aa97d743a8d1f7e6867138617f1d5492ff3e5505e4e0ef6aec5a3b2d83aba9"
+        },
+        {
+          "path": "assets/mummified_mite.png",
+          "sha256": "add69aa6c3c43ae31af7d6b454c4174c29c83f890a14d1278d108d2592c76cbf"
+        },
+        {
+          "path": "assets/my-chigga-title.png",
+          "sha256": "cfdf62c7ac5d8a44c0a8355b77f597a39e3f798061b4b8fc29f1e0c0223863f1"
+        },
+        {
+          "path": "assets/my-chigga.png",
+          "sha256": "9e7f0b57bf2d6fc3d3256a29048a1a676fa7ec06ad2e6f26c3290bfa9140d46c"
+        },
+        {
+          "path": "assets/neon_nit_drip.png",
+          "sha256": "a4d097b07ddc4f27310a13a227523a841406583883d4a9ddacbcd8c1c5f5739b"
+        },
+        {
+          "path": "assets/neon-vest-chigga.png",
+          "sha256": "a4d097b07ddc4f27310a13a227523a841406583883d4a9ddacbcd8c1c5f5739b"
+        },
+        {
+          "path": "assets/orange-gang-commander.png",
+          "sha256": "f0d6679425a9ff3983b7987dfd52988132c5746f29f8114d4b634a62b2d5cf9b"
+        },
+        {
+          "path": "assets/orange-gang-minion.png",
+          "sha256": "1f5aa403d9e11d4989b96e4b46843d8e0cca241d20054bd2fe6f3efb68ba53c3"
+        },
+        {
+          "path": "assets/orange-puffer-chigga.png",
+          "sha256": "267531172f0e9b12263fa899c512db522e8654409018c8d6834b89d18afa7770"
+        },
+        {
+          "path": "assets/pale-skin.png",
+          "sha256": "87b68364cdd8876c6a72d449433ae575e0b20747f25c8718bfadb8f0fe56f07a"
+        },
+        {
+          "path": "assets/pet-dog.mp4",
+          "sha256": "55a6cf8b9d84daf15a414380a2b64d9fefe6e24450396e6d6caf0eb9f7fad70a"
+        },
+        {
+          "path": "assets/pinstripe_plague_boss.png",
+          "sha256": "46953d2a72eede30a593888b88ce0a6ade2c5c9617ab8014bf51a1df5c74d7c2"
+        },
+        {
+          "path": "assets/pinstripe-tracksuit-chigga.png",
+          "sha256": "46953d2a72eede30a593888b88ce0a6ade2c5c9617ab8014bf51a1df5c74d7c2"
+        },
+        {
+          "path": "assets/powerup-pistol.webp",
+          "sha256": "0bc11eb01eae334a531b3960192ac0c7f8f129b452d33d0521debe8f2db092cd"
+        },
+        {
+          "path": "assets/powerup-speed.webp",
+          "sha256": "d445fb7c3427511357bd454fc7ec1e9e2e12dcfd831497ebe142c0777bab14fc"
+        },
+        {
+          "path": "assets/puffer_parasite_chigga.png",
+          "sha256": "267531172f0e9b12263fa899c512db522e8654409018c8d6834b89d18afa7770"
+        },
+        {
+          "path": "assets/purple_velour_vandal.png",
+          "sha256": "b5276a5f6689ee9a2a05f9190eacb8b047b639a6bfcdf7bb2aeb9484055a659b"
+        },
+        {
+          "path": "assets/purple-bandana-chigga.png",
+          "sha256": "9faa2b71b4d08debc327acab6d8e28e58588e920c6b1c79454a5b6a7ce00ec02"
+        },
+        {
+          "path": "assets/purple-gang-commander.png",
+          "sha256": "f165ac07ae4366952fcec5377339eeb1a0e83e33376ab5bb05372204279083c8"
+        },
+        {
+          "path": "assets/purple-gang-minion.png",
+          "sha256": "ad704cda7e59053c288fea93a73fccfe8054f34f31f75cc02aa8b6b11db6d0a2"
+        },
+        {
+          "path": "assets/purple-tracksuit-chigga.png",
+          "sha256": "52b988aa5e071c154d6898dec0fbe1754749db34aff0a522e94153b1e787e646"
+        },
+        {
+          "path": "assets/purple-velour-chigga.png",
+          "sha256": "b5276a5f6689ee9a2a05f9190eacb8b047b639a6bfcdf7bb2aeb9484055a659b"
+        },
+        {
+          "path": "assets/red_puff_mite.png",
+          "sha256": "34ef423b65a2e3c306d4885025a595daddd4168cb104cc6ae6c8634e1651937b"
+        },
+        {
+          "path": "assets/red-puffer-bucket-chigga.png",
+          "sha256": "34ef423b65a2e3c306d4885025a595daddd4168cb104cc6ae6c8634e1651937b"
+        },
+        {
+          "path": "assets/screenshot-2026-05-21-102353.png",
+          "sha256": "80c134f441d9271484ff7f5a9b131c2556e37d7e06e4b3dd5f9a5d99e30fed6d"
+        },
+        {
+          "path": "assets/skin-bruise.webp",
+          "sha256": "2e957601a1cf50c575d773730770f86cf154903d5a4001afb8a6915a0f76a2c5"
+        },
+        {
+          "path": "assets/skin-follicle-base.webp",
+          "sha256": "9960e93239fe8e8195413cee422de785b92c137e3d418b512b8fb552b788b50e"
+        },
+        {
+          "path": "assets/skin-hair-follicle.webp",
+          "sha256": "ce21ece541fb2b4421be5c30ffd1998e259ae94ff6f8ed41448fcc492829992b"
+        },
+        {
+          "path": "assets/skin-pimple.webp",
+          "sha256": "afd48d39a04144d0277a2a63d6eeb93630e42b886ba145e9d61f66fa5e81525f"
+        },
+        {
+          "path": "assets/skin-tattoo-tribal.webp",
+          "sha256": "0b17bd9c118527bfd283afd3f935ea4e3128090bc876ce0104f5d3a4d190f6ec"
+        },
+        {
+          "path": "assets/skin-texture.webp",
+          "sha256": "833f691559d0410ed162cad379547404d0850d303c281878835b10d654495afa"
+        },
+        {
+          "path": "assets/soldier_0007_suit.png",
+          "sha256": "78713b00f6efa0bb9d23aef6e3e8f56fd34cb5752abb2fff893c31842ecbfc5b"
+        },
+        {
+          "path": "assets/soldier_bball_blue.png",
+          "sha256": "768fc725e8ab9922c803548e457d6d952e394ceb043b58da6e72892e667af24b"
+        },
+        {
+          "path": "assets/soldier_bball_team_flame.png",
+          "sha256": "0f6d5bf841f48b9bbb432b229c3aa58a17565d34f625afe3534c127a588646f9"
+        },
+        {
+          "path": "assets/soldier_bball_team_green.png",
+          "sha256": "e0821e392ddb997a61a71dc62e84440b4eb692237ac42d409252a3a044bd241b"
+        },
+        {
+          "path": "assets/soldier_bball_team_purple.png",
+          "sha256": "59ad66872a6dcc8511f605e66692fd9dd0f5b68719aed2bb9ad6317911a102ff"
+        },
+        {
+          "path": "assets/soldier_bball_team_red.png",
+          "sha256": "7229122cc29acd11c5edc124a060ff0567e27be58f308028d048bbbf05708ef8"
+        },
+        {
+          "path": "assets/soldier_black_puffy_brown.png",
+          "sha256": "a242bd0db323adb568bc384a9c4e8912d689aa2b70496cbc06658558e87a2be6"
+        },
+        {
+          "path": "assets/soldier_blue_vest_glasses.png",
+          "sha256": "97a70cc951d264b48b41fbea881aa406a44a05869050120b162944d4ce06b922"
+        },
+        {
+          "path": "assets/soldier_brown_leather_blue.png",
+          "sha256": "40c8ff78eea8a279981bfc8ec40f83f3438b8f8e7401502bd1f362c4c0997ed8"
+        },
+        {
+          "path": "assets/soldier_denim_camo_cap.png",
+          "sha256": "07f80526e8d8c8a76ab02616e3889b0ec4757588527a8a25f5f02b8e3ebee331"
+        },
+        {
+          "path": "assets/soldier_denim_camoflage.png",
+          "sha256": "4cc8b80a22be90471daea123c215be506aedb8a45b309c74748f2e8196bb1acd"
+        },
+        {
+          "path": "assets/soldier_denim_durag.png",
+          "sha256": "7322270f0803efe8a56b324f14e05dcf2a6fc7c846cd10edf35980b7ba26e58c"
+        },
+        {
+          "path": "assets/soldier_denim_green.png",
+          "sha256": "c1d2bdb4967b12a5e9c44c8db75845007fd34a2147ecc78c58b5e04618b323d8"
+        },
+        {
+          "path": "assets/soldier_denim_leather_hat.png",
+          "sha256": "c66b791c4bce38e11d3c1f263547d6e2b4a91bf9fdd418d57794b89e59c162ae"
+        },
+        {
+          "path": "assets/soldier_denim_purple.png",
+          "sha256": "ec30c8b134caad11702c351c2e18544837f5ff608fb347ccd9079ad5831f02ba"
+        },
+        {
+          "path": "assets/soldier_denim_red.png",
+          "sha256": "5b19aba8fa863a8fe65cd33cc2fcb3725968d9580dbd3183c3ef7c5562ac3980"
+        },
+        {
+          "path": "assets/soldier_denim_white_scully.png",
+          "sha256": "d18a5050694b2522e001e351704f21965cc71ff1c7b5e77115d4611f34bb3af3"
+        },
+        {
+          "path": "assets/soldier_franken_flea.png",
+          "sha256": "a63c55f4bf41f409cb4ee50739bd738150e6fdf2a993029ed47e17e860034970"
+        },
+        {
+          "path": "assets/soldier_leather_brown.png",
+          "sha256": "d3d2f9d77099e89efd3685afb298d4074aca63cddf8bedb4f6f3575dd1b3bb31"
+        },
+        {
+          "path": "assets/soldier_mummy_fit.png",
+          "sha256": "102bceaa2dbc40492a89649f17f29a6025392b4831cb690610d4ed9e46a5c435"
+        },
+        {
+          "path": "assets/soldier_smart_scully.png",
+          "sha256": "af136ad6e2c7ea1ea27427df324b211fdd24b516ef5c8ae91f3a2583c3c7df9d"
+        },
+        {
+          "path": "assets/soldier_sour_prince.png",
+          "sha256": "5fc218d98bdce9b99716236c4f4c88cb7108b176df42f2d51d19a41dde3d2462"
+        },
+        {
+          "path": "assets/soldier_team_black_2.png",
+          "sha256": "211cd475356ead3ae97cb045b8c5f5ff85c9c6460818c023ac172acd76b093a0"
+        },
+        {
+          "path": "assets/soldier_team_black.png",
+          "sha256": "132faec4658cd55d6a234c8aadbd0eb0fb9e0b18e536979ccc71b26f854e1f7a"
+        },
+        {
+          "path": "assets/soldier_team_blue.png",
+          "sha256": "9e06d702ba88793175338809edb17cbe8ab856980b532c1ea60af06752ac1adf"
+        },
+        {
+          "path": "assets/soldier_team_green.png",
+          "sha256": "1e3f2657208b37304bc4258678626e3fe3818612d9622c59eb7bb33677a5faaa"
+        },
+        {
+          "path": "assets/soldier_team_orange.png",
+          "sha256": "cbb4b81202c26adc47778ac87c8daba970d19b91f1180e65a6d52a3e9a516c3e"
+        },
+        {
+          "path": "assets/soldier_team_yellow.png",
+          "sha256": "cf566972e9275862910853f15de492290b32c9ce84cac11d6165cd5d01805bf4"
+        },
+        {
+          "path": "assets/soldier-black-puffy-brown.png",
+          "sha256": "a242bd0db323adb568bc384a9c4e8912d689aa2b70496cbc06658558e87a2be6"
+        },
+        {
+          "path": "assets/soldier-blue-vest-glasses.png",
+          "sha256": "97a70cc951d264b48b41fbea881aa406a44a05869050120b162944d4ce06b922"
+        },
+        {
+          "path": "assets/soldier-brown-leather-blue.png",
+          "sha256": "40c8ff78eea8a279981bfc8ec40f83f3438b8f8e7401502bd1f362c4c0997ed8"
+        },
+        {
+          "path": "assets/soldier-denim-camo-cap.png",
+          "sha256": "07f80526e8d8c8a76ab02616e3889b0ec4757588527a8a25f5f02b8e3ebee331"
+        },
+        {
+          "path": "assets/soldier-denim-camoflage.png",
+          "sha256": "4cc8b80a22be90471daea123c215be506aedb8a45b309c74748f2e8196bb1acd"
+        },
+        {
+          "path": "assets/soldier-denim-durag.png",
+          "sha256": "7322270f0803efe8a56b324f14e05dcf2a6fc7c846cd10edf35980b7ba26e58c"
+        },
+        {
+          "path": "assets/soldier-denim-green.png",
+          "sha256": "c1d2bdb4967b12a5e9c44c8db75845007fd34a2147ecc78c58b5e04618b323d8"
+        },
+        {
+          "path": "assets/soldier-denim-leather-hat.png",
+          "sha256": "c66b791c4bce38e11d3c1f263547d6e2b4a91bf9fdd418d57794b89e59c162ae"
+        },
+        {
+          "path": "assets/soldier-denim-purple.png",
+          "sha256": "ec30c8b134caad11702c351c2e18544837f5ff608fb347ccd9079ad5831f02ba"
+        },
+        {
+          "path": "assets/soldier-denim-red.png",
+          "sha256": "5b19aba8fa863a8fe65cd33cc2fcb3725968d9580dbd3183c3ef7c5562ac3980"
+        },
+        {
+          "path": "assets/soldier-denim-white-scully.png",
+          "sha256": "d18a5050694b2522e001e351704f21965cc71ff1c7b5e77115d4611f34bb3af3"
+        },
+        {
+          "path": "assets/soldier-leather-brown.png",
+          "sha256": "d3d2f9d77099e89efd3685afb298d4074aca63cddf8bedb4f6f3575dd1b3bb31"
+        },
+        {
+          "path": "assets/soldier-smart-scully.png",
+          "sha256": "af136ad6e2c7ea1ea27427df324b211fdd24b516ef5c8ae91f3a2583c3c7df9d"
+        },
+        {
+          "path": "assets/soldier-sour-prince.png",
+          "sha256": "5fc218d98bdce9b99716236c4f4c88cb7108b176df42f2d51d19a41dde3d2462"
+        },
+        {
+          "path": "assets/street_scabies_chigga.png",
+          "sha256": "3b18c5ca4b1779a40cc618b1f6553c6d164f9acaa5ae8cb61867c18d351e8b8d"
+        },
+        {
+          "path": "assets/street-bandana-chigga.png",
+          "sha256": "3b18c5ca4b1779a40cc618b1f6553c6d164f9acaa5ae8cb61867c18d351e8b8d"
+        },
+        {
+          "path": "assets/turf_sergeant_chigga.png",
+          "sha256": "341483d377f4bde99d52bd21080f4e6c4ac52be62eeac2d24e7afc654ef63069"
+        },
+        {
+          "path": "assets/velour_vector_chigga.png",
+          "sha256": "52b988aa5e071c154d6898dec0fbe1754749db34aff0a522e94153b1e787e646"
+        },
+        {
+          "path": "assets/white_chain_wriggler.png",
+          "sha256": "9cfb59b49a2df52a07722b61b0f0b10ce933369f6b738e8d5f60d4b5388ac9ba"
+        },
+        {
+          "path": "assets/white-chain-hoodie-chigga.png",
+          "sha256": "9cfb59b49a2df52a07722b61b0f0b10ce933369f6b738e8d5f60d4b5388ac9ba"
+        },
+        {
+          "path": "assets/yellow_jacket_itch.png",
+          "sha256": "be3f7e6adc1707f75b9b3974e051ddae7056b6fb7fec9d168fa859fcc90f7c12"
+        },
+        {
+          "path": "assets/yellow-puffer-bucket-chigga.png",
+          "sha256": "be3f7e6adc1707f75b9b3974e051ddae7056b6fb7fec9d168fa859fcc90f7c12"
+        },
+        {
+          "path": "audio/AudioManager.js",
+          "sha256": "00b4ef1eb0dbe51be7fe6593e6302946572f75089105f789f5202a47648cc3df"
+        },
+        {
+          "path": "config.js",
+          "sha256": "6aac763be0d0297114b6ae5560d2ea2ffb58e99890da5dc25a557e1c1728de11"
+        },
+        {
+          "path": "entities/BossChigga.js",
+          "sha256": "6a01b364ef798826da57dbefda5e035210717d2469d1346f910924c67fdeae3a"
+        },
+        {
+          "path": "entities/Chigga.js",
+          "sha256": "6e7ccae715c350fd12eb803d9a6fd86796997b6c95e1d401ba3076b272938e55"
+        },
+        {
+          "path": "entities/CockroachBoss.js",
+          "sha256": "904190fa07fff0c067385ed0c6f04e53bb00ddbd57da023fe5b01c49d464b657"
+        },
+        {
+          "path": "entities/EnemyCommander.js",
+          "sha256": "1390680e8807a047f4744ba056c3e728546bfbdff6e2f512f3555b94298f946f"
+        },
+        {
+          "path": "entities/LiceBoss.js",
+          "sha256": "6da2587c95ed1a77adc7c0c60d6d08b57d84a77bf67a7af6803e2fb821bb3e7b"
+        },
+        {
+          "path": "entities/MiteOverlord.js",
+          "sha256": "2308399e98384456e556a6184d28b6fdd2254074e30e0a0cecc3bdeea2490a5b"
+        },
+        {
+          "path": "entities/Player.js",
+          "sha256": "fc3faac3641234c753080a68887ddaf22e87c0ba049241d9a1737892af3a5503"
+        },
+        {
+          "path": "entities/Territory.js",
+          "sha256": "a18c27969a905501ff794059b5a8247440c5e9390cd20c86abfef2e54e7b7b12"
+        },
+        {
+          "path": "entities/TickBoss.js",
+          "sha256": "a86ff725bdb0f6eb7ba5dfefad1d05a557e199cb53d868478e41910ed20b6a9f"
+        },
+        {
+          "path": "entities/TickTwins.js",
+          "sha256": "9a1cd4f5fdf79c1fe680969c5a751f616e7e1b0a2d51dd55108758718253a125"
+        },
+        {
+          "path": "export-metadata.json",
+          "sha256": "472b8f6bcde7a674376d67f314334985db0bdba646c852597c0abe458f162a95"
+        },
+        {
+          "path": "index.html",
+          "sha256": "3a225b9f42f94712da1399126cd0060fcbf050f35b12ea9f59a68c5b3f0c6fe9"
+        },
+        {
+          "path": "main.js",
+          "sha256": "ddd329cf2776b1dbaa04e9e20edb680b3d76b556f20274e3c605841af01b7da1"
+        },
+        {
+          "path": "rosie/controls/phaserMobileControls.js",
+          "sha256": "3bcf0bd183a14d322aab6173ae87c323df3d9a7a3f09b4c97ce6135e70ad8a6c"
+        },
+        {
+          "path": "rosie/README.md",
+          "sha256": "0eb0e0224c5041595c282bc56eaa4fc2b02bbc03d9054358c10ae500b25ed025"
+        },
+        {
+          "path": "scenes/ControlsSettingsManager.js",
+          "sha256": "5aa1ceadac4ce7fba612151a1044578e1022d4e7766a3f7ac2f550bf0440d470"
+        },
+        {
+          "path": "scenes/GamepadRuntimeBridge.js",
+          "sha256": "6fa7fd91b89d6c4d070790ec089b5a3f9f3f1d9b53dd09b02b15967b436780ef"
+        },
+        {
+          "path": "scenes/GameScene.js",
+          "sha256": "3ea5ee9b2ed49f4a86fa6e77964b7423fd2e0f526c760cf1abb91d52e049b3fd"
+        },
+        {
+          "path": "scenes/IntroScene.js",
+          "sha256": "74587325f3015384dbe160e94de4956eab0a0526a0b8bf5237d6121bbf5c463d"
+        },
+        {
+          "path": "scenes/LeaderboardScene.js",
+          "sha256": "b7c69c94a8a3f3628bc6deeb43a12b7ef7e2b9092a2b9594b84fe9fa5ae77e5b"
+        },
+        {
+          "path": "scenes/LegendaryPurchaseCatalog.js",
+          "sha256": "7bdf17c29bdf86e2c04cfa08573df4a41a52856a04cdf229e7adeb185a4f3037"
+        },
+        {
+          "path": "scenes/LegendaryStoreScene.js",
+          "sha256": "bc4f73e40b0af38d61ffa3f72c29482429602cfda6f36a989e5f4ea7679f1a90"
+        },
+        {
+          "path": "scenes/LoadingScene.js",
+          "sha256": "0971d8da0f0ad583083cac08b04012a3745c7142eb0c3c60be9fa551d766c625"
+        },
+        {
+          "path": "scenes/MemoryMatchScene.js",
+          "sha256": "835560ad690702600f143321f032c2820f0d6f65baa5f928b8d2a9db2125c147"
+        },
+        {
+          "path": "scenes/MenuScene.js",
+          "sha256": "41f9f00fa6c19d048c495d61f8e19420c0b2c3ca1028f85687ff12f4c07aaeaa"
+        },
+        {
+          "path": "scenes/MiniGamePromptScene.js",
+          "sha256": "fe59528f81a2b13d509c408ae3e6d41bbbb4020f1b7c071049d1e75488c66a48"
+        },
+        {
+          "path": "scenes/MiniGamesScene.js",
+          "sha256": "77952c45af51637854cffdd35f3d8286aa204106a4ddcdce41ad81ad02a29878"
+        },
+        {
+          "path": "scenes/ParasiteMazeScene.js",
+          "sha256": "7fb2f5256bd980bf564fb6bbd837ff9ace09f58c6372d1de6aa6bf71cf0f40b8"
+        },
+        {
+          "path": "scenes/PlatformPurchaseAdapter.js",
+          "sha256": "9b58b2bccd6b5562c2298459e3e31fa39110353f7920dd1652e39d4411edf83c"
+        },
+        {
+          "path": "scenes/ResponsiveLayout.js",
+          "sha256": "320a161998289da4a95c6fdd628f5bf8850a9ea67cfb284b2032e55161d3cb7e"
+        },
+        {
+          "path": "scenes/SkinRegistry.js",
+          "sha256": "f3e439b0fa7778449d3d9671279f897a7c2ad422d5c7620ebf33489be5bb8f42"
+        },
+        {
+          "path": "scenes/StageIntroScene.js",
+          "sha256": "6b3a8dc4db0e2c8af5a5aa22324380a0e6398c9518d05482bbe6fe4c27c0bf3a"
+        },
+        {
+          "path": "scenes/SteamAchievementEventReporter.js",
+          "sha256": "e7426b729fe3ef517ae110d07d61c7f4f8924b0d8e1f40669e545df059011ab2"
+        },
+        {
+          "path": "scenes/SteamInputPromptManager.js",
+          "sha256": "0f68ab9c1e5e773d63fcf88591964049fef1201686d5692d146ef0528f9ef6de"
+        },
+        {
+          "path": "scenes/SteamInventoryEntitlementBridge.js",
+          "sha256": "06c4463d51fb1d2c27f468972fb132963d1e74c875134dfb54ae248264486740"
+        },
+        {
+          "path": "scenes/TerrainDecorator.js",
+          "sha256": "332a318898d092d979634a01c60ff1f61f12e11af34b3dc5aa7cec82a68be831"
+        },
+        {
+          "path": "scenes/TutorialScene.js",
+          "sha256": "9eadb99d123d61fbde6b044a5b354e1f8cc76aa8e5936dd9a3460d81ef2d108a"
+        },
+        {
+          "path": "scenes/WardrobeScene.js",
+          "sha256": "6367965d94eb47ddbfc39dcdc9a62817bee118fe0bb5f8f93de4261a75a344cc"
+        },
+        {
+          "path": "vendor/phaser/phaser-default-shim.js",
+          "sha256": "6eb7227e13284d91d7be817b94d5c9e9506e013021f047dfeb5fb1a7a9d7f27a"
+        },
+        {
+          "path": "vendor/phaser/README_INSTALL.txt",
+          "sha256": "dd85d6a22135a11cf2170290d96b331f6db712ba1b1a222ea30a3afff93d5bc2"
+        },
+        {
+          "path": "vendor/phaser/VERSION.txt",
+          "sha256": "74af8515738a55071ad8a67fc74b69a41d5b285ce6f828580bab5aa59f4c166f"
         }
       ]
     },
@@ -1658,8 +2433,8 @@
       "root": "C:\\ChiggasUnified\\platforms\\android-capacitor\\www",
       "ok": true,
       "status": "payload_manifest_ready",
-      "fileCount": 203,
-      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389",
+      "fileCount": 191,
+      "combinedHash": "5d0762e1048b242a36a511123dc473d6b85afceb5f09bbb591b60041c5e60022",
       "files": [
         {
           "path": "assets/audio/cartoon-munch.mp3",
@@ -2262,26 +3037,6 @@
           "sha256": "6aac763be0d0297114b6ae5560d2ea2ffb58e99890da5dc25a557e1c1728de11"
         },
         {
-          "path": "ControllerDisconnectPausePass101D.js",
-          "sha256": "3341d8d1a46742910b6aaa52628c61193be8edcb18ec817088c940d7c7fa0fce"
-        },
-        {
-          "path": "ControllerPromptsPass101C.js",
-          "sha256": "8357ba54cd696e518e3d3c92fba77dbf13695071ea0863e3583ab0b09a4d79fd"
-        },
-        {
-          "path": "ControllerRealPauseCursorPass101E.js",
-          "sha256": "99a5ac86b4e1933de755d91b3e61049c89e8c69aed9e10da502843ac72d6b5a1"
-        },
-        {
-          "path": "ControllerReviewCompliancePass100A.js",
-          "sha256": "387caa2f9d7b8a97cf8c3d2c710c1b930ce0fa3b1d5c7fb546b20ebc4d458576"
-        },
-        {
-          "path": "ControllerReviewCompliancePass100A1.js",
-          "sha256": "34b630e0a2ddf273ccdd5a6e720877077887da05ee0e51f76f8511da012b1df4"
-        },
-        {
           "path": "entities/BossChigga.js",
           "sha256": "6a01b364ef798826da57dbefda5e035210717d2469d1346f910924c67fdeae3a"
         },
@@ -2326,12 +3081,8 @@
           "sha256": "472b8f6bcde7a674376d67f314334985db0bdba646c852597c0abe458f162a95"
         },
         {
-          "path": "ForceDisconnectPausePass101F.js",
-          "sha256": "37853cba1d6683a51cee43d3add2776f058c885899c307bc63347ec72fb7b80c"
-        },
-        {
           "path": "index.html",
-          "sha256": "9cc7c6e2ea46b125dc9cd947f48e41e450726a739e343e8f0f87185ca98f60b6"
+          "sha256": "3a225b9f42f94712da1399126cd0060fcbf050f35b12ea9f59a68c5b3f0c6fe9"
         },
         {
           "path": "main.js",
@@ -2355,7 +3106,7 @@
         },
         {
           "path": "scenes/GameScene.js",
-          "sha256": "7724637d40a297cb34451ef0038177b0361a777d6acc6216ca52cac9f5829bce"
+          "sha256": "3ea5ee9b2ed49f4a86fa6e77964b7423fd2e0f526c760cf1abb91d52e049b3fd"
         },
         {
           "path": "scenes/IntroScene.js",
@@ -2383,7 +3134,7 @@
         },
         {
           "path": "scenes/MenuScene.js",
-          "sha256": "3d5adc96bc6cc154ce0647d1ae46725212bdc680992516b643c077bab080dd40"
+          "sha256": "41f9f00fa6c19d048c495d61f8e19420c0b2c3ca1028f85687ff12f4c07aaeaa"
         },
         {
           "path": "scenes/MiniGamePromptScene.js",
@@ -2399,7 +3150,7 @@
         },
         {
           "path": "scenes/PlatformPurchaseAdapter.js",
-          "sha256": "545bdd0773c941f43dabe4e3e8485f1f2e215d8e0d1ac08289a21f33f5dfc871"
+          "sha256": "9b58b2bccd6b5562c2298459e3e31fa39110353f7920dd1652e39d4411edf83c"
         },
         {
           "path": "scenes/ResponsiveLayout.js",
@@ -2438,22 +3189,6 @@
           "sha256": "6367965d94eb47ddbfc39dcdc9a62817bee118fe0bb5f8f93de4261a75a344cc"
         },
         {
-          "path": "StableControllerCursorPass101H.js",
-          "sha256": "4afdafe763231bb9020316bb4aefcfb86f88f4a70cb858ca99247d0ca9a65f25"
-        },
-        {
-          "path": "SteamInputCompatibilityPass101B.js",
-          "sha256": "b9c3c1f2c346a10e4cee8f82ac18c9dfcc1971c7e220950623aa0a50aaac6746"
-        },
-        {
-          "path": "SteamInputRuntimeInspectorPass101A.js",
-          "sha256": "127c3b2ccb7b740e30b289de430e54be316a02546f85eb5f1d7139d0e1308b89"
-        },
-        {
-          "path": "SteamWalletPurchaseBridgePass99C.js",
-          "sha256": "07b23c783cd3d1b838c51d759f36e3771c8c8fb516e39991f91153bbca89b78e"
-        },
-        {
           "path": "vendor/phaser/phaser-default-shim.js",
           "sha256": "6eb7227e13284d91d7be817b94d5c9e9506e013021f047dfeb5fb1a7a9d7f27a"
         },
@@ -2464,14 +3199,6 @@
         {
           "path": "vendor/phaser/VERSION.txt",
           "sha256": "74af8515738a55071ad8a67fc74b69a41d5b285ce6f828580bab5aa59f4c166f"
-        },
-        {
-          "path": "WalletFailedStateFixPass102B.js",
-          "sha256": "4a152f48dcf8dcdbe733e688c348ca1f20e14376fa9b5a37937377660195320c"
-        },
-        {
-          "path": "WalletNoticeOverlayFixPass102A.js",
-          "sha256": "1202bc735a2e3c48bc3fed61ee8e89f73617e57e5dc141be0bf3960ce1e8220c"
         }
       ]
     },
@@ -2480,8 +3207,8 @@
       "root": "C:\\ChiggasUnified\\platforms\\android-capacitor\\android\\app\\src\\main\\assets\\public",
       "ok": true,
       "status": "payload_manifest_ready",
-      "fileCount": 203,
-      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389",
+      "fileCount": 191,
+      "combinedHash": "5d0762e1048b242a36a511123dc473d6b85afceb5f09bbb591b60041c5e60022",
       "files": [
         {
           "path": "assets/audio/cartoon-munch.mp3",
@@ -3084,26 +3811,6 @@
           "sha256": "6aac763be0d0297114b6ae5560d2ea2ffb58e99890da5dc25a557e1c1728de11"
         },
         {
-          "path": "ControllerDisconnectPausePass101D.js",
-          "sha256": "3341d8d1a46742910b6aaa52628c61193be8edcb18ec817088c940d7c7fa0fce"
-        },
-        {
-          "path": "ControllerPromptsPass101C.js",
-          "sha256": "8357ba54cd696e518e3d3c92fba77dbf13695071ea0863e3583ab0b09a4d79fd"
-        },
-        {
-          "path": "ControllerRealPauseCursorPass101E.js",
-          "sha256": "99a5ac86b4e1933de755d91b3e61049c89e8c69aed9e10da502843ac72d6b5a1"
-        },
-        {
-          "path": "ControllerReviewCompliancePass100A.js",
-          "sha256": "387caa2f9d7b8a97cf8c3d2c710c1b930ce0fa3b1d5c7fb546b20ebc4d458576"
-        },
-        {
-          "path": "ControllerReviewCompliancePass100A1.js",
-          "sha256": "34b630e0a2ddf273ccdd5a6e720877077887da05ee0e51f76f8511da012b1df4"
-        },
-        {
           "path": "entities/BossChigga.js",
           "sha256": "6a01b364ef798826da57dbefda5e035210717d2469d1346f910924c67fdeae3a"
         },
@@ -3148,12 +3855,8 @@
           "sha256": "472b8f6bcde7a674376d67f314334985db0bdba646c852597c0abe458f162a95"
         },
         {
-          "path": "ForceDisconnectPausePass101F.js",
-          "sha256": "37853cba1d6683a51cee43d3add2776f058c885899c307bc63347ec72fb7b80c"
-        },
-        {
           "path": "index.html",
-          "sha256": "9cc7c6e2ea46b125dc9cd947f48e41e450726a739e343e8f0f87185ca98f60b6"
+          "sha256": "3a225b9f42f94712da1399126cd0060fcbf050f35b12ea9f59a68c5b3f0c6fe9"
         },
         {
           "path": "main.js",
@@ -3177,7 +3880,7 @@
         },
         {
           "path": "scenes/GameScene.js",
-          "sha256": "7724637d40a297cb34451ef0038177b0361a777d6acc6216ca52cac9f5829bce"
+          "sha256": "3ea5ee9b2ed49f4a86fa6e77964b7423fd2e0f526c760cf1abb91d52e049b3fd"
         },
         {
           "path": "scenes/IntroScene.js",
@@ -3205,7 +3908,7 @@
         },
         {
           "path": "scenes/MenuScene.js",
-          "sha256": "3d5adc96bc6cc154ce0647d1ae46725212bdc680992516b643c077bab080dd40"
+          "sha256": "41f9f00fa6c19d048c495d61f8e19420c0b2c3ca1028f85687ff12f4c07aaeaa"
         },
         {
           "path": "scenes/MiniGamePromptScene.js",
@@ -3221,7 +3924,7 @@
         },
         {
           "path": "scenes/PlatformPurchaseAdapter.js",
-          "sha256": "545bdd0773c941f43dabe4e3e8485f1f2e215d8e0d1ac08289a21f33f5dfc871"
+          "sha256": "9b58b2bccd6b5562c2298459e3e31fa39110353f7920dd1652e39d4411edf83c"
         },
         {
           "path": "scenes/ResponsiveLayout.js",
@@ -3260,22 +3963,6 @@
           "sha256": "6367965d94eb47ddbfc39dcdc9a62817bee118fe0bb5f8f93de4261a75a344cc"
         },
         {
-          "path": "StableControllerCursorPass101H.js",
-          "sha256": "4afdafe763231bb9020316bb4aefcfb86f88f4a70cb858ca99247d0ca9a65f25"
-        },
-        {
-          "path": "SteamInputCompatibilityPass101B.js",
-          "sha256": "b9c3c1f2c346a10e4cee8f82ac18c9dfcc1971c7e220950623aa0a50aaac6746"
-        },
-        {
-          "path": "SteamInputRuntimeInspectorPass101A.js",
-          "sha256": "127c3b2ccb7b740e30b289de430e54be316a02546f85eb5f1d7139d0e1308b89"
-        },
-        {
-          "path": "SteamWalletPurchaseBridgePass99C.js",
-          "sha256": "07b23c783cd3d1b838c51d759f36e3771c8c8fb516e39991f91153bbca89b78e"
-        },
-        {
           "path": "vendor/phaser/phaser-default-shim.js",
           "sha256": "6eb7227e13284d91d7be817b94d5c9e9506e013021f047dfeb5fb1a7a9d7f27a"
         },
@@ -3286,14 +3973,6 @@
         {
           "path": "vendor/phaser/VERSION.txt",
           "sha256": "74af8515738a55071ad8a67fc74b69a41d5b285ce6f828580bab5aa59f4c166f"
-        },
-        {
-          "path": "WalletFailedStateFixPass102B.js",
-          "sha256": "4a152f48dcf8dcdbe733e688c348ca1f20e14376fa9b5a37937377660195320c"
-        },
-        {
-          "path": "WalletNoticeOverlayFixPass102A.js",
-          "sha256": "1202bc735a2e3c48bc3fed61ee8e89f73617e57e5dc141be0bf3960ce1e8220c"
         }
       ]
     }
@@ -3302,17 +3981,17 @@
     {
       "label": "steam",
       "matchesGame": true,
-      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389"
+      "combinedHash": "5e0d7c1c0365dadee8d1f27b5071db7447435dba58fc170c70fa6717823731bc"
     },
     {
       "label": "android-www",
       "matchesGame": true,
-      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389"
+      "combinedHash": "5d0762e1048b242a36a511123dc473d6b85afceb5f09bbb591b60041c5e60022"
     },
     {
       "label": "android-public",
       "matchesGame": true,
-      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389"
+      "combinedHash": "5d0762e1048b242a36a511123dc473d6b85afceb5f09bbb591b60041c5e60022"
     }
   ]
 }

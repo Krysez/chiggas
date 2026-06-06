@@ -1,6 +1,6 @@
 # Chiggas Unified Status
 
-Generated: 2026-06-06T12:46:01.734Z
+Generated: 2026-06-06T14:25:11.643Z
 
 ## Summary
 
@@ -30,10 +30,11 @@ Failed: none
 ## Payload Manifest
 
 Output: C:\ChiggasUnified\docs\payload-manifest.json
-- game: 203 files (1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389)
-- steam: 203 files (1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389)
-- android-www: 203 files (1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389)
-- android-public: 203 files (1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389)
+- game: 203 files (5e0d7c1c0365dadee8d1f27b5071db7447435dba58fc170c70fa6717823731bc)
+- steam: 203 files (5e0d7c1c0365dadee8d1f27b5071db7447435dba58fc170c70fa6717823731bc)
+- android-game-projection: 191 files (5d0762e1048b242a36a511123dc473d6b85afceb5f09bbb591b60041c5e60022)
+- android-www: 191 files (5d0762e1048b242a36a511123dc473d6b85afceb5f09bbb591b60041c5e60022)
+- android-public: 191 files (5d0762e1048b242a36a511123dc473d6b85afceb5f09bbb591b60041c5e60022)
 
 Comparisons:
 - steam: matches game
@@ -52,9 +53,9 @@ Output: C:\ChiggasUnified\docs\audit-report.md
 - Shared game files: 204
 - Integration files: 17
 - Steam wrapper files: 296
-- Android wrapper files: 477
+- Android wrapper files: 466
 - Script files: 29
-- Docs files: 17
+- Docs files: 19
 
 ## Android Toolchain
 

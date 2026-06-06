@@ -50,6 +50,7 @@ export default class MenuScene extends Phaser.Scene {
         this.selectedControlMode = this.settings.controlMode || 'touch';
         this.optionsContainer = null;
         this.diffContainer = null;
+        this._bindingCapture = null;
 
         this.add.rectangle(width / 2, height / 2, width, height, 0x111111);
 
@@ -850,41 +851,93 @@ export default class MenuScene extends Phaser.Scene {
     }
 
     _beginKeyboardBindingCapture(row, returnTarget = 'main') {
-        const { width, height } = this.scale;
-        const overlay = this._createCaptureOverlay(`PRESS KEY FOR ${row.label.toUpperCase()}`);
+        const capture = this._startBindingCapture(`PRESS KEY FOR ${row.label.toUpperCase()}`);
+        const armedAt = this.time?.now || Date.now();
 
         const finish = (event) => {
+            if (capture !== this._bindingCapture) return;
+            const now = this.time?.now || Date.now();
+            if (now - armedAt < 120) return;
             if (!event?.code) return;
             event.preventDefault?.();
-            overlay?.destroy(true);
+            event.stopPropagation?.();
+            if (event.code === 'Escape' || event.key === 'Escape') {
+                this._cancelBindingCapture(returnTarget);
+                return;
+            }
+            this._endBindingCapture();
             setKeyboardBinding(row.actionSet, row.action, event.code);
             this.controlBindings = loadControlBindings();
             this.showControlsSettings(returnTarget);
         };
 
-        this.input.keyboard.once('keydown', finish);
+        capture.keyboardFinish = finish;
+        this.input.keyboard.on('keydown', finish);
     }
 
     _beginGamepadBindingCapture(row, returnTarget = 'main') {
-        const overlay = this._createCaptureOverlay(`PRESS GAMEPAD BUTTON FOR ${row.label.toUpperCase()}`);
+        const capture = this._startBindingCapture(`PRESS GAMEPAD BUTTON FOR ${row.label.toUpperCase()}`);
+        const armedAt = this.time?.now || Date.now();
 
         const finish = (pad, button, index) => {
+            if (capture !== this._bindingCapture) return;
+            const now = this.time?.now || Date.now();
+            if (now - armedAt < 120) return;
             const buttonIndex = button?.index ?? index;
             if (buttonIndex === undefined || buttonIndex === null) return;
-            overlay?.destroy(true);
+            this._endBindingCapture();
             setGamepadBinding(row.actionSet, row.action, buttonIndex);
             this.controlBindings = loadControlBindings();
             this.showControlsSettings(returnTarget);
         };
 
         if (this.input.gamepad) {
-            this.input.gamepad.once('down', finish);
+            capture.gamepadFinish = finish;
+            this.input.gamepad.on('down', finish);
         }
 
-        this.input.keyboard.once('keydown-ESC', () => {
-            overlay?.destroy(true);
-            this.showControlsSettings(returnTarget);
-        });
+        const cancel = (event) => {
+            if (capture !== this._bindingCapture) return;
+            event?.preventDefault?.();
+            event?.stopPropagation?.();
+            this._cancelBindingCapture(returnTarget);
+        };
+        capture.keyboardCancel = cancel;
+        this.input.keyboard.on('keydown-ESC', cancel);
+    }
+
+    _startBindingCapture(message) {
+        this._endBindingCapture();
+        const capture = {
+            overlay: this._createCaptureOverlay(message),
+            keyboardFinish: null,
+            keyboardCancel: null,
+            gamepadFinish: null
+        };
+        this._bindingCapture = capture;
+        return capture;
+    }
+
+    _endBindingCapture() {
+        const capture = this._bindingCapture;
+        if (!capture) return;
+
+        if (capture.keyboardFinish && this.input?.keyboard) {
+            this.input.keyboard.off('keydown', capture.keyboardFinish);
+        }
+        if (capture.keyboardCancel && this.input?.keyboard) {
+            this.input.keyboard.off('keydown-ESC', capture.keyboardCancel);
+        }
+        if (capture.gamepadFinish && this.input?.gamepad) {
+            this.input.gamepad.off('down', capture.gamepadFinish);
+        }
+        capture.overlay?.destroy(true);
+        this._bindingCapture = null;
+    }
+
+    _cancelBindingCapture(returnTarget = 'main') {
+        this._endBindingCapture();
+        this.showControlsSettings(returnTarget);
     }
 
     _createCaptureOverlay(message) {
@@ -1320,6 +1373,9 @@ ${samples}`, {
                     this._moveMenuFocus('right');
                 } else if (key === 'Enter' || key === ' ') {
                     this._activateFocusedMenuButton();
+                } else if (this._bindingCapture) {
+                    event.preventDefault?.();
+                    event.stopPropagation?.();
                 } else if (key === 'Escape' || key === 'Backspace') {
                     this._menuNavBack?.();
                 }
@@ -2110,14 +2166,14 @@ try {
 
                     this.input?.gamepad?.on?.('down', (_pad, button, index) => {
                         const buttonIndex = button?.index ?? index;
-                        if ((buttonIndex === 1 || buttonIndex === 8) && (this.optionsContainer || this.controlsContainer)) {
+                        if (!this._bindingCapture && (buttonIndex === 1 || buttonIndex === 8) && (this.optionsContainer || this.controlsContainer)) {
                             this.__pass92KBackPressedAt = this.time?.now || Date.now();
                             this.__pass92KReturnToMainMenuSafely();
                         }
                     });
 
                     this.input?.keyboard?.on?.('keydown', event => {
-                        if ((event.key === 'Escape' || event.code === 'Escape') && (this.optionsContainer || this.controlsContainer)) {
+                        if (!this._bindingCapture && (event.key === 'Escape' || event.code === 'Escape') && (this.optionsContainer || this.controlsContainer)) {
                             this.__pass92KBackPressedAt = this.time?.now || Date.now();
                             this.__pass92KReturnToMainMenuSafely();
                         }

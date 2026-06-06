@@ -6,13 +6,31 @@ const { exists } = require('../lib/file-utils');
 const source = path.join(STEAM_DIR, 'dist', 'win-unpacked');
 const target = path.join(STEAM_DIR, 'steam_depot_build', 'windows');
 
-function copyRecursive(from, to) {
+function normalizeRel(rel) {
+  return rel.replace(/\\/g, '/');
+}
+
+function shouldExclude(rel, entry) {
+  const normalized = normalizeRel(rel);
+  const base = path.basename(normalized);
+  if (entry.isDirectory()) return false;
+
+  return normalized.endsWith('.log')
+    || /^pass\d+[a-z0-9-]*(trace|history)[a-z0-9-]*\.jsonl?$/i.test(base)
+    || /^steam-achievement-.*trace.*\.(json|log)$/i.test(base)
+    || /^chiggas-.*trace.*\.(json|log)$/i.test(base);
+}
+
+function copyRecursive(from, to, rel = '') {
   fs.mkdirSync(to, { recursive: true });
   for (const entry of fs.readdirSync(from, { withFileTypes: true })) {
+    const entryRel = rel ? path.join(rel, entry.name) : entry.name;
+    if (shouldExclude(entryRel, entry)) continue;
+
     const src = path.join(from, entry.name);
     const dest = path.join(to, entry.name);
     if (entry.isDirectory()) {
-      copyRecursive(src, dest);
+      copyRecursive(src, dest, entryRel);
     } else {
       fs.copyFileSync(src, dest);
     }

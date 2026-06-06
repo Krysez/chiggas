@@ -1,6 +1,6 @@
 # Chiggas Unified Status
 
-Generated: 2026-06-06T12:40:13.824Z
+Generated: 2026-06-06T12:42:03.647Z
 
 ## Summary
 
@@ -50,7 +50,7 @@ Output: C:\ChiggasUnified\docs\audit-report.md
 ## Structure
 
 - Shared game files: 204
-- Integration files: 24
+- Integration files: 17
 - Steam wrapper files: 296
 - Android wrapper files: 477
 - Script files: 28

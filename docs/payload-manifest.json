@@ -1,7 +1,7 @@
 {
   "ok": true,
   "status": "payload_manifest_written",
-  "generatedAt": "2026-06-05T20:38:04.088Z",
+  "generatedAt": "2026-06-06T12:18:37.776Z",
   "exclusions": [
     "vendor/phaser/phaser.esm.js",
     "cordova.js",
@@ -15,7 +15,7 @@
       "ok": true,
       "status": "payload_manifest_ready",
       "fileCount": 203,
-      "combinedHash": "960c4dee41bc2561a8485e1f575e5f21078fef12f24587343b82b0ef224f675e",
+      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389",
       "files": [
         {
           "path": "assets/audio/cartoon-munch.mp3",
@@ -739,7 +739,7 @@
         },
         {
           "path": "scenes/MenuScene.js",
-          "sha256": "aa96c423e63d37b63f301228afa7efc2008d4d509cd7540480a8f1e1aaeaa8dd"
+          "sha256": "3d5adc96bc6cc154ce0647d1ae46725212bdc680992516b643c077bab080dd40"
         },
         {
           "path": "scenes/MiniGamePromptScene.js",
@@ -837,7 +837,7 @@
       "ok": true,
       "status": "payload_manifest_ready",
       "fileCount": 203,
-      "combinedHash": "960c4dee41bc2561a8485e1f575e5f21078fef12f24587343b82b0ef224f675e",
+      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389",
       "files": [
         {
           "path": "assets/audio/cartoon-munch.mp3",
@@ -1561,7 +1561,7 @@
         },
         {
           "path": "scenes/MenuScene.js",
-          "sha256": "aa96c423e63d37b63f301228afa7efc2008d4d509cd7540480a8f1e1aaeaa8dd"
+          "sha256": "3d5adc96bc6cc154ce0647d1ae46725212bdc680992516b643c077bab080dd40"
         },
         {
           "path": "scenes/MiniGamePromptScene.js",
@@ -1659,7 +1659,7 @@
       "ok": true,
       "status": "payload_manifest_ready",
       "fileCount": 203,
-      "combinedHash": "960c4dee41bc2561a8485e1f575e5f21078fef12f24587343b82b0ef224f675e",
+      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389",
       "files": [
         {
           "path": "assets/audio/cartoon-munch.mp3",
@@ -2383,7 +2383,7 @@
         },
         {
           "path": "scenes/MenuScene.js",
-          "sha256": "aa96c423e63d37b63f301228afa7efc2008d4d509cd7540480a8f1e1aaeaa8dd"
+          "sha256": "3d5adc96bc6cc154ce0647d1ae46725212bdc680992516b643c077bab080dd40"
         },
         {
           "path": "scenes/MiniGamePromptScene.js",
@@ -2481,7 +2481,7 @@
       "ok": true,
       "status": "payload_manifest_ready",
       "fileCount": 203,
-      "combinedHash": "960c4dee41bc2561a8485e1f575e5f21078fef12f24587343b82b0ef224f675e",
+      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389",
       "files": [
         {
           "path": "assets/audio/cartoon-munch.mp3",
@@ -3205,7 +3205,7 @@
         },
         {
           "path": "scenes/MenuScene.js",
-          "sha256": "aa96c423e63d37b63f301228afa7efc2008d4d509cd7540480a8f1e1aaeaa8dd"
+          "sha256": "3d5adc96bc6cc154ce0647d1ae46725212bdc680992516b643c077bab080dd40"
         },
         {
           "path": "scenes/MiniGamePromptScene.js",
@@ -3302,17 +3302,17 @@
     {
       "label": "steam",
       "matchesGame": true,
-      "combinedHash": "960c4dee41bc2561a8485e1f575e5f21078fef12f24587343b82b0ef224f675e"
+      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389"
     },
     {
       "label": "android-www",
       "matchesGame": true,
-      "combinedHash": "960c4dee41bc2561a8485e1f575e5f21078fef12f24587343b82b0ef224f675e"
+      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389"
     },
     {
       "label": "android-public",
       "matchesGame": true,
-      "combinedHash": "960c4dee41bc2561a8485e1f575e5f21078fef12f24587343b82b0ef224f675e"
+      "combinedHash": "1aaeabeb7ff26256eb065b099edccf7382f288e6f8cfc5bc9089b4e3f040e389"
     }
   ]
 }

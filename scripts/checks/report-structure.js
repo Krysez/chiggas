@@ -22,11 +22,44 @@ function topLevelDirs(root) {
     .sort();
 }
 
+function normalizedRel(rel) {
+  return rel.replace(/\\/g, '/');
+}
+
+function commonGeneratedExclude(rel) {
+  const normalized = normalizedRel(rel);
+  return normalized.startsWith('node_modules/')
+    || normalized.startsWith('.git/')
+    || normalized.startsWith('dist/')
+    || normalized.startsWith('build/')
+    || normalized.startsWith('out/')
+    || normalized.startsWith('coverage/')
+    || normalized.endsWith('.log');
+}
+
+const integrationsGeneratedExclude = rel => {
+  const normalized = normalizedRel(rel);
+  return commonGeneratedExclude(rel)
+    || normalized.startsWith('steam/entitlement-backend/node_modules/')
+    || normalized.startsWith('steam/entitlement-backend/data/')
+    || normalized.startsWith('steam/entitlement-backend/backups/')
+    || normalized.startsWith('steam/steamworks/generated/');
+};
+
+const steamGeneratedExclude = rel => {
+  const normalized = normalizedRel(rel);
+  return commonGeneratedExclude(rel)
+    || normalized.startsWith('steam_depot_build/');
+};
+
 const androidGeneratedExclude = rel => {
-  const normalized = rel.replace(/\\/g, '/');
-  return normalized.startsWith('android/.gradle/')
+  const normalized = normalizedRel(rel);
+  return commonGeneratedExclude(rel)
+    || normalized.includes('/build/')
+    || normalized.startsWith('android/.gradle/')
+    || normalized.startsWith('android/build/')
     || normalized.startsWith('android/app/build/')
-    || normalized.startsWith('node_modules/');
+    || normalized.startsWith('android/.kotlin/');
 };
 
 const report = {
@@ -41,17 +74,17 @@ const report = {
     },
     integrations: {
       path: INTEGRATIONS_DIR,
-      files: countFiles(INTEGRATIONS_DIR),
-      steamFiles: countFiles(STEAM_INTEGRATIONS_DIR),
+      files: countFiles(INTEGRATIONS_DIR, { exclude: integrationsGeneratedExclude }),
+      steamFiles: countFiles(STEAM_INTEGRATIONS_DIR, {
+        exclude: rel => integrationsGeneratedExclude(path.join('steam', rel))
+      }),
       topLevelDirs: topLevelDirs(INTEGRATIONS_DIR)
     }
   },
   platforms: {
     steamElectron: {
       path: STEAM_DIR,
-      files: countFiles(STEAM_DIR, {
-        exclude: rel => rel.replace(/\\/g, '/').startsWith('node_modules/')
-      }),
+      files: countFiles(STEAM_DIR, { exclude: steamGeneratedExclude }),
       topLevelDirs: topLevelDirs(STEAM_DIR)
     },
     androidCapacitor: {

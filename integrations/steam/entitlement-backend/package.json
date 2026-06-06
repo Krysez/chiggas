@@ -7,17 +7,11 @@
   "scripts": {
     "start": "node steam-microtxn-pass-99a-server.js",
     "dev": "node server.js",
+    "check": "node --check server.js && node --check steam-microtxn-pass-99a-server.js && node --check scripts/health-check.js",
     "health": "node scripts/health-check.js",
     "steam:mtx:server": "node steam-microtxn-pass-99a-server.js",
-    "steam:pass99a:check": "node scripts/check-steam-pass-99a-microtxn-backend.js",
     "steam:mtx:health": "node -e \"fetch('http://localhost:8791/steam/mtx/health').then(r=>r.text()).then(console.log).catch(e=>{console.error(e);process.exit(1)})\"",
-    "steam:mtx:catalog": "node -e \"fetch('http://localhost:8791/steam/mtx/catalog').then(r=>r.text()).then(console.log).catch(e=>{console.error(e);process.exit(1)})\"",
-    "steam:pass99a1:check": "node scripts/check-steam-pass-99a1-env-loader.js",
-    "steam:pass99b2:check": "node scripts/check-steam-pass-99b2-querytxn-get-fix.js",
-    "steam:pass99b3:check": "node scripts/check-steam-pass-99b3-getreport-get-fix.js",
-    "steam:pass102c:check": "node scripts/check-steam-pass-102c-catalog-names.js",
-    "steam:pass102d:check": "node scripts/check-steam-pass-102d-wallet-names.js",
-    "steam:pass102d1:check": "node scripts/check-steam-pass-102d1-syntax-hotfix.js"
+    "steam:mtx:catalog": "node -e \"fetch('http://localhost:8791/steam/mtx/catalog').then(r=>r.text()).then(console.log).catch(e=>{console.error(e);process.exit(1)})\""
   },
   "engines": {
     "node": ">=20"

@@ -33,6 +33,12 @@ STEAM_PUBLISHER_WEB_API_KEY=your_real_key_here
 npm start
 ```
 
+Static syntax check:
+
+```powershell
+npm run check
+```
+
 Health check:
 
 ```powershell

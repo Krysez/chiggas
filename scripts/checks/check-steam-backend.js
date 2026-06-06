@@ -18,6 +18,7 @@ const requiredFiles = [
 const requiredPackageScripts = [
   'start',
   'dev',
+  'check',
   'health',
   'steam:mtx:server',
   'steam:mtx:health',

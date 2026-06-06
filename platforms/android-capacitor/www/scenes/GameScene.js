@@ -118,6 +118,7 @@ export default class GameScene extends Phaser.Scene {
         if (!this.debugMode) {
             this.controlMode = this.settings.controlMode || this.controlMode || 'touch';
         }
+        this._lockAndroidTouchControls();
 
         // Territory.js reads this CONFIG value directly, so set it at scene start
         // to make turf-claim speed difficulty-aware for the current run.
@@ -514,21 +515,51 @@ export default class GameScene extends Phaser.Scene {
             const raw = window.localStorage.getItem('chiggas_settings_v1');
             const parsed = raw ? JSON.parse(raw) : {};
             return {
-                controlMode: parsed.controlMode || this.controlMode || 'touch',
+                controlMode: this._isAndroidRuntime() ? 'touch' : (parsed.controlMode || this.controlMode || 'touch'),
                 masterVolume: this._clamp01(parsed.masterVolume ?? 1),
                 musicVolume: this._clamp01(parsed.musicVolume ?? 1),
                 sfxVolume: this._clamp01(parsed.sfxVolume ?? 1)
             };
         } catch (e) {
-            return { controlMode: this.controlMode || 'touch', masterVolume: 1, musicVolume: 1, sfxVolume: 1 };
+            return { controlMode: this._isAndroidRuntime() ? 'touch' : (this.controlMode || 'touch'), masterVolume: 1, musicVolume: 1, sfxVolume: 1 };
         }
     }
 
     _saveSettings() {
         try {
+            if (this._isAndroidRuntime() && this.settings) {
+                this.settings.controlMode = 'touch';
+            }
             window.localStorage.setItem('chiggas_settings_v1', JSON.stringify(this.settings));
         } catch (e) {}
         refreshAudioVolumes();
+    }
+
+    _isAndroidRuntime() {
+        try {
+            const win = typeof window !== 'undefined' ? window : null;
+            if (!win) return false;
+            if (win.AndroidChiggasApp || win.ChiggasAndroidApp || win.AndroidChiggasBilling) return true;
+            if (win.Capacitor?.getPlatform?.() === 'android') return true;
+            if (win.Capacitor?.platform === 'android') return true;
+            return /^file:\/\/\/android_asset\//i.test(String(win.location?.href || ''));
+        } catch (e) {
+            return false;
+        }
+    }
+
+    _lockAndroidTouchControls() {
+        if (!this._isAndroidRuntime()) return false;
+        this.settings = this.settings || {};
+        this.controlMode = 'touch';
+        this.settings.controlMode = 'touch';
+        try {
+            const raw = window.localStorage.getItem('chiggas_settings_v1');
+            const parsed = raw ? JSON.parse(raw) : {};
+            parsed.controlMode = 'touch';
+            window.localStorage.setItem('chiggas_settings_v1', JSON.stringify(parsed));
+        } catch (e) {}
+        return true;
     }
 
     _clamp01(value) {
@@ -909,6 +940,17 @@ export default class GameScene extends Phaser.Scene {
         if (this._pauseContainer) {
             this._pauseContainer.destroy(true);
             this._pauseContainer = null;
+        }
+
+        this._lockAndroidTouchControls();
+        if (this._isAndroidRuntime()) {
+            try {
+                if (this.joystick) {
+                    this.joystick.vector = { x: 0, y: 0 };
+                    this.joystick.activePointer = null;
+                }
+                this.handleResize(this.scale);
+            } catch (e) {}
         }
 
         if (!this._wasPhysicsPausedByMenu) {
@@ -7437,6 +7479,151 @@ try {
     console.warn('[Chiggas] Gameplay Stability Pass 92L direct game override failed safely:', error);
 }
 /* CHIGGAS_GAMEPLAY_STABILITY_PASS_92L_GAME_DIRECT_OVERRIDE_END */
+
+/* CHIGGAS_ANDROID_TOUCH_ONLY_INGAME_OPTIONS_BEGIN */
+try {
+    if (!GameScene.prototype.__chiggasAndroidTouchOnlyInGameOptionsInstalled) {
+        GameScene.prototype.__chiggasAndroidTouchOnlyInGameOptionsInstalled = true;
+
+        const __chiggasAndroidOrigOpenGameOptions = GameScene.prototype._openGameOptionsMenu;
+        GameScene.prototype._openGameOptionsMenu = function(...args) {
+            if (!this._isAndroidRuntime?.()) {
+                return __chiggasAndroidOrigOpenGameOptions.apply(this, args);
+            }
+
+            this._lockAndroidTouchControls?.();
+            this._clearPauseInputZones();
+            if (this._pauseContainer) {
+                this._pauseContainer.destroy(true);
+                this._pauseContainer = null;
+            }
+
+            const { width, height } = this.scale;
+            const compact = width < 760 || height < 560;
+            const c = this.add.container(0, 0).setScrollFactor(0).setDepth(9600);
+            this._pauseContainer = c;
+            this.__pass92LActiveOptionGrid = false;
+            this.__pass92LOptionRows = [];
+            this.__pass92LGridPos = { row: 0, col: 0 };
+            this.__pass92KOptionsActive = false;
+            this.__chiggasAndroidOptionsActive = true;
+
+            const shade = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.74);
+            const panelW = Math.min(compact ? 420 : 500, width - 28);
+            const panelH = Math.min(height - 24, compact ? 360 : 420);
+            const top = height / 2 - panelH / 2;
+
+            const panel = this.add.graphics();
+            panel.fillStyle(0x151015, 0.98);
+            panel.fillRoundedRect(width / 2 - panelW / 2, top, panelW, panelH, 22);
+            panel.lineStyle(4, 0x8a44ff, 0.8);
+            panel.strokeRoundedRect(width / 2 - panelW / 2, top, panelW, panelH, 22);
+
+            const title = this.add.text(width / 2, top + (compact ? 30 : 42), 'SET IT UP', {
+                fontSize: compact ? '32px' : '40px',
+                fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+                color: '#ffdd00',
+                stroke: '#000000',
+                strokeThickness: 7
+            }).setOrigin(0.5);
+
+            c.add([shade, panel, title]);
+
+            const makeBtn = (x, y, text, color, action, w = 112, h = 38, fz = 16) => {
+                const btn = this._createPauseButton(c, x, y, text, color, action, w, h, fz);
+                try {
+                    btn.__chiggasAndroidOptionButton = true;
+                    btn.__chiggasAndroidOptionLabel = String(text || '').trim().toUpperCase();
+                } catch (_) {}
+                return btn;
+            };
+
+            const focusAndroidButton = (btn) => {
+                try {
+                    if (btn && this._pauseNavButtons?.includes(btn)) {
+                        this._setPauseFocusByButton(btn);
+                    }
+                } catch (_) {}
+            };
+
+            const volumeStart = top + (compact ? 104 : 126);
+            const volumeGap = compact ? 54 : 64;
+
+            const makeVolumeRow = (label, key, y) => {
+                const rowLabel = this.add.text(width / 2 - (compact ? 72 : 92), y, `${label}: ${this._formatVolume(this.settings[key])}`, {
+                    fontSize: compact ? '19px' : '22px',
+                    fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+                    color: '#ffffff',
+                    stroke: '#000000',
+                    strokeThickness: 4
+                }).setOrigin(0.5);
+                c.add(rowLabel);
+
+                let minusBtn = null;
+                let plusBtn = null;
+
+                const applyVolumeDelta = (delta, focusBtn) => {
+                    this._lockAndroidTouchControls?.();
+                    this.settings[key] = this._clamp01((this.settings[key] ?? 1) + delta);
+                    rowLabel.setText(`${label}: ${this._formatVolume(this.settings[key])}`);
+                    this._saveSettings();
+                    focusAndroidButton(focusBtn);
+                };
+
+                minusBtn = makeBtn(width / 2 + (compact ? 72 : 92), y, '-', 0x333333, () => {
+                    applyVolumeDelta(-0.1, minusBtn);
+                }, compact ? 42 : 46, compact ? 36 : 40, compact ? 22 : 24);
+
+                plusBtn = makeBtn(width / 2 + (compact ? 128 : 152), y, '+', 0x333333, () => {
+                    applyVolumeDelta(0.1, plusBtn);
+                }, compact ? 42 : 46, compact ? 36 : 40, compact ? 22 : 24);
+            };
+
+            makeVolumeRow('MASTER', 'masterVolume', volumeStart);
+            makeVolumeRow('MUSIC', 'musicVolume', volumeStart + volumeGap);
+            makeVolumeRow('SFX', 'sfxVolume', volumeStart + volumeGap * 2);
+
+            makeBtn(width / 2, top + panelH - (compact ? 78 : 92), 'BACK', 0x444444, () => {
+                this.__chiggasAndroidOptionsActive = false;
+                this._lockAndroidTouchControls?.();
+                this._clearPauseInputZones();
+                if (this._pauseContainer) {
+                    this._pauseContainer.destroy(true);
+                    this._pauseContainer = null;
+                }
+                this._openPauseMenu();
+            }, 190, compact ? 40 : 46, compact ? 20 : 22);
+
+            makeBtn(width / 2, top + panelH - (compact ? 32 : 42), 'KEEP CRAWLIN', 0x2d7d32, () => {
+                this.__chiggasAndroidOptionsActive = false;
+                this._lockAndroidTouchControls?.();
+                this._closePauseMenu();
+            }, 220, compact ? 40 : 46, compact ? 19 : 21);
+
+            this._focusFirstPauseButton();
+        };
+
+        const __chiggasAndroidOrigClosePauseMenu = GameScene.prototype._closePauseMenu;
+        GameScene.prototype._closePauseMenu = function(...args) {
+            this.__chiggasAndroidOptionsActive = false;
+            const result = __chiggasAndroidOrigClosePauseMenu.apply(this, args);
+            if (this._isAndroidRuntime?.()) {
+                this._lockAndroidTouchControls?.();
+                try {
+                    if (this.joystick) {
+                        this.joystick.vector = { x: 0, y: 0 };
+                        this.joystick.activePointer = null;
+                    }
+                    this.handleResize(this.scale);
+                } catch (_) {}
+            }
+            return result;
+        };
+    }
+} catch (error) {
+    console.warn('[Chiggas] Android touch-only in-game options failed safely:', error);
+}
+/* CHIGGAS_ANDROID_TOUCH_ONLY_INGAME_OPTIONS_END */
 
 /* CHIGGAS_GAMEPLAY_TUNING_PASS_93A_BEGIN */
 try {

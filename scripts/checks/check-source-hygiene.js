@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const { ROOT, STEAM_DIR, ANDROID_DIR } = require('../lib/paths');
+const { ROOT, STEAM_DIR, ANDROID_DIR, STEAM_INTEGRATIONS_DIR } = require('../lib/paths');
 const { exists } = require('../lib/file-utils');
 
 const requiredIgnorePatterns = [
@@ -26,11 +26,15 @@ const ignoredLocalChecks = [
   ['android gradle cache', path.join(ANDROID_DIR, 'android', '.gradle')],
   ['android project build', path.join(ANDROID_DIR, 'android', 'build')],
   ['android app build', path.join(ANDROID_DIR, 'android', 'app', 'build')],
+  ['steam backend node_modules', path.join(STEAM_INTEGRATIONS_DIR, 'entitlement-backend', 'node_modules')],
+  ['steam backend data', path.join(STEAM_INTEGRATIONS_DIR, 'entitlement-backend', 'data')],
+  ['steam backend backups', path.join(STEAM_INTEGRATIONS_DIR, 'entitlement-backend', 'backups')],
 ];
 
 const requiredIgnoreFiles = [
   ['root gitignore', path.join(ROOT, '.gitignore')],
   ['steam gitignore', path.join(STEAM_DIR, '.gitignore')],
+  ['steam backend gitignore', path.join(STEAM_INTEGRATIONS_DIR, 'entitlement-backend', '.gitignore')],
   ['android gitignore', path.join(ANDROID_DIR, 'android', '.gitignore')],
   ['android app gitignore', path.join(ANDROID_DIR, 'android', 'app', '.gitignore')]
 ];

@@ -46,8 +46,25 @@ const GAME_INDEX = path.join(__dirname, 'game', 'index.html');
 const IS_DEV = process.env.CHIGGAS_DEVTOOLS === '1' || process.env.NODE_ENV === 'development';
 const BASE_STEAM_APP_ID = '4788490';
 const LAUNCHED_STEAM_APP_ID = process.env.SteamAppId || process.env.SteamGameId || process.env.STEAM_APP_ID || '';
+const DEMO_MARKER_FILE = 'chiggas-demo-mode.flag';
+
+function hasDemoModeMarker() {
+  const dirs = [
+    path.dirname(process.execPath || ''),
+    process.resourcesPath || '',
+    __dirname
+  ].filter(Boolean);
+
+  try {
+    return dirs.some((dir) => fs.existsSync(path.join(dir, DEMO_MARKER_FILE)));
+  } catch (_error) {
+    return false;
+  }
+}
+
 const IS_DEMO = process.env.CHIGGAS_DEMO_MODE === '1' ||
   process.env.STEAM_DEMO === '1' ||
+  hasDemoModeMarker() ||
   (!!LAUNCHED_STEAM_APP_ID && String(LAUNCHED_STEAM_APP_ID) !== BASE_STEAM_APP_ID);
 
 try {

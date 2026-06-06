@@ -19,6 +19,7 @@ It then runs:
 npm run release:versions
 npm run release:check
 npm run verify
+npm run steam:backend:check
 ```
 
 ## Local Machine Files

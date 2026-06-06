@@ -57,6 +57,10 @@ for (const project of projects) {
   const [command, args] = npmArgs(['run', 'verify']);
   run('verify', command, args, ROOT);
 }
+{
+  const [command, args] = npmArgs(['run', 'steam:backend:check']);
+  run('steam backend check', command, args, ROOT);
+}
 
 console.log('\n' + JSON.stringify({
   ok: true,

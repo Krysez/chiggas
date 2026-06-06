@@ -16,7 +16,7 @@ Your current Electron `steamworks.js` binding can generate a Web API auth ticket
 ## Setup
 
 ```powershell
-cd C:\ChiggaStreamWrapper\steam-entitlement-backend
+cd C:\ChiggasUnified\integrations\steam\entitlement-backend
 npm install
 copy .env.example .env
 ```
@@ -68,3 +68,14 @@ ALLOWED_ORIGIN=*
 
 Never place `STEAM_PUBLISHER_WEB_API_KEY` in the Electron/game client.
 It belongs only on the backend server.
+
+## Unified Workspace Check
+
+From the repo root:
+
+```powershell
+cd C:\ChiggasUnified
+npm run steam:backend:check
+```
+
+This runs static backend checks without requiring a real publisher key.

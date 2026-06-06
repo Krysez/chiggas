@@ -18,6 +18,7 @@
     "release:versions": "node scripts/checks/report-release-versions.js",
     "runtime:report": "node scripts/checks/report-steam-runtime-modules.js",
     "steam:check": "node scripts/checks/check-steam-electron-runtime.js",
+    "steam:backend:check": "node scripts/checks/check-steam-backend.js",
     "steam:pack:win": "npm --prefix platforms/steam-electron run pack:win",
     "steam:dist:win": "npm --prefix platforms/steam-electron run dist:win",
     "steam:depot:stage": "node scripts/steam/stage-steam-depot.js",

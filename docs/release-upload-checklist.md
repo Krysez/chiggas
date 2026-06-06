@@ -9,6 +9,7 @@ npm run sync:all
 npm run verify
 npm run release:check
 npm run release:versions
+npm run steam:backend:check
 ```
 
 ## SteamPipe

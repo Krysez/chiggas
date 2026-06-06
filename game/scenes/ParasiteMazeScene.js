@@ -273,9 +273,9 @@ export default class ParasiteMazeScene extends Phaser.Scene {
 
     _createControls() {
         const { height } = this.scale;
-        const baseX = 72;
-        const baseY = height - 58;
-        const s = 34;
+        const baseX = 88;
+        const baseY = Math.max(92, height - 74);
+        const s = 52;
 
         this._createDpadButton(baseX, baseY - s, '▲', () => this._setDirection(0, -1));
         this._createDpadButton(baseX, baseY + s, '▼', () => this._setDirection(0, 1));
@@ -916,7 +916,7 @@ export default class ParasiteMazeScene extends Phaser.Scene {
     }
 
     _createDpadButton(x, y, label, onClick) {
-        return this._createButton(x, y, label, 0x222222, onClick, 42, 38, 18);
+        return this._createButton(x, y, label, 0x222222, onClick, 50, 46, 20);
     }
 
     _createButton(x, y, text, color, onClick, w = 180, h = 46, fz = 18, container = null) {
@@ -1104,4 +1104,3 @@ try {
     console.warn('[Chiggas] Gameplay Stability Pass 92A Maze repair failed safely:', error);
 }
 // CHIGGAS_GAMEPLAY_STABILITY_PASS_92A_REPAIR_MAZE_END
-

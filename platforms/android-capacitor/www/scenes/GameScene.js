@@ -1054,12 +1054,14 @@ export default class GameScene extends Phaser.Scene {
         makeVolumeRow('SFX', 'sfxVolume', top + 326);
 
         this._createPauseButton(c, width / 2, top + panelH - 114, 'BACK', 0x444444, () => {
+            const wasPhysicsPausedByMenu = this._wasPhysicsPausedByMenu;
             this._clearPauseInputZones();
             if (this._pauseContainer) {
                 this._pauseContainer.destroy(true);
                 this._pauseContainer = null;
             }
             this._openPauseMenu();
+            this._wasPhysicsPausedByMenu = wasPhysicsPausedByMenu;
         }, 190, 44, 20);
 
         this._createPauseButton(c, width / 2, top + panelH - 58, 'KEEP CRAWLIN’', 0x2d7d32, () => this._closePauseMenu(), 220, 44, 20);
@@ -7584,6 +7586,7 @@ try {
             makeVolumeRow('SFX', 'sfxVolume', volumeStart + volumeGap * 2);
 
             makeBtn(width / 2, top + panelH - (compact ? 78 : 92), 'BACK', 0x444444, () => {
+                const wasPhysicsPausedByMenu = this._wasPhysicsPausedByMenu;
                 this.__chiggasAndroidOptionsActive = false;
                 this._lockAndroidTouchControls?.();
                 this._clearPauseInputZones();
@@ -7592,6 +7595,7 @@ try {
                     this._pauseContainer = null;
                 }
                 this._openPauseMenu();
+                this._wasPhysicsPausedByMenu = wasPhysicsPausedByMenu;
             }, 190, compact ? 40 : 46, compact ? 20 : 22);
 
             makeBtn(width / 2, top + panelH - (compact ? 32 : 42), 'KEEP CRAWLIN', 0x2d7d32, () => {

@@ -1,8 +1,12 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 try {
+  const baseSteamAppId = '4788490';
+  const launchedSteamAppId = process.env.SteamAppId || process.env.SteamGameId || process.env.STEAM_APP_ID || '';
   contextBridge.exposeInMainWorld('ChiggasDemoRuntime', {
-    enabled: process.env.CHIGGAS_DEMO_MODE === '1' || process.env.STEAM_DEMO === '1',
+    enabled: process.env.CHIGGAS_DEMO_MODE === '1' ||
+      process.env.STEAM_DEMO === '1' ||
+      (!!launchedSteamAppId && String(launchedSteamAppId) !== baseSteamAppId),
     mode: 'score_attack',
     durationSeconds: 480
   });

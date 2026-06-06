@@ -16,7 +16,7 @@ function shouldExclude(rel, entry) {
   if (entry.isDirectory()) return false;
 
   return normalized.endsWith('.log')
-    || /^pass\d+[a-z0-9-]*(trace|history)[a-z0-9-]*\.jsonl?$/i.test(base)
+    || /^pass\d+[a-z0-9-]*.*(trace|history).*\.jsonl?$/i.test(base)
     || /^steam-achievement-.*trace.*\.(json|log)$/i.test(base)
     || /^chiggas-.*trace.*\.(json|log)$/i.test(base);
 }

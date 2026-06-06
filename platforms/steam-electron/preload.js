@@ -1,5 +1,15 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+try {
+  contextBridge.exposeInMainWorld('ChiggasDemoRuntime', {
+    enabled: process.env.CHIGGAS_DEMO_MODE === '1' || process.env.STEAM_DEMO === '1',
+    mode: 'score_attack',
+    durationSeconds: 480
+  });
+} catch (error) {
+  console.warn('[Chiggas] Demo runtime preload exposure failed:', error);
+}
+
 // CHIGGAS_STEAM_BRIDGE_PRELOAD_RUNTIME_BEGIN
 try {
   require('./runtime/steam-bridge-preload').exposeSteamBridgePreload(contextBridge, ipcRenderer);

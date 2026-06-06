@@ -13,8 +13,10 @@ import ParasiteMazeScene from './scenes/ParasiteMazeScene.js';
 import MiniGamesScene from './scenes/MiniGamesScene.js';
 import MiniGamePromptScene from './scenes/MiniGamePromptScene.js';
 import { exposeGamepadRuntimeDebug } from './scenes/GamepadRuntimeBridge.js';
+import { installDemoAchievementSuppression } from './scenes/DemoMode.js';
 
 exposeGamepadRuntimeDebug();
+installDemoAchievementSuppression();
 
 const config = {
     type: Phaser.AUTO,

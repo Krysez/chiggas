@@ -11,6 +11,7 @@ import {
     validateLegendaryPurchases,
     LEGENDARY_ITEM_PRICE_LABEL
 } from './SkinRegistry.js';
+import { isDemoSessionActive } from './DemoMode.js';
 
 export const PLATFORM_PURCHASE_ADAPTER_VERSION = '1.6.0-google-play-product-query';
 export const PURCHASE_ADAPTER_LOG_KEY = 'chiggas_purchase_adapter_log_v1';
@@ -801,11 +802,12 @@ export function getPurchaseRuntimeInfo() {
     const restoreBridgeReady = bridgeCapabilities.restoreBridgeReady;
     const realBillingReady = releaseGuard.canUseNativeBilling;
     const nativeCallbackApiReady = callbacksRegistered;
+    const demoActive = isDemoSessionActive();
 
     return {
         adapterVersion: PLATFORM_PURCHASE_ADAPTER_VERSION,
         platform,
-        mode: realBillingReady ? platform : (LOCKED_PLATFORM_PURCHASES.includes(platform) ? 'billing_locked' : (REAL_BILLING_ARMED ? 'billing_locked' : 'local_test')),
+        mode: demoActive ? 'demo_locked' : (realBillingReady ? platform : (LOCKED_PLATFORM_PURCHASES.includes(platform) ? 'billing_locked' : (REAL_BILLING_ARMED ? 'billing_locked' : 'local_test'))),
         realBillingArmed: REAL_BILLING_ARMED,
         bridgeDetected: !!bridge,
         bridgeFunctionNames: getBridgeFunctionNames(bridge),
@@ -827,7 +829,9 @@ export function getPurchaseRuntimeInfo() {
         liveButtonLabelsAllowed: releaseGuard.canShowLiveStoreLabels,
         recommendedStoreLabel: releaseGuard.recommendedStoreLabel,
         priceLabel: LEGENDARY_ITEM_PRICE_LABEL,
-        storeSubtitle: realBillingReady
+        storeSubtitle: demoActive
+            ? 'Demo preview only - Legendary Store unlocks are available in the full game.'
+            : (realBillingReady
             ? `Platform store ready - ${LEGENDARY_ITEM_PRICE_LABEL} each.`
             : (LOCKED_PLATFORM_PURCHASES.includes(platform)
                 ? 'Platform purchases locked until live billing is configured.'
@@ -835,7 +839,7 @@ export function getPurchaseRuntimeInfo() {
                 ? `REAL BILLING BLOCKED - ${releaseGuard.blockingFailures.length} release guard check(s) failed.`
                 : (bridge
                     ? `Local test store - native bridge detected, billing locked, validation ready.`
-                    : `Local test store - ${LEGENDARY_ITEM_PRICE_LABEL} each. Billing locked, validation ready.`)))
+                    : `Local test store - ${LEGENDARY_ITEM_PRICE_LABEL} each. Billing locked, validation ready.`))))
     };
 }
 function safeJsonClone(value) {
@@ -971,6 +975,7 @@ export function setBillingDebugHarnessEnabled(enabled) {
 
 export function getPurchaseButtonLabel(skinId) {
     if (isSkinPurchased(skinId)) return 'OWNED';
+    if (isDemoSessionActive()) return 'FULL GAME';
 
     const entity = getPurchaseEntityForSkin(skinId);
     const runtime = getPurchaseRuntimeInfo();
@@ -1201,6 +1206,13 @@ export async function purchaseLegendarySkin(skinId) {
     const entity = getPurchaseEntityForSkin(skinId);
     const runtime = getPurchaseRuntimeInfo();
 
+    if (isDemoSessionActive()) {
+        const result = { ok: false, status: 'demo_full_game_only', skinId, skin, entity, runtime };
+        appendPurchaseLog({ event: result.status, skinId, runtime: safeJsonClone(runtime) });
+        dispatchPurchaseEvent('purchase-locked', result);
+        return result;
+    }
+
     const validation = validateLegendaryProductReference({ skinId });
 
     if (!skin || !entity || skin.unlockType !== 'premium' || !validation.ok) {
@@ -1289,6 +1301,13 @@ export async function purchaseLegendarySkin(skinId) {
 
 export async function restoreLegendaryPurchases() {
     const runtime = getPurchaseRuntimeInfo();
+
+    if (isDemoSessionActive()) {
+        const result = { ok: false, status: 'demo_full_game_only', runtime, restoredSkins: [], count: 0 };
+        appendPurchaseLog({ event: result.status, runtime: safeJsonClone(runtime) });
+        dispatchPurchaseEvent('restore-ignored', result);
+        return result;
+    }
 
     if (runtime.realBillingArmed && !runtime.realBillingReady) {
         const releaseGuard = getBillingReleaseGuardReport();
@@ -1762,6 +1781,8 @@ export function getPurchaseResultMessage(result, fallbackName = 'ITEM') {
         case 'restore_blocked_by_release_guard':
         case 'platform_purchase_locked_until_configured':
             return 'BILLING LOCKED';
+        case 'demo_full_game_only':
+            return 'FULL GAME ONLY';
         case 'platform_restored_with_rejections':
             return `RESTORED ${result.count || 0} VALID PURCHASES`;
         case 'invalid_item':

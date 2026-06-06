@@ -18,6 +18,7 @@ import CockroachBoss from '../entities/CockroachBoss.js';
 import TerrainDecorator from './TerrainDecorator.js';
 import { initAudio, playTurfCapture, playRecruit, playDeath, playStageAdvance, startAmbientMusic, stopAmbientMusic, playHit, playBite, playChargeCry, playGunshot, playSpeedGush, refreshAudioVolumes, startRainAmbience, startSnowWindAmbience, stopWeatherAmbience } from '../audio/AudioManager.js';
 import { unlockStageRewards, unlockAchievementRewards, getEquippedPlayerSkin, getEquippedSoldierSkin, pass95AUnlockBaseChiggaWear, pass95AGetBaseUnlockCompletion } from './SkinRegistry.js';
+import { DEMO_SCORE_ATTACK, createScoreAttackGameData, isDemoGameData, openFullGameStorePage, setDemoSessionActive } from './DemoMode.js';
 
 export default class GameScene extends Phaser.Scene {
     constructor() {
@@ -31,6 +32,12 @@ export default class GameScene extends Phaser.Scene {
         this.controlMode = data?.controlMode ?? 'touch'; // touch, keyboard, gamepad
         this.debugMode = data?.debugMode ?? false;
         this.debugOptions = data?.debugOptions ?? {};
+        this.demoMode = isDemoGameData(data);
+        if (this.demoMode) {
+            this.stageIndex = DEMO_SCORE_ATTACK.stageIndex;
+            this.difficulty = DEMO_SCORE_ATTACK.difficulty;
+            setDemoSessionActive(true);
+        }
 
         this.runStats = data?.runStats ?? {
             kills: 0,
@@ -180,6 +187,9 @@ export default class GameScene extends Phaser.Scene {
         this.isEnding = false;
         this.isDead = false;
         this._isPausedByExitMenu = false;
+        this._demoBossPressureStarted = false;
+        this._demoFinalWarningShown = false;
+        this._demoCompletionShown = false;
 
         this.runStats.stageReached = Math.max(this.runStats.stageReached || 1, this.stageIndex + 1);
 
@@ -2908,6 +2918,10 @@ export default class GameScene extends Phaser.Scene {
     }
 
     _saveRunRecord() {
+        if (this.demoMode) {
+            return this._saveDemoScoreAttackRecord();
+        }
+
         const allRecords = this._loadAllRecords();
         const key = this._getDifficultyKey();
         const record = { ...this._getDefaultRecord(), ...(allRecords[key] || {}) };
@@ -2928,6 +2942,157 @@ export default class GameScene extends Phaser.Scene {
         allRecords[key] = record;
         this._saveAllRecords(allRecords);
         return record;
+    }
+
+    _saveDemoScoreAttackRecord() {
+        const key = 'chiggas_demo_score_attack_records_v1';
+        const record = {
+            bestScore: 0,
+            totalRuns: 0,
+            bestKills: 0,
+            bestRecruits: 0,
+            bestTurfsClaimed: 0,
+            bestBossesDefeated: 0,
+            lastScore: 0
+        };
+
+        try {
+            const raw = window.localStorage.getItem(key);
+            Object.assign(record, raw ? JSON.parse(raw) : {});
+        } catch (_) {}
+
+        const score = Math.round(this.score || 0);
+        record.totalRuns = Number(record.totalRuns || 0) + 1;
+        record.lastScore = score;
+        record.bestScore = Math.max(Number(record.bestScore || 0), score);
+        record.bestKills = Math.max(Number(record.bestKills || 0), Number(this.runStats?.kills || 0));
+        record.bestRecruits = Math.max(Number(record.bestRecruits || 0), Number(this.runStats?.recruits || 0));
+        record.bestTurfsClaimed = Math.max(Number(record.bestTurfsClaimed || 0), Number(this.runStats?.turfsClaimed || 0));
+        record.bestBossesDefeated = Math.max(Number(record.bestBossesDefeated || 0), Number(this.runStats?.bossesDefeated || 0));
+        record.updatedAt = new Date().toISOString();
+
+        try {
+            window.localStorage.setItem(key, JSON.stringify(record));
+        } catch (_) {}
+
+        return record;
+    }
+
+    _updateDemoScoreAttack(playerTerritories = 0) {
+        if (!this.demoMode || this.isEnding || this.isDead || this._demoCompletionShown) return;
+
+        const elapsed = Math.floor((this.time.now - this.startTime) / 1000);
+        const remaining = Math.max(0, DEMO_SCORE_ATTACK.durationSeconds - elapsed);
+
+        if (remaining <= 30 && !this._demoFinalWarningShown) {
+            this._demoFinalWarningShown = true;
+            this.showFeedback?.('FINAL 30 SECONDS!', 0xffdd00, this.player.x, this.player.y - 135);
+        }
+
+        if (!this._demoBossPressureStarted && elapsed >= DEMO_SCORE_ATTACK.bossWarningAtSeconds && !this.bossPhaseActive && !this.bossDefeated) {
+            this._demoBossPressureStarted = true;
+            this._startBossCountdown?.(12000, 'Steam Fest demo score attack pressure');
+        }
+
+        if (elapsed >= DEMO_SCORE_ATTACK.durationSeconds) {
+            this._finishDemoScoreAttack('time_limit', playerTerritories);
+        }
+    }
+
+    _finishDemoScoreAttack(reason = 'complete', playerTerritories = null) {
+        if (!this.demoMode || this._demoCompletionShown) return;
+
+        this._demoCompletionShown = true;
+        this.isEnding = true;
+        stopAmbientMusic();
+
+        try {
+            if (this.player?.body) this.player.body.setVelocity(0, 0);
+            this.physics?.world?.pause?.();
+        } catch (_) {}
+
+        const record = this._saveDemoScoreAttackRecord();
+        this._showDemoScoreAttackCompletePanel({
+            reason,
+            record,
+            playerTerritories: playerTerritories ?? (this.territories?.filter(t => t?.faction === CONFIG.FACTIONS.PLAYER).length ?? 0)
+        });
+    }
+
+    _showDemoScoreAttackCompletePanel({ reason = 'complete', record = {}, playerTerritories = 0 } = {}) {
+        const { width, height } = this.scale;
+        const compact = width < 760 || height < 620;
+        const panelW = Math.min(width - 30, compact ? 450 : 700);
+        const panelH = Math.min(height - 34, compact ? 430 : 520);
+        const panelX = width / 2;
+        const panelY = height / 2;
+        const panelTop = panelY - panelH / 2;
+        const panelBottom = panelY + panelH / 2;
+        const overlayDepth = 9300;
+
+        const overlay = this.add.container(0, 0).setScrollFactor(0).setDepth(overlayDepth);
+        const shade = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.88);
+        const panel = this.add.graphics();
+        panel.fillStyle(0x111111, 0.98);
+        panel.fillRoundedRect(panelX - panelW / 2, panelTop, panelW, panelH, 22);
+        panel.lineStyle(5, 0xffdd00, 0.94);
+        panel.strokeRoundedRect(panelX - panelW / 2, panelTop, panelW, panelH, 22);
+
+        const title = this.add.text(panelX, panelTop + (compact ? 36 : 52), 'DEMO COMPLETE', {
+            fontSize: compact ? '32px' : '52px',
+            fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+            color: '#ffdd00',
+            stroke: '#000000',
+            strokeThickness: compact ? 7 : 10,
+            align: 'center',
+            wordWrap: { width: panelW - 34 }
+        }).setOrigin(0.5);
+
+        const elapsed = Math.min(DEMO_SCORE_ATTACK.durationSeconds, Math.max(0, Number(this.elapsedTime || 0)));
+        const resultLabel = reason === 'boss_defeated' ? 'Boss Defeated' : (reason === 'time_limit' ? 'Time Limit Reached' : 'Run Complete');
+        const bodyLines = [
+            DEMO_SCORE_ATTACK.title,
+            resultLabel,
+            '',
+            `Final Score: ${Math.round(this.score || 0)}`,
+            `Best Demo Score: ${record.bestScore || 0}`,
+            `Time: ${this._formatDuration(elapsed)}`,
+            `Kills: ${this.runStats?.kills || 0}  |  Recruits: ${this.runStats?.recruits || 0}`,
+            `Turfs Claimed: ${this.runStats?.turfsClaimed || 0}  |  Turfs Held: ${playerTerritories}/${this.territories?.length || 0}`,
+            '',
+            'Wishlist the full game to unlock every stage, boss, mini-game, Chigga Wear, and progression system.'
+        ];
+
+        const body = this.add.text(panelX, panelTop + (compact ? 82 : 112), bodyLines.join('\n'), {
+            fontSize: compact ? '13px' : '19px',
+            fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+            color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 4,
+            align: 'center',
+            lineSpacing: compact ? 2 : 5,
+            wordWrap: { width: panelW - 48 }
+        }).setOrigin(0.5, 0);
+
+        const btnH = compact ? 38 : 48;
+        const btnW = compact ? 138 : 190;
+        const btnY = panelBottom - (compact ? 42 : 54);
+        const gap = Math.min(compact ? 146 : 210, panelW * 0.30);
+
+        const playAgain = this._createStageClearButton(panelX - gap, btnY, 'PLAY AGAIN', 0xaa1111, () => {
+            this.scene.start('StageIntroScene', { targetGameData: createScoreAttackGameData(this.controlMode || 'gamepad') });
+        }, overlay, btnW, btnH, compact ? 13 : 17);
+
+        const wishlist = this._createStageClearButton(panelX, btnY, 'WISHLIST', 0x225522, async () => {
+            const result = await openFullGameStorePage('demo_complete_panel');
+            this.showFeedback?.(result?.ok ? 'STEAM PAGE OPENED' : 'OPEN FULL GAME PAGE', 0xffdd00, this.player?.x || CONFIG.WORLD_SIZE / 2, (this.player?.y || CONFIG.WORLD_SIZE / 2) - 120);
+        }, overlay, btnW, btnH, compact ? 13 : 17);
+
+        const titleBtn = this._createStageClearButton(panelX + gap, btnY, 'TITLE', 0x333333, () => {
+            this.scene.start('MenuScene');
+        }, overlay, btnW, btnH, compact ? 13 : 17);
+
+        overlay.add([shade, panel, title, body, playAgain, wishlist, titleBtn]);
     }
 
     _formatDuration(totalSeconds) {
@@ -3172,6 +3337,12 @@ export default class GameScene extends Phaser.Scene {
 
     advanceStage() {
         if (this.isEnding) return;
+
+        if (this.demoMode) {
+            this._finishDemoScoreAttack('boss_defeated');
+            return;
+        }
+
         this.isEnding = true;
         stopAmbientMusic();
         playStageAdvance();
@@ -4280,6 +4451,7 @@ export default class GameScene extends Phaser.Scene {
         this.updateCompass(nearestPlayerTurf, nearestUnclaimedTurf);
         this._prunePlayerFollowers();
         this.updateHUD(playerTerritories);
+        this._updateDemoScoreAttack(playerTerritories);
         this.checkNearbyUnits();
         this.updateArmyAggro();
         this._updateMinimap();
@@ -8273,6 +8445,8 @@ try {
         };
 
         GameScene.prototype.__pass94ACheckLongAchievements = function(time) {
+            if (this.demoMode) return;
+
             try {
                 this.__pass94AInitRunWatchdog();
 
@@ -8446,7 +8620,7 @@ try {
         };
 
         GameScene.prototype.__pass95AHandleBaseUnlocks = function(event = 'catchup', extra = {}, showFeedback = false) {
-            if (this.debugMode) return [];
+            if (this.debugMode || this.demoMode) return [];
 
             try {
                 const result = pass95AUnlockBaseChiggaWear(this.__pass95ABuildProgress(event, extra));

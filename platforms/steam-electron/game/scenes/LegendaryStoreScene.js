@@ -21,6 +21,7 @@ import {
     getPurchaseAdapterLog,
     clearPurchaseAdapterLog
 } from './PlatformPurchaseAdapter.js';
+import { isDemoSessionActive } from './DemoMode.js';
 // CHIGGAS_STEAM_INVENTORY_BRIDGE_PASS_83_IMPORT_BEGIN
 import {
     syncSteamInventoryEntitlements,
@@ -524,7 +525,7 @@ export default class LegendaryStoreScene extends Phaser.Scene {
                 wordWrap: { width: cardW - 24 }
             }).setOrigin(0.5);
 
-            const price = this.add.text(0, cardH * 0.29, owned ? 'OWNED' : (skin.priceLabel || LEGENDARY_ITEM_PRICE_LABEL), {
+            const price = this.add.text(0, cardH * 0.29, owned ? 'OWNED' : (isDemoSessionActive() ? 'FULL GAME' : (skin.priceLabel || LEGENDARY_ITEM_PRICE_LABEL)), {
                 fontSize: compact ? '15px' : '18px',
                 fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
                 color: owned ? '#39ff14' : '#ffdd00',
@@ -558,6 +559,11 @@ export default class LegendaryStoreScene extends Phaser.Scene {
 
     async _handlePurchasePress(skin, owned = false) {
         if (owned || !skin?.id || this._purchaseInProgress) return;
+
+        if (isDemoSessionActive()) {
+            this._toast('AVAILABLE IN FULL GAME');
+            return;
+        }
 
         this._purchaseInProgress = skin.id;
 
@@ -687,6 +693,11 @@ const result = await purchaseLegendarySkin(skin.id);
 
     async _handleRestorePurchases() {
         if (this._restoreInProgress) return;
+
+        if (isDemoSessionActive()) {
+            this._toast('RESTORE AVAILABLE IN FULL GAME');
+            return;
+        }
 
         this._restoreInProgress = true;
 

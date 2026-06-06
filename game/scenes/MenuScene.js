@@ -4,6 +4,7 @@ import { initSteamInputPromptManager, setSteamInputActionSet, getSteamInputPromp
 import { GAMEPLAY_CONTROL_ROWS, loadControlBindings, resetControlBindings, setKeyboardBinding, setGamepadBinding, keyboardCodeToLabel, gamepadButtonToLabel, runControlsDebugSuite } from './ControlsSettingsManager.js';
 import { resetCosmeticState } from './SkinRegistry.js';
 import { refreshAudioVolumes, initAudio, playVolumeTick } from '../audio/AudioManager.js';
+import { DEMO_SCORE_ATTACK, clearDemoSession, createScoreAttackGameData, isDemoRuntime, setDemoSessionActive } from './DemoMode.js';
 
 export default class MenuScene extends Phaser.Scene {
     constructor() {
@@ -46,6 +47,7 @@ export default class MenuScene extends Phaser.Scene {
         window.addEventListener('chiggasAndroidBack', this._androidBackHandler);
 
         this.settings = this._loadSettings();
+        if (isDemoRuntime()) setDemoSessionActive(true);
         this.controlBindings = loadControlBindings();
         this.selectedControlMode = this.settings.controlMode || 'touch';
         this.optionsContainer = null;
@@ -203,19 +205,57 @@ export default class MenuScene extends Phaser.Scene {
             return;
         }
 
+        const demoRuntime = isDemoRuntime();
         const btnW = Math.min(compact ? 260 : 380, safe.width - 26);
         const bigH = compact ? 46 : 64;
         const smallH = compact ? 38 : 46;
         const startY = compact ? safe.top + safe.height * 0.52 : safe.top + safe.height * 0.58;
         const gap = compact ? 52 : 62;
 
+        if (demoRuntime) {
+            this.createButton(safe.centerX, startY, 'START SCORE ATTACK DEMO', 0xcc1111, () => {
+                this.startScoreAttackDemo();
+            }, this.mainBtnContainer, btnW, bigH, compact ? 17 : 25);
+
+            this.createButton(safe.centerX, startY + gap, 'CHIGGA WEAR PREVIEW', 0xaa1111, () => {
+                this.scene.start('WardrobeScene');
+            }, this.mainBtnContainer, Math.min(btnW, 320), smallH, compact ? 15 : 20);
+
+            const demoSplitW = Math.min(compact ? 126 : 170, (safe.width - 42) / 2);
+            const demoSplitGap = Math.min(compact ? 76 : 102, safe.width * 0.16);
+
+            this.createButton(safe.centerX - demoSplitGap, startY + gap * 2, 'HOW TO PLAY', 0x225522, () => {
+                this.scene.start('HowToPlayScene');
+            }, this.mainBtnContainer, demoSplitW, smallH, compact ? 13 : 16);
+
+            this.createButton(safe.centerX + demoSplitGap, startY + gap * 2, 'SET IT UP', 0x333333, () => {
+                this.showOptionsMenu('main');
+            }, this.mainBtnContainer, demoSplitW, smallH, compact ? 13 : 16);
+
+            this.add.text(safe.centerX, safe.bottom - (compact ? 4 : 10), `${DEMO_SCORE_ATTACK.durationSeconds / 60}-minute Steam Fest score attack`, {
+                fontSize: compact ? '13px' : '17px',
+                fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+                color: '#ffddaa',
+                stroke: '#000000',
+                strokeThickness: 3
+            }).setOrigin(0.5);
+            return;
+        }
+
         this.createButton(safe.centerX, startY, 'GET UNDER THE SKIN', 0xcc1111, () => {
             this.showDifficultySelect();
         }, this.mainBtnContainer, btnW, bigH, compact ? 19 : 28);
 
-        this.createButton(safe.centerX, startY + gap, 'LEADERBOARDS', 0x6b1fa2, () => {
+        const demoRowW = Math.min(compact ? 126 : 170, (safe.width - 42) / 2);
+        const demoRowGap = Math.min(compact ? 76 : 102, safe.width * 0.16);
+
+        this.createButton(safe.centerX - demoRowGap, startY + gap, 'STEAM FEST DEMO', 0xaa1111, () => {
+            this.startScoreAttackDemo();
+        }, this.mainBtnContainer, demoRowW, smallH, compact ? 11 : 14);
+
+        this.createButton(safe.centerX + demoRowGap, startY + gap, 'LEADERBOARDS', 0x6b1fa2, () => {
             this.scene.start('LeaderboardScene');
-        }, this.mainBtnContainer, Math.min(btnW, 320), smallH, compact ? 17 : 22);
+        }, this.mainBtnContainer, demoRowW, smallH, compact ? 11 : 14);
 
         this.createButton(safe.centerX, startY + gap * 2, 'CHIGGA WEAR', 0xaa1111, () => {
             this.scene.start('WardrobeScene');
@@ -1434,6 +1474,7 @@ ${samples}`, {
     }
 
     startGame(difficultyLevel) {
+        clearDemoSession();
         this._stopTitleMusic();
         this.scene.start('StageIntroScene', {
             targetGameData: {
@@ -1441,6 +1482,13 @@ ${samples}`, {
                 difficulty: difficultyLevel,
                 controlMode: this.selectedControlMode
             }
+        });
+    }
+
+    startScoreAttackDemo() {
+        this._stopTitleMusic();
+        this.scene.start('StageIntroScene', {
+            targetGameData: createScoreAttackGameData(this.selectedControlMode || 'gamepad')
         });
     }
     _initMenuNavigation(onBack = null) {

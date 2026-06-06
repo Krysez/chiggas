@@ -44,6 +44,7 @@ const { createSteamBridgeRuntime, registerSteamBridgeIpc } = require('./runtime/
 const APP_TITLE = 'Chiggas - Survival of the Mitiest';
 const GAME_INDEX = path.join(__dirname, 'game', 'index.html');
 const IS_DEV = process.env.CHIGGAS_DEVTOOLS === '1' || process.env.NODE_ENV === 'development';
+const IS_DEMO = process.env.CHIGGAS_DEMO_MODE === '1' || process.env.STEAM_DEMO === '1';
 
 try {
   app.disableHardwareAcceleration();
@@ -89,7 +90,8 @@ function installRendererDiagnostics(win) {
       SteamGameId: process.env.SteamGameId || null,
       SteamOverlayGameId: process.env.SteamOverlayGameId || null,
       SteamClientLaunch: process.env.SteamClientLaunch || null
-    }
+    },
+    demoMode: IS_DEMO
   });
 
   win.webContents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL) => {
@@ -211,7 +213,8 @@ function createMainWindow() {
     return;
   }
 
-  mainWindow.loadFile(GAME_INDEX).catch((error) => {
+  const loadOptions = IS_DEMO ? { query: { demo: '1' } } : undefined;
+  mainWindow.loadFile(GAME_INDEX, loadOptions).catch((error) => {
     appendLaunchLog('load_file_rejected', { error: error?.message || String(error), gameIndex: GAME_INDEX });
     loadDiagnosticPage(mainWindow, 'Game failed to load', error?.message || String(error));
   });

@@ -71,10 +71,6 @@ const checks = [
 const failed = checks.filter((check) => !check.ok);
 const warnings = [];
 
-if (steamTemplateText.includes('REPLACE_WITH_WINDOWS_DEPOT_ID')) {
-  warnings.push('SteamPipe template keeps a depot placeholder; steam:vdf:write replaces it with Windows depot 4788491 by default.');
-}
-
 console.log(JSON.stringify({
   ok: failed.length === 0,
   status: failed.length === 0 ? 'release_readiness_ready' : 'release_readiness_failed',

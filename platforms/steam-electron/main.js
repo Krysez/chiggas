@@ -37,6 +37,7 @@ try {
 // CHIGGAS_STEAM_ACHIEVEMENTS_MAIN_RUNTIME_EARLY_END
 
 const { app, BrowserWindow, shell, Menu, ipcMain } = require('electron');
+const fs = require('fs');
 const path = require('path');
 const { createSteamBridgeRuntime, registerSteamBridgeIpc } = require('./runtime/steam-bridge-main');
 
@@ -44,8 +45,90 @@ const APP_TITLE = 'Chiggas - Survival of the Mitiest';
 const GAME_INDEX = path.join(__dirname, 'game', 'index.html');
 const IS_DEV = process.env.CHIGGAS_DEVTOOLS === '1' || process.env.NODE_ENV === 'development';
 
+try {
+  app.disableHardwareAcceleration();
+} catch (error) {
+  console.warn('[Chiggas] Steam launch GPU guard failed to disable hardware acceleration:', error);
+}
+
 let mainWindow = null;
 const steamBridge = createSteamBridgeRuntime();
+
+function getLaunchLogPath() {
+  try {
+    return path.join(app.getPath('userData'), 'chiggas-steam-launch.log');
+  } catch (_error) {
+    return path.join(__dirname, 'chiggas-steam-launch.log');
+  }
+}
+
+function appendLaunchLog(event, payload = {}) {
+  const line = JSON.stringify({
+    time: new Date().toISOString(),
+    event,
+    payload
+  }) + '\n';
+
+  try {
+    fs.mkdirSync(path.dirname(getLaunchLogPath()), { recursive: true });
+    fs.appendFileSync(getLaunchLogPath(), line, 'utf8');
+  } catch (_error) {}
+}
+
+function installRendererDiagnostics(win) {
+  if (!win || !win.webContents) return;
+
+  appendLaunchLog('window_created', {
+    gameIndex: GAME_INDEX,
+    gameIndexExists: fs.existsSync(GAME_INDEX),
+    dirname: __dirname,
+    resourcesPath: process.resourcesPath || null,
+    cwd: process.cwd(),
+    steamEnv: {
+      SteamAppId: process.env.SteamAppId || null,
+      SteamGameId: process.env.SteamGameId || null,
+      SteamOverlayGameId: process.env.SteamOverlayGameId || null,
+      SteamClientLaunch: process.env.SteamClientLaunch || null
+    }
+  });
+
+  win.webContents.on('did-fail-load', (_event, errorCode, errorDescription, validatedURL) => {
+    appendLaunchLog('did_fail_load', { errorCode, errorDescription, validatedURL });
+  });
+
+  win.webContents.on('did-finish-load', () => {
+    appendLaunchLog('did_finish_load', { url: win.webContents.getURL() });
+  });
+
+  win.webContents.on('dom-ready', () => {
+    appendLaunchLog('dom_ready', { url: win.webContents.getURL() });
+  });
+
+  win.webContents.on('console-message', (_event, level, message, line, sourceId) => {
+    appendLaunchLog('renderer_console', { level, message, line, sourceId });
+  });
+
+  win.webContents.on('render-process-gone', (_event, details) => {
+    appendLaunchLog('render_process_gone', details || {});
+  });
+}
+
+function loadDiagnosticPage(win, title, message) {
+  if (!win || win.isDestroyed?.()) return;
+  const html = [
+    '<!doctype html><html><head><meta charset="utf-8">',
+    `<title>${APP_TITLE}</title>`,
+    '<style>html,body{margin:0;height:100%;background:#111;color:#ffd800;font-family:Arial,sans-serif;}',
+    'body{display:flex;align-items:center;justify-content:center;text-align:center;padding:32px;box-sizing:border-box;}',
+    '.box{max-width:760px}.msg{color:#fff;font-size:18px;line-height:1.45}</style></head><body>',
+    '<div class="box">',
+    `<h1>${title}</h1>`,
+    `<div class="msg">${message}</div>`,
+    `<p class="msg">Log: ${getLaunchLogPath()}</p>`,
+    '</div></body></html>'
+  ].join('');
+  win.loadURL(`data:text/html;charset=utf-8,${encodeURIComponent(html)}`).catch(() => {});
+}
 
 function createMainWindow() {
   Menu.setApplicationMenu(null);
@@ -85,6 +168,8 @@ function createMainWindow() {
     mainWindow = null;
   });
 
+  installRendererDiagnostics(mainWindow);
+
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
     if (url && !url.startsWith('file://')) {
       shell.openExternal(url);
@@ -120,11 +205,23 @@ function createMainWindow() {
     }
   });
 
-  mainWindow.loadFile(GAME_INDEX);
+  if (!fs.existsSync(GAME_INDEX)) {
+    appendLaunchLog('game_index_missing', { gameIndex: GAME_INDEX });
+    loadDiagnosticPage(mainWindow, 'Game files missing', 'Steam did not install the game HTML payload. Re-upload the depot with recursive file mapping enabled.');
+    return;
+  }
+
+  mainWindow.loadFile(GAME_INDEX).catch((error) => {
+    appendLaunchLog('load_file_rejected', { error: error?.message || String(error), gameIndex: GAME_INDEX });
+    loadDiagnosticPage(mainWindow, 'Game failed to load', error?.message || String(error));
+  });
 }
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
 app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling');
+app.commandLine.appendSwitch('disable-gpu');
+app.commandLine.appendSwitch('disable-gpu-compositing');
+app.commandLine.appendSwitch('disable-gpu-rasterization');
 
 app.whenReady().then(() => {
 try {

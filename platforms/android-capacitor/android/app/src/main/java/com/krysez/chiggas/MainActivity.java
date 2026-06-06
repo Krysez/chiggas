@@ -3,6 +3,9 @@ package com.krysez.chiggas;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Build;
+import android.os.Process;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
@@ -161,11 +164,33 @@ public class MainActivity extends BridgeActivity {
         @JavascriptInterface
         public void exitApp() {
             MainActivity.this.runOnUiThread(() -> {
+                dispatchLifecycleToGame("chiggasAndroidExit");
+                try {
+                    WebView webView = MainActivity.this.bridge != null ? MainActivity.this.bridge.getWebView() : null;
+                    if (webView != null) {
+                        webView.evaluateJavascript(
+                            "(function(){"
+                                + "try{window.__chiggasTitleMusic&&window.__chiggasTitleMusic.pause&&window.__chiggasTitleMusic.pause();}catch(e){}"
+                                + "try{window.game&&window.game.sound&&window.game.sound.stopAll&&window.game.sound.stopAll();}catch(e){}"
+                                + "try{window.game&&window.game.destroy&&window.game.destroy(true);}catch(e){}"
+                                + "})();",
+                            null
+                        );
+                        webView.onPause();
+                        webView.pauseTimers();
+                    }
+                } catch (Exception e) {
+                    // Continue to finish even if the WebView shutdown hook fails.
+                }
                 try {
                     MainActivity.this.finishAndRemoveTask();
                 } catch (Exception e) {
                     MainActivity.this.finish();
                 }
+                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                    Process.killProcess(Process.myPid());
+                    System.exit(0);
+                }, 250);
             });
         }
     }

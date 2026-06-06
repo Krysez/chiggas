@@ -1982,13 +1982,7 @@ try {
 
         MenuScene.prototype.__pass92JExitGameAction = function() {
             try { window.__chiggasPass92JExitGameClicked = true; } catch (_) {}
-            try { window.close(); } catch (_) {}
-            try { globalThis.close?.(); } catch (_) {}
-            try {
-                this.time?.delayedCall?.(150, () => {
-                    try { this.game?.destroy?.(true); } catch (_) {}
-                });
-            } catch (_) {}
+            try { this._requestExitApp?.(); return; } catch (_) {}
         };
 
         MenuScene.prototype.__pass92JEnsureExitGameButton = function() {
@@ -2286,13 +2280,7 @@ try {
 
         MenuScene.prototype.__pass92LExitGameAction = function() {
             try { window.__chiggasPass92LExitGameClicked = true; } catch (_) {}
-            try { window.close(); } catch (_) {}
-            try { globalThis.close?.(); } catch (_) {}
-            try {
-                this.time?.delayedCall?.(150, () => {
-                    try { this.game?.destroy?.(true); } catch (_) {}
-                });
-            } catch (_) {}
+            try { this._requestExitApp?.(); return; } catch (_) {}
         };
 
         MenuScene.prototype.__pass92LEnsureExitGameButton = function() {

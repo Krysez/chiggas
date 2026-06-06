@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { getSafeBounds } from './ResponsiveLayout.js';
-import { initSteamInputPromptManager, setSteamInputActionSet, runSteamInputPromptDebugSuite, getSteamInputPromptLabel } from './SteamInputPromptManager.js';
+import { initSteamInputPromptManager, setSteamInputActionSet, getSteamInputPromptRuntimeInfo, runSteamInputPromptDebugSuite, getSteamInputPromptLabel } from './SteamInputPromptManager.js';
 import { GAMEPLAY_CONTROL_ROWS, loadControlBindings, resetControlBindings, setKeyboardBinding, setGamepadBinding, keyboardCodeToLabel, gamepadButtonToLabel, runControlsDebugSuite } from './ControlsSettingsManager.js';
 import { resetCosmeticState } from './SkinRegistry.js';
 import { refreshAudioVolumes, initAudio, playVolumeTick } from '../audio/AudioManager.js';
@@ -928,7 +928,9 @@ export default class MenuScene extends Phaser.Scene {
     }
 
     _beginKeyboardBindingCapture(row, returnTarget = 'main') {
-        const capture = this._startBindingCapture(`PRESS KEY FOR ${row.label.toUpperCase()}`);
+        const capture = this._startBindingCapture(`PRESS KEY FOR ${row.label.toUpperCase()}`, {
+            actionSet: row.actionSet || 'gameplay'
+        });
 
         const finish = (event) => {
             if (capture !== this._bindingCapture) return;
@@ -950,7 +952,9 @@ export default class MenuScene extends Phaser.Scene {
     }
 
     _beginGamepadBindingCapture(row, returnTarget = 'main') {
-        const capture = this._startBindingCapture(`PRESS GAMEPAD BUTTON FOR ${row.label.toUpperCase()}`);
+        const capture = this._startBindingCapture(`PRESS GAMEPAD BUTTON FOR ${row.label.toUpperCase()}`, {
+            actionSet: row.actionSet || 'gameplay'
+        });
 
         const finish = (pad, button, index) => {
             if (capture !== this._bindingCapture) return;
@@ -977,13 +981,25 @@ export default class MenuScene extends Phaser.Scene {
         this.input.keyboard.on('keydown-ESC', cancel);
     }
 
-    _startBindingCapture(message) {
+    _startBindingCapture(message, options = {}) {
         this._endBindingCapture();
+        let restoreActionSet = 'menu';
+        try {
+            restoreActionSet = getSteamInputPromptRuntimeInfo?.()?.activeActionSet || 'menu';
+        } catch (_) {}
+
+        const captureActionSet = options.actionSet || 'gameplay';
+        try {
+            setSteamInputActionSet(captureActionSet);
+        } catch (_) {}
+
         const capture = {
             overlay: this._createCaptureOverlay(message),
             keyboardFinish: null,
             keyboardCancel: null,
-            gamepadFinish: null
+            gamepadFinish: null,
+            captureActionSet,
+            restoreActionSet
         };
         this._bindingCapture = capture;
         return capture;
@@ -1004,6 +1020,10 @@ export default class MenuScene extends Phaser.Scene {
         }
         capture.overlay?.destroy(true);
         this._bindingCapture = null;
+
+        try {
+            setSteamInputActionSet(capture.restoreActionSet || 'menu');
+        } catch (_) {}
     }
 
     _cancelBindingCapture(returnTarget = 'main') {

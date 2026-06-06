@@ -138,6 +138,17 @@ export default class MenuScene extends Phaser.Scene {
         return this.scale.width < 760 || this.scale.height < 620;
     }
 
+    _isAndroidPlatform() {
+        try {
+            if (typeof window === 'undefined') return false;
+            if (window.Capacitor?.getPlatform?.() === 'android') return true;
+            if (window.Capacitor?.platform === 'android') return true;
+            return /Android/i.test(window.navigator?.userAgent || '');
+        } catch (_) {
+            return false;
+        }
+    }
+
     _isAndroidLandscapeLike() {
         return this.scale.width > this.scale.height && this.scale.height < 560;
     }
@@ -551,33 +562,35 @@ export default class MenuScene extends Phaser.Scene {
         this.createButton(width / 2, firstY + gap, 'Straight Up Basic', 0xaa8811, () => this.startGame(1), c, btnW, btnH, fz);
         this.createButton(width / 2, firstY + gap * 2, "Gotta Be Kiddin' Me!", 0xcc1111, () => this.startGame(2), c, btnW, btnH, fz);
 
-        const controlY = firstY + gap * 2 + (compact ? 50 : 70);
-        const controlText = this.add.text(width / 2, controlY - 22, 'CONTROL MODE', {
-            fontSize: compact ? '19px' : '22px',
-            fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
-            color: '#ffdd00',
-            stroke: '#000000',
-            strokeThickness: 4
-        }).setOrigin(0.5);
-        c.add(controlText);
+        if (!this._isAndroidPlatform()) {
+            const controlY = firstY + gap * 2 + (compact ? 50 : 70);
+            const controlText = this.add.text(width / 2, controlY - 22, 'CONTROL MODE', {
+                fontSize: compact ? '19px' : '22px',
+                fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+                color: '#ffdd00',
+                stroke: '#000000',
+                strokeThickness: 4
+            }).setOrigin(0.5);
+            c.add(controlText);
 
-        const modeGap = Math.min(compact ? 116 : 140, panelW * 0.29);
-        const modeW = compact ? 112 : 124;
-        const modes = [
-            { label: 'Touch', value: 'touch', x: width / 2 - modeGap },
-            { label: 'Keyboard', value: 'keyboard', x: width / 2 },
-            { label: 'Gamepad', value: 'gamepad', x: width / 2 + modeGap }
-        ];
+            const modeGap = Math.min(compact ? 116 : 140, panelW * 0.29);
+            const modeW = compact ? 112 : 124;
+            const modes = [
+                { label: 'Touch', value: 'touch', x: width / 2 - modeGap },
+                { label: 'Keyboard', value: 'keyboard', x: width / 2 },
+                { label: 'Gamepad', value: 'gamepad', x: width / 2 + modeGap }
+            ];
 
-        modes.forEach(mode => {
-            const selected = this.selectedControlMode === mode.value;
-            this.createButton(mode.x, controlY + 16, mode.label, selected ? 0xffdd00 : 0x333333, () => {
-                this.selectedControlMode = mode.value;
-                this.settings.controlMode = mode.value;
-                this._saveSettings();
-                this.showDifficultySelect();
-            }, c, modeW, compact ? 38 : 42, compact ? 16 : 18);
-        });
+            modes.forEach(mode => {
+                const selected = this.selectedControlMode === mode.value;
+                this.createButton(mode.x, controlY + 16, mode.label, selected ? 0xffdd00 : 0x333333, () => {
+                    this.selectedControlMode = mode.value;
+                    this.settings.controlMode = mode.value;
+                    this._saveSettings();
+                    this.showDifficultySelect();
+                }, c, modeW, compact ? 38 : 42, compact ? 16 : 18);
+            });
+        }
 
         this.createButton(width / 2, top + panelH - (compact ? 28 : 42), 'BACK', 0x333333, () => {
             if (this.diffContainer) {
@@ -621,15 +634,18 @@ export default class MenuScene extends Phaser.Scene {
             strokeThickness: 7
         }).setOrigin(0.5);
 
-        const controlLabel = this.add.text(width / 2, top + (compact ? 70 : 92), 'CONTROL SCHEME', {
-            fontSize: compact ? '19px' : '22px',
-            fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
-            color: '#ffffff',
-            stroke: '#000000',
-            strokeThickness: 4
-        }).setOrigin(0.5);
+        const showControllerOptions = !this._isAndroidPlatform();
+        const controlLabel = showControllerOptions
+            ? this.add.text(width / 2, top + (compact ? 70 : 92), 'CONTROL SCHEME', {
+                fontSize: compact ? '19px' : '22px',
+                fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+                color: '#ffffff',
+                stroke: '#000000',
+                strokeThickness: 4
+            }).setOrigin(0.5)
+            : null;
 
-        c.add([shade, panel, title, controlLabel]);
+        c.add(controlLabel ? [shade, panel, title, controlLabel] : [shade, panel, title]);
 
         const makeSmallButton = (x, y, text, color, onClick, w = 112, h = 38, fz = 16) => {
             const btn = this.createButton(x, y, text, color, onClick, c, w, h, fz);
@@ -641,36 +657,38 @@ export default class MenuScene extends Phaser.Scene {
             return btn;
         };
 
-        const modeGap = Math.min(compact ? 116 : 140, panelW * 0.29);
-        const modeW = compact ? 112 : 130;
-        const modeY = top + (compact ? 106 : 132);
-        const modes = [
-            { label: 'TOUCH', value: 'touch', x: width / 2 - modeGap },
-            { label: 'KEYBOARD', value: 'keyboard', x: width / 2 },
-            { label: 'GAMEPAD', value: 'gamepad', x: width / 2 + modeGap }
-        ];
+        if (showControllerOptions) {
+            const modeGap = Math.min(compact ? 116 : 140, panelW * 0.29);
+            const modeW = compact ? 112 : 130;
+            const modeY = top + (compact ? 106 : 132);
+            const modes = [
+                { label: 'TOUCH', value: 'touch', x: width / 2 - modeGap },
+                { label: 'KEYBOARD', value: 'keyboard', x: width / 2 },
+                { label: 'GAMEPAD', value: 'gamepad', x: width / 2 + modeGap }
+            ];
 
-        modes.forEach(mode => {
-            const selected = this.selectedControlMode === mode.value;
-            const btn = makeSmallButton(mode.x, modeY, mode.label, selected ? 0xffdd00 : 0x333333, () => {
-                this.selectedControlMode = mode.value;
-                this.settings.controlMode = mode.value;
-                this._saveSettings();
-                this.showOptionsMenu(returnTarget);
-            }, modeW, compact ? 38 : 44, compact ? 16 : 18);
+            modes.forEach(mode => {
+                const selected = this.selectedControlMode === mode.value;
+                const btn = makeSmallButton(mode.x, modeY, mode.label, selected ? 0xffdd00 : 0x333333, () => {
+                    this.selectedControlMode = mode.value;
+                    this.settings.controlMode = mode.value;
+                    this._saveSettings();
+                    this.showOptionsMenu(returnTarget);
+                }, modeW, compact ? 38 : 44, compact ? 16 : 18);
 
-            try {
-                btn.__pass92GControlModeButton = true;
-                btn.__pass92GControlModeValue = mode.value;
-            } catch (_) {}
-        });
+                try {
+                    btn.__pass92GControlModeButton = true;
+                    btn.__pass92GControlModeValue = mode.value;
+                } catch (_) {}
+            });
 
-        const controlsButton = makeSmallButton(width / 2, top + (compact ? 154 : 176), 'CONTROLS / HOTKEYS', 0x2255aa, () => {
-            this.showControlsSettings(returnTarget);
-        }, compact ? 236 : 276, compact ? 36 : 42, compact ? 15 : 17);
-        try { controlsButton.__pass92GNonVolumeButton = true; } catch (_) {}
+            const controlsButton = makeSmallButton(width / 2, top + (compact ? 154 : 176), 'CONTROLS / HOTKEYS', 0x2255aa, () => {
+                this.showControlsSettings(returnTarget);
+            }, compact ? 236 : 276, compact ? 36 : 42, compact ? 15 : 17);
+            try { controlsButton.__pass92GNonVolumeButton = true; } catch (_) {}
+        }
 
-        const volumeStart = top + (compact ? 204 : 246);
+        const volumeStart = top + (showControllerOptions ? (compact ? 204 : 246) : (compact ? 106 : 132));
         const volumeGap = compact ? 48 : 56;
 
         const makeVolumeRow = (label, key, y) => {
@@ -744,6 +762,11 @@ export default class MenuScene extends Phaser.Scene {
         this.time.delayedCall(0, () => this._focusFirstVisible());
     }
     showControlsSettings(returnTarget = 'main') {
+        if (this._isAndroidPlatform()) {
+            this.showOptionsMenu(returnTarget);
+            return;
+        }
+
         const { width, height } = this.scale;
         const compact = this._isCompact();
 

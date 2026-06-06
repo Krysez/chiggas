@@ -562,6 +562,13 @@ export default class LegendaryStoreScene extends Phaser.Scene {
         this._purchaseInProgress = skin.id;
 
         try {
+            const purchaseRuntime = getPurchaseRuntimeInfo();
+            if (purchaseRuntime.platform !== 'steam') {
+                const result = await purchaseLegendarySkin(skin.id);
+                this._toast(getPurchaseResultMessage(result, skin.name));
+                return;
+            }
+
                         // CHIGGAS_STORE_PRE_LIVE_PURCHASE_LOCK_PASS_90_BEGIN
             if (true) {
                 try {
@@ -685,6 +692,12 @@ const result = await purchaseLegendarySkin(skin.id);
 
         try {
             const result = await restoreLegendaryPurchases();
+            const purchaseRuntime = getPurchaseRuntimeInfo();
+            if (purchaseRuntime.platform !== 'steam') {
+                this._toast(getPurchaseResultMessage(result));
+                return;
+            }
+
             // CHIGGAS_STEAM_INVENTORY_BRIDGE_PASS_83_RESTORE_SYNC_BEGIN
             const steamInventorySync = await syncSteamInventoryEntitlements({ mode: 'restore', reason: 'legendary_store_restore_button' });
             if (steamInventorySync?.grantedCount > 0 || steamInventorySync?.alreadyOwnedCount > 0) {

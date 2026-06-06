@@ -283,8 +283,9 @@ export function getCurrentPlatform() {
     const win = getWindow();
     const ua = getUserAgent();
 
-    if (win?.ChiggasSteam || win?.Steamworks || win?.steamworks || win?.greenworks) return 'steam';
+    if (win?.Capacitor?.getPlatform?.() === 'android' || win?.Capacitor?.platform === 'android') return 'google_play';
     if (/Android/i.test(ua)) return 'google_play';
+    if (win?.ChiggasSteam || win?.Steamworks || win?.steamworks || win?.greenworks) return 'steam';
     if (/iPhone|iPad|iPod/i.test(ua)) return 'ios_web';
     return 'web';
 }

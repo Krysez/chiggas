@@ -26,7 +26,7 @@ const steamTemplateText = exists(steamTemplate) ? fs.readFileSync(steamTemplate,
 const checks = [
   {
     label: 'root release check script',
-    ok: scriptExists(rootPackage, 'release:check')
+    ok: ['release:check', 'release:versions', 'release:artifacts', 'steam:backend:check'].every((name) => scriptExists(rootPackage, name))
   },
   {
     label: 'root Steam build scripts',

@@ -1,6 +1,6 @@
 # Chiggas Unified Status
 
-Generated: 2026-06-06T12:42:03.647Z
+Generated: 2026-06-06T12:45:17.789Z
 
 ## Summary
 
@@ -53,7 +53,7 @@ Output: C:\ChiggasUnified\docs\audit-report.md
 - Integration files: 17
 - Steam wrapper files: 296
 - Android wrapper files: 477
-- Script files: 28
+- Script files: 29
 - Docs files: 17
 
 ## Android Toolchain

@@ -4,7 +4,7 @@ import { initSteamInputPromptManager, setSteamInputActionSet, getSteamInputPromp
 import { GAMEPLAY_CONTROL_ROWS, loadControlBindings, resetControlBindings, setKeyboardBinding, setGamepadBinding, keyboardCodeToLabel, gamepadButtonToLabel, runControlsDebugSuite } from './ControlsSettingsManager.js';
 import { resetCosmeticState } from './SkinRegistry.js';
 import { refreshAudioVolumes, initAudio, playVolumeTick } from '../audio/AudioManager.js';
-import { DEMO_SCORE_ATTACK, clearDemoSession, createScoreAttackGameData, isDemoRuntime, setDemoSessionActive } from './DemoMode.js';
+import { DEMO_SCORE_ATTACK, clearDemoSession, createScoreAttackGameData, isDemoSessionActive, setDemoSessionActive } from './DemoMode.js';
 
 export default class MenuScene extends Phaser.Scene {
     constructor() {
@@ -47,7 +47,8 @@ export default class MenuScene extends Phaser.Scene {
         window.addEventListener('chiggasAndroidBack', this._androidBackHandler);
 
         this.settings = this._loadSettings();
-        if (isDemoRuntime()) setDemoSessionActive(true);
+        this.demoTitleActive = isDemoSessionActive();
+        if (this.demoTitleActive) setDemoSessionActive(true);
         this.controlBindings = loadControlBindings();
         this.selectedControlMode = this.settings.controlMode || 'touch';
         this.optionsContainer = null;
@@ -88,6 +89,7 @@ export default class MenuScene extends Phaser.Scene {
         // The title is already embedded in assets/game-title-new.
         // Do not draw an extra Phaser text title on top of the background art.
         this.mainBtnContainer = this.add.container(0, 0);
+        if (this._isDemoTitleActive()) this.mainBtnContainer.add(this._drawDemoBanner());
         this._renderMainButtons();
         this.time.delayedCall(0, () => this._focusFirstVisible());
 
@@ -155,13 +157,50 @@ export default class MenuScene extends Phaser.Scene {
         return this.scale.width > this.scale.height && this.scale.height < 560;
     }
 
+    _isDemoTitleActive() {
+        return !!this.demoTitleActive || isDemoSessionActive();
+    }
+
+    _drawDemoBanner() {
+        const safe = getSafeBounds(this, 10);
+        const compact = this._isCompact();
+        const androidLandscape = this._isAndroidLandscapeLike();
+        const bannerW = Math.min(androidLandscape ? 210 : (compact ? 190 : 270), safe.width * 0.42);
+        const bannerH = androidLandscape ? 44 : (compact ? 46 : 64);
+        const maxX = safe.right - bannerW * 0.18;
+        const minX = safe.left + bannerW * 0.72;
+        const preferredX = safe.centerX + Math.min(safe.width * 0.30, androidLandscape ? 205 : 280);
+        const x = Phaser.Math.Clamp(preferredX, minX, maxX);
+        const y = safe.top + (androidLandscape ? 78 : (compact ? 88 : 118));
+        const rotation = -0.46;
+        const container = this.add.container(x, y).setRotation(rotation).setDepth(18);
+        const bg = this.add.graphics();
+
+        bg.fillStyle(0x31ff12, 1);
+        bg.fillRoundedRect(-bannerW / 2, -bannerH / 2, bannerW, bannerH, 4);
+        bg.lineStyle(Math.max(3, Math.round(bannerH * 0.08)), 0x000000, 1);
+        bg.strokeRoundedRect(-bannerW / 2, -bannerH / 2, bannerW, bannerH, 4);
+
+        const text = this.add.text(0, 0, 'DEMO', {
+            fontSize: `${Math.round(bannerH * 0.68)}px`,
+            fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+            color: '#ffee00',
+            stroke: '#000000',
+            strokeThickness: Math.max(4, Math.round(bannerH * 0.10))
+        }).setOrigin(0.5);
+
+        container.add([bg, text]);
+        return container;
+    }
+
     _renderMainButtons() {
         const { width, height } = this.scale;
         const safe = getSafeBounds(this, 10);
         const compact = this._isCompact();
         const androidLandscape = this._isAndroidLandscapeLike();
+        const demoRuntime = this._isDemoTitleActive();
 
-        if (androidLandscape) {
+        if (androidLandscape && !demoRuntime) {
             const btnW = Math.min(282, safe.width * 0.335);
             const btnH = 40;
             const fz = 18;
@@ -205,7 +244,6 @@ export default class MenuScene extends Phaser.Scene {
             return;
         }
 
-        const demoRuntime = isDemoRuntime();
         const btnW = Math.min(compact ? 260 : 380, safe.width - 26);
         const bigH = compact ? 46 : 64;
         const smallH = compact ? 38 : 46;

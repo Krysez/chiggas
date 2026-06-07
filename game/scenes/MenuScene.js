@@ -284,16 +284,9 @@ export default class MenuScene extends Phaser.Scene {
             this.showDifficultySelect();
         }, this.mainBtnContainer, btnW, bigH, compact ? 19 : 28);
 
-        const demoRowW = Math.min(compact ? 126 : 170, (safe.width - 42) / 2);
-        const demoRowGap = Math.min(compact ? 76 : 102, safe.width * 0.16);
-
-        this.createButton(safe.centerX - demoRowGap, startY + gap, 'STEAM FEST DEMO', 0xaa1111, () => {
-            this.startScoreAttackDemo();
-        }, this.mainBtnContainer, demoRowW, smallH, compact ? 11 : 14);
-
-        this.createButton(safe.centerX + demoRowGap, startY + gap, 'LEADERBOARDS', 0x6b1fa2, () => {
+        this.createButton(safe.centerX, startY + gap, 'LEADERBOARDS', 0x6b1fa2, () => {
             this.scene.start('LeaderboardScene');
-        }, this.mainBtnContainer, demoRowW, smallH, compact ? 11 : 14);
+        }, this.mainBtnContainer, Math.min(btnW, 300), smallH, compact ? 15 : 20);
 
         this.createButton(safe.centerX, startY + gap * 2, 'CHIGGA WEAR', 0xaa1111, () => {
             this.scene.start('WardrobeScene');

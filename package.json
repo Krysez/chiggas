@@ -27,6 +27,7 @@
     "steam:demo:stage": "node scripts/steam/stage-steam-demo-unpacked.js",
     "steam:demo:depot:stage": "node scripts/steam/stage-steam-demo-unpacked.js && set CHIGGAS_STEAM_DEMO_BUILD=1&& node scripts/steam/stage-steam-depot.js",
     "steam:vdf:write": "node scripts/steam/write-steampipe-vdf.js",
+    "steam:demo:vdf:write": "set CHIGGAS_STEAM_TARGET=demo&& node scripts/steam/write-steampipe-vdf.js",
     "status:write": "node scripts/checks/write-status-report.js",
     "structure:report": "node scripts/checks/report-structure.js",
     "setup:install": "node scripts/setup/install-workspace-dependencies.js",

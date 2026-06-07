@@ -32,7 +32,7 @@ const checks = [
   },
   {
     label: 'root Steam build scripts',
-    ok: ['steam:pack:win', 'steam:dist:win', 'steam:depot:stage', 'steam:vdf:write'].every((name) => scriptExists(rootPackage, name))
+    ok: ['steam:pack:win', 'steam:dist:win', 'steam:depot:stage', 'steam:vdf:write', 'steam:demo:depot:stage', 'steam:demo:vdf:write'].every((name) => scriptExists(rootPackage, name))
   },
   {
     label: 'root Android build scripts',
@@ -51,8 +51,12 @@ const checks = [
     ok: steamTemplateText.includes('"AppID" "4788490"')
   },
   {
-    label: 'SteamPipe Windows depot id default',
-    ok: steamVdfWriterText.includes("DEFAULT_WINDOWS_DEPOT_ID = '4788491'")
+    label: 'SteamPipe main app and depot ids',
+    ok: steamVdfWriterText.includes("appId: '4788490'") && steamVdfWriterText.includes("depotId: '4788491'")
+  },
+  {
+    label: 'SteamPipe demo app and depot ids',
+    ok: steamVdfWriterText.includes("appId: '4827370'") && steamVdfWriterText.includes("depotId: '4827371'")
   },
   {
     label: 'Android release script',

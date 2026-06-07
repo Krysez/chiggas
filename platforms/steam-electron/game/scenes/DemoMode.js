@@ -9,7 +9,7 @@ export const DEMO_SCORE_ATTACK = {
     durationSeconds: 480,
     bossWarningAtSeconds: 360,
     miniGameId: 'parasite_maze',
-    storePageUrl: `https://store.steampowered.com/app/${DEMO_APP_ID}/`
+    storePageUrl: 'https://store.steampowered.com/app/4788490/Chiggas__Survival_of_the_Mitiest/'
 };
 
 function getWindow() {
@@ -93,6 +93,7 @@ export async function openFullGameStorePage(reason = 'demo_wishlist') {
     const win = getWindow();
     const payload = {
         appId: DEMO_APP_ID,
+        url: DEMO_SCORE_ATTACK.storePageUrl,
         allowStorePageOpen: true,
         source: 'demo_mode',
         reason
@@ -100,6 +101,16 @@ export async function openFullGameStorePage(reason = 'demo_wishlist') {
 
     try {
         const result = await win?.ChiggasSteamPurchases?.openSteamStorePage?.(payload);
+        if (result?.ok) return result;
+    } catch (_) {}
+
+    try {
+        const result = await win?.ChiggasSteamItemStoreExternal?.openItemStore?.({
+            appId: DEMO_APP_ID,
+            url: DEMO_SCORE_ATTACK.storePageUrl,
+            source: 'demo_mode',
+            reason
+        });
         if (result?.ok) return result;
     } catch (_) {}
 

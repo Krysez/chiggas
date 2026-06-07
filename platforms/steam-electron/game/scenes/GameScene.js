@@ -25,6 +25,17 @@ export default class GameScene extends Phaser.Scene {
         super('GameScene');
     }
 
+    preload() {
+        if (!this.demoMode) return;
+
+        if (!this.textures.exists('demo-end-screen')) {
+            this.load.image('demo-end-screen', 'assets/demo-end-screen.png');
+        }
+        if (!this.textures.exists('demo-wishlist-button')) {
+            this.load.image('demo-wishlist-button', 'assets/wishlist-button.png');
+        }
+    }
+
     init(data) {
         this.stageIndex = data?.stageIndex ?? 0;
         this.startingScore = data?.score ?? 0;
@@ -3196,22 +3207,33 @@ export default class GameScene extends Phaser.Scene {
     _showDemoScoreAttackCompletePanel({ reason = 'complete', record = {}, playerTerritories = 0 } = {}) {
         const { width, height } = this.scale;
         const compact = width < 760 || height < 620;
-        const panelW = Math.min(width - 30, compact ? 450 : 700);
-        const panelH = Math.min(height - 34, compact ? 430 : 520);
-        const panelX = width / 2;
-        const panelY = height / 2;
-        const panelTop = panelY - panelH / 2;
-        const panelBottom = panelY + panelH / 2;
         const overlayDepth = 9300;
 
         const overlay = this.add.container(0, 0).setScrollFactor(0).setDepth(overlayDepth);
-        const shade = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.88);
-        const backdrop = this._createDemoCompleteBackdrop(panelX, panelY, panelW, panelH, compact);
-        const panel = this.add.graphics();
-        panel.fillStyle(0x111111, 0.98);
-        panel.fillRoundedRect(panelX - panelW / 2, panelTop, panelW, panelH, 22);
-        panel.lineStyle(5, 0xffdd00, 0.94);
-        panel.strokeRoundedRect(panelX - panelW / 2, panelTop, panelW, panelH, 22);
+        const shade = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.12);
+        const backdrop = this._createDemoCompleteBackdrop(width, height, compact);
+        const panelRect = this._demoCompletePanelRect || {
+            x: width / 2,
+            y: height / 2,
+            w: Math.min(width - 30, compact ? 450 : 700),
+            h: Math.min(height - 34, compact ? 430 : 520)
+        };
+        const panelX = panelRect.x;
+        const panelY = panelRect.y;
+        const panelW = panelRect.w;
+        const panelH = panelRect.h;
+        const panelTop = panelY - panelH / 2;
+        const panelBottom = panelY + panelH / 2;
+
+        const goTitle = () => {
+            this._cleanupDemoCompleteInput?.();
+            this.scene.start('MenuScene');
+        };
+
+        const openWishlist = async () => {
+            const result = await openFullGameStorePage('demo_complete_panel');
+            this.showFeedback?.(result?.ok ? 'STEAM PAGE OPENED' : 'OPEN FULL GAME PAGE', 0xffdd00, this.player?.x || CONFIG.WORLD_SIZE / 2, (this.player?.y || CONFIG.WORLD_SIZE / 2) - 120);
+        };
 
         const title = this.add.text(panelX, panelTop + (compact ? 36 : 52), 'DEMO COMPLETE', {
             fontSize: compact ? '32px' : '52px',
@@ -3237,7 +3259,7 @@ export default class GameScene extends Phaser.Scene {
         ];
 
         const body = this.add.text(panelX, panelTop + (compact ? 82 : 112), bodyLines.join('\n'), {
-            fontSize: compact ? '13px' : '19px',
+            fontSize: compact ? '13px' : '18px',
             fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
             color: '#ffffff',
             stroke: '#000000',
@@ -3268,28 +3290,16 @@ export default class GameScene extends Phaser.Scene {
 
         const btnH = compact ? 38 : 48;
         const btnW = compact ? 140 : 190;
-        const wishlistY = panelBottom - (compact ? 100 : 112);
         const btnY = panelBottom - (compact ? 55 : 62);
         const gap = Math.min(compact ? 88 : 122, panelW * 0.20);
-
-        const goTitle = () => {
-            this._cleanupDemoCompleteInput?.();
-            this.scene.start('MenuScene');
-        };
-
-        const openWishlist = async () => {
-            const result = await openFullGameStorePage('demo_complete_panel');
-            this.showFeedback?.(result?.ok ? 'STEAM PAGE OPENED' : 'OPEN FULL GAME PAGE', 0xffdd00, this.player?.x || CONFIG.WORLD_SIZE / 2, (this.player?.y || CONFIG.WORLD_SIZE / 2) - 120);
-        };
 
         const playAgain = this._createStageClearButton(panelX - gap, btnY, 'PLAY AGAIN', 0xaa1111, () => {
             this._cleanupDemoCompleteInput?.();
             this.scene.start('StageIntroScene', { targetGameData: createScoreAttackGameData(this.controlMode || 'gamepad') });
         }, overlay, btnW, btnH, compact ? 13 : 17);
 
-        const wishlist = this._createStageClearButton(panelX, wishlistY, 'WISHLIST NOW', 0x1f8f2f, openWishlist, overlay, compact ? 230 : 310, compact ? 44 : 56, compact ? 16 : 23);
-
         const titleBtn = this._createStageClearButton(panelX + gap, btnY, 'TITLE MENU', 0x333333, goTitle, overlay, btnW, btnH, compact ? 12 : 16);
+        const wishlistVisuals = this._createDemoWishlistButton(openWishlist, compact);
 
         const keyHandler = event => {
             if (event?.key === 'Escape' || event?.code === 'Escape') {
@@ -3315,84 +3325,100 @@ export default class GameScene extends Phaser.Scene {
         };
         this.events.once('shutdown', () => this._cleanupDemoCompleteInput?.());
 
-        overlay.add([shade, ...backdrop, panel, title, body, pitch, escapeHint, playAgain, wishlist, titleBtn]);
+        overlay.add([shade, ...backdrop, title, body, pitch, escapeHint, playAgain, titleBtn, ...wishlistVisuals]);
     }
 
-    _createDemoCompleteBackdrop(panelX, panelY, panelW, panelH, compact = false) {
+    _createDemoCompleteBackdrop(width, height, compact = false) {
         const visuals = [];
-        const backW = Math.min(this.scale.width - 10, panelW + (compact ? 54 : 96));
-        const backH = Math.min(this.scale.height - 8, panelH + (compact ? 48 : 82));
-        const left = panelX - backW / 2;
-        const top = panelY - backH / 2;
-        const bg = this.add.graphics();
+        const safe = getSafeBounds(this, 4);
 
-        bg.fillStyle(0xd49a72, 0.86);
-        bg.fillRoundedRect(left, top, backW, backH, 30);
-        bg.lineStyle(5, 0x39ff14, 0.6);
-        bg.strokeRoundedRect(left + 5, top + 5, backW - 10, backH - 10, 26);
-        bg.lineStyle(2, 0x6b2f1b, 0.24);
-        for (let i = 0; i < 18; i++) {
-            const x = left + 22 + Math.random() * (backW - 44);
-            const y = top + 18 + Math.random() * (backH - 36);
-            bg.strokeCircle(x, y, 7 + Math.random() * 16);
+        if (this.textures.exists('demo-end-screen')) {
+            const bg = this.add.image(width / 2, height / 2, 'demo-end-screen').setScrollFactor(0);
+            const source = bg.texture?.source?.[0] || {};
+            const imgW = Math.max(1, source.width || bg.width || 2340);
+            const imgH = Math.max(1, source.height || bg.height || 1080);
+            const scale = Math.max(width / imgW, height / imgH);
+            const displayW = imgW * scale;
+            const displayH = imgH * scale;
+            const imageLeft = width / 2 - displayW / 2;
+            const imageTop = height / 2 - displayH / 2;
+
+            bg.setScale(scale);
+            visuals.push(bg);
+
+            this._demoCompletePanelRect = {
+                x: imageLeft + displayW * 0.50,
+                y: imageTop + displayH * 0.50,
+                w: Math.min(displayW * 0.47, safe.width - 28),
+                h: Math.min(displayH * 0.76, safe.height - 22)
+            };
+            return visuals;
         }
-        visuals.push(bg);
 
-        const addSprite = (key, x, y, size, rotation = 0, flipX = false) => {
-            if (!this.textures.exists(key)) return null;
-            const sprite = this.add.image(x, y, key).setRotation(rotation).setFlipX(flipX);
-            const scale = Math.min(size / Math.max(1, sprite.width), size / Math.max(1, sprite.height));
-            sprite.setScale(scale);
-            visuals.push(sprite);
-            return sprite;
+        const fallback = this.add.graphics();
+        const panelW = Math.min(width - 30, compact ? 450 : 700);
+        const panelH = Math.min(height - 34, compact ? 430 : 520);
+        this._demoCompletePanelRect = { x: width / 2, y: height / 2, w: panelW, h: panelH };
+        fallback.fillStyle(0x161010, 1);
+        fallback.fillRect(0, 0, width, height);
+        fallback.fillStyle(0x111111, 0.98);
+        fallback.fillRoundedRect(width / 2 - panelW / 2, height / 2 - panelH / 2, panelW, panelH, 22);
+        fallback.lineStyle(5, 0xffdd00, 0.94);
+        fallback.strokeRoundedRect(width / 2 - panelW / 2, height / 2 - panelH / 2, panelW, panelH, 22);
+        visuals.push(fallback);
+
+        return visuals;
+    }
+
+    _createDemoWishlistButton(openWishlist, compact = false) {
+        const visuals = [];
+        const safe = getSafeBounds(this, 10);
+        const panel = this._demoCompletePanelRect || {
+            x: safe.centerX,
+            y: safe.centerY,
+            w: Math.min(safe.width, compact ? 450 : 700),
+            h: Math.min(safe.height, compact ? 430 : 520)
         };
+        const panelLeft = panel.x - panel.w / 2;
+        const sideSpace = Math.max(0, panelLeft - safe.left);
+        const nativeW = 1640;
+        const nativeH = 664;
+        let buttonW = Math.min(compact ? 240 : 360, Math.max(170, sideSpace - 28));
+        let buttonX = safe.left + sideSpace / 2;
+        let buttonY = panel.y - panel.h * 0.25;
 
-        const addFallbackBug = (x, y, color, scale = 1) => {
-            const bug = this.add.graphics();
-            bug.fillStyle(color, 0.95);
-            bug.fillCircle(x, y, 14 * scale);
-            bug.fillCircle(x - 17 * scale, y, 10 * scale);
-            bug.fillCircle(x + 18 * scale, y, 18 * scale);
-            bug.lineStyle(3 * scale, 0x111111, 0.85);
-            for (let i = -1; i <= 1; i++) {
-                bug.lineBetween(x - 2 * scale, y + i * 8 * scale, x - 30 * scale, y + i * 17 * scale);
-                bug.lineBetween(x + 4 * scale, y + i * 8 * scale, x + 36 * scale, y + i * 17 * scale);
-            }
-            visuals.push(bug);
-        };
-
-        if (!addSprite('player', left + backW * 0.18, top + backH * 0.28, compact ? 78 : 120, -0.12, false)) {
-            addFallbackBug(left + backW * 0.18, top + backH * 0.28, 0xcc1111, compact ? 0.7 : 1);
-        }
-        if (!addSprite('chigga-blue', left + backW * 0.82, top + backH * 0.30, compact ? 74 : 112, 0.14, true)) {
-            addFallbackBug(left + backW * 0.82, top + backH * 0.30, 0x2288ff, compact ? 0.7 : 1);
-        }
-        if (!addSprite('chigga-green', left + backW * 0.18, top + backH * 0.76, compact ? 66 : 100, 0.18, false)) {
-            addFallbackBug(left + backW * 0.18, top + backH * 0.76, 0x2ebd35, compact ? 0.65 : 0.92);
-        }
-        if (!addSprite('mite-wild', left + backW * 0.84, top + backH * 0.76, compact ? 70 : 108, -0.2, true)) {
-            addFallbackBug(left + backW * 0.84, top + backH * 0.76, 0x6b4a2c, compact ? 0.65 : 0.92);
+        if (sideSpace < buttonW + 18) {
+            buttonW = Math.min(compact ? 230 : 340, safe.width * 0.42);
+            buttonX = safe.centerX;
+            buttonY = Math.max(safe.top + (buttonW / nativeW * nativeH) / 2 + 10, panel.y - panel.h / 2 - 20);
         }
 
-        const ribbonW = Math.min(backW * 0.44, compact ? 210 : 310);
-        const ribbonH = compact ? 36 : 48;
-        const ribbonX = panelX + backW * 0.22;
-        const ribbonY = top + (compact ? 42 : 58);
-        const ribbon = this.add.container(ribbonX, ribbonY).setRotation(-0.16);
-        const ribbonBg = this.add.graphics();
-        const ribbonText = this.add.text(0, 0, 'WISHLIST NOW', {
-            fontSize: compact ? '18px' : '28px',
+        const buttonH = buttonW / nativeW * nativeH;
+        let button;
+        if (this.textures.exists('demo-wishlist-button')) {
+            button = this.add.image(buttonX, buttonY, 'demo-wishlist-button')
+                .setScrollFactor(0)
+                .setScale(buttonW / nativeW)
+                .setInteractive({ useHandCursor: true });
+            button.on('pointerover', () => button.setScale((buttonW / nativeW) * 1.035));
+            button.on('pointerout', () => button.setScale(buttonW / nativeW));
+            button.on('pointerdown', () => openWishlist?.());
+            visuals.push(button);
+        } else {
+            button = this._createStageClearButton(buttonX, buttonY, 'ADD TO WISHLIST', 0x2233dd, openWishlist, null, buttonW, buttonH, compact ? 14 : 18);
+            visuals.push(button);
+        }
+
+        const link = this.add.text(buttonX, buttonY + buttonH / 2 + (compact ? 11 : 14), 'store.steampowered.com/app/4788490', {
+            fontSize: compact ? '9px' : '12px',
             fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
-            color: '#ffee00',
+            color: '#dfe9ff',
             stroke: '#000000',
-            strokeThickness: compact ? 4 : 6
-        }).setOrigin(0.5);
-        ribbonBg.fillStyle(0x39ff14, 1);
-        ribbonBg.fillRoundedRect(-ribbonW / 2, -ribbonH / 2, ribbonW, ribbonH, 6);
-        ribbonBg.lineStyle(4, 0x000000, 0.9);
-        ribbonBg.strokeRoundedRect(-ribbonW / 2, -ribbonH / 2, ribbonW, ribbonH, 6);
-        ribbon.add([ribbonBg, ribbonText]);
-        visuals.push(ribbon);
+            strokeThickness: 3,
+            align: 'center'
+        }).setOrigin(0.5).setScrollFactor(0).setInteractive({ useHandCursor: true });
+        link.on('pointerdown', () => openWishlist?.());
+        visuals.push(link);
 
         return visuals;
     }

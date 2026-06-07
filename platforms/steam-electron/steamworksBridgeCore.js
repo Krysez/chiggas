@@ -1196,6 +1196,7 @@ function createSteamworksBridgeCore(options = {}) {
     const parsed = parsePayload(payload);
     const report = getSteamMicrotxnReadinessReport();
     const allowStorePageOpen = parsed.allowStorePageOpen === true || parsed.allow === true;
+    const targetAppId = Number.parseInt(parsed.appId || appId, 10) || appId;
 
     if (!client || !client.overlay || typeof client.overlay.activateToStore !== 'function') {
       return {
@@ -1220,11 +1221,12 @@ function createSteamworksBridgeCore(options = {}) {
 
     try {
       const flag = client.overlay.StoreFlag?.None ?? 0;
-      client.overlay.activateToStore(appId, flag);
-      log('steam_overlay_store_page_opened', { appId, flag });
+      client.overlay.activateToStore(targetAppId, flag);
+      log('steam_overlay_store_page_opened', { appId: targetAppId, flag, sourceAppId: appId });
       return {
         ok: true,
         status: 'steam_overlay_store_page_opened',
+        appId: targetAppId,
         realBillingArmed: false,
         storeShouldShow: 'TEST BUY',
         report

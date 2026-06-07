@@ -11,6 +11,7 @@ function installItemStoreDynamicUrlHandlerMain() {
       const PASS91J = 'steam_store_itemstore_dynamic_url_handler_pass_91j';
       const CHANNEL91J = 'chiggas-steam-store:open-itemstore-external-pass-91b';
       const DEFAULT_URL91J = 'https://store.steampowered.com/itemstore/4788490/browse/?filter=All';
+      const MAIN_APP_URL91J = 'https://store.steampowered.com/app/4788490/Chiggas__Survival_of_the_Mitiest/';
     
       function getTraceRoot91J() {
         try {
@@ -37,6 +38,9 @@ function installItemStoreDynamicUrlHandlerMain() {
       function normalizeStoreUrl91J(url) {
         if (typeof url !== 'string') return DEFAULT_URL91J;
         const clean = url.trim();
+        if (/^https:\/\/store\.steampowered\.com\/app\/4788490(\/Chiggas__Survival_of_the_Mitiest\/?|\/?)$/i.test(clean)) {
+          return MAIN_APP_URL91J;
+        }
         if (/^https:\/\/store\.steampowered\.com\/itemstore\/4788490\/(browse\/\?filter=All|detail\/[0-9]+\/)$/i.test(clean)) {
           return clean;
         }

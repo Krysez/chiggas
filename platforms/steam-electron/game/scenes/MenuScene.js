@@ -47,8 +47,8 @@ export default class MenuScene extends Phaser.Scene {
         window.addEventListener('chiggasAndroidBack', this._androidBackHandler);
 
         this.settings = this._loadSettings();
-        this.demoTitleActive = isDemoSessionActive();
-        if (this.demoTitleActive) setDemoSessionActive(true);
+        this.demoTitleActive = true;
+        setDemoSessionActive(true);
         this.controlBindings = loadControlBindings();
         this.selectedControlMode = this.settings.controlMode || 'touch';
         this.optionsContainer = null;
@@ -158,7 +158,7 @@ export default class MenuScene extends Phaser.Scene {
     }
 
     _isDemoTitleActive() {
-        return !!this.demoTitleActive || isDemoSessionActive();
+        return true;
     }
 
     _drawDemoBanner() {

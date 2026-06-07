@@ -179,6 +179,57 @@ export function startSnowWindAmbience(volume = 0.8) {
     } catch (e) {}
 }
 
+export function playThunderClap(volume = 0.85) {
+    if (!_ready || getSfxVolume() <= 0) return;
+
+    try {
+        const ctx = getCtx();
+        const t = now();
+        const output = getSfxOutput();
+        const gain = ctx.createGain();
+        const rumbleGain = ctx.createGain();
+        const bufferSize = Math.max(1, Math.floor(ctx.sampleRate * 1.35));
+        const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+        const data = noiseBuffer.getChannelData(0);
+
+        for (let i = 0; i < bufferSize; i++) {
+            const falloff = 1 - (i / bufferSize);
+            data[i] = (Math.random() * 2 - 1) * falloff * falloff;
+        }
+
+        const crack = ctx.createBufferSource();
+        crack.buffer = noiseBuffer;
+
+        const crackFilter = ctx.createBiquadFilter();
+        crackFilter.type = 'bandpass';
+        crackFilter.frequency.setValueAtTime(780, t);
+        crackFilter.Q.value = 0.9;
+
+        gain.gain.setValueAtTime(0.001, t);
+        gain.gain.exponentialRampToValueAtTime(0.42 * volume, t + 0.035);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 1.1);
+
+        const rumble = ctx.createOscillator();
+        rumble.type = 'sine';
+        rumble.frequency.setValueAtTime(82, t);
+        rumble.frequency.exponentialRampToValueAtTime(42, t + 1.25);
+        rumbleGain.gain.setValueAtTime(0.001, t);
+        rumbleGain.gain.exponentialRampToValueAtTime(0.16 * volume, t + 0.14);
+        rumbleGain.gain.exponentialRampToValueAtTime(0.001, t + 1.35);
+
+        crack.connect(crackFilter);
+        crackFilter.connect(gain);
+        gain.connect(output);
+        rumble.connect(rumbleGain);
+        rumbleGain.connect(output);
+
+        crack.start(t);
+        crack.stop(t + 1.2);
+        rumble.start(t);
+        rumble.stop(t + 1.4);
+    } catch (e) {}
+}
+
 export function playVolumeTick(volume = 0.65) {
     if (!_ready) return;
 

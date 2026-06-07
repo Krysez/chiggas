@@ -16,7 +16,7 @@ import LiceBoss from '../entities/LiceBoss.js';
 import TickTwins from '../entities/TickTwins.js';
 import CockroachBoss from '../entities/CockroachBoss.js';
 import TerrainDecorator from './TerrainDecorator.js';
-import { initAudio, playTurfCapture, playRecruit, playDeath, playStageAdvance, startAmbientMusic, stopAmbientMusic, playHit, playBite, playChargeCry, playGunshot, playSpeedGush, refreshAudioVolumes, startRainAmbience, startSnowWindAmbience, stopWeatherAmbience } from '../audio/AudioManager.js';
+import { initAudio, playTurfCapture, playRecruit, playDeath, playStageAdvance, startAmbientMusic, stopAmbientMusic, playHit, playBite, playChargeCry, playGunshot, playSpeedGush, refreshAudioVolumes, startRainAmbience, startSnowWindAmbience, stopWeatherAmbience, playThunderClap } from '../audio/AudioManager.js';
 import { unlockStageRewards, unlockAchievementRewards, getEquippedPlayerSkin, getEquippedSoldierSkin, pass95AUnlockBaseChiggaWear, pass95AGetBaseUnlockCompletion } from './SkinRegistry.js';
 import { DEMO_SCORE_ATTACK, createScoreAttackGameData, isDemoGameData, openFullGameStorePage, setDemoSessionActive } from './DemoMode.js';
 
@@ -499,6 +499,7 @@ export default class GameScene extends Phaser.Scene {
         const cleanup = () => {
             stopAmbientMusic();
             stopWeatherAmbience();
+            this._clearLightningStorm?.();
             if (this._larvae) {
                 this._larvae.forEach(l => { if (l && l.active) l.destroy(); });
                 this._larvae = [];
@@ -1319,7 +1320,7 @@ export default class GameScene extends Phaser.Scene {
     }
 
     _startRainVisuals() {
-        const count = 70;
+        const count = 100;
         this._weatherVisuals = [];
 
         for (let i = 0; i < count; i++) {
@@ -1330,12 +1331,12 @@ export default class GameScene extends Phaser.Scene {
                 0,
                 -10,
                 26,
-                0x7fd6ff,
-                0.42
+                0xbceeff,
+                0.66
             ).setScrollFactor(0).setDepth(5200);
 
-            drop._weatherSpeed = 700 + Math.random() * 420;
-            drop._weatherDrift = -110 + Math.random() * 50;
+            drop._weatherSpeed = 760 + Math.random() * 480;
+            drop._weatherDrift = -125 + Math.random() * 62;
             this._weatherVisuals.push(drop);
         }
     }
@@ -1349,8 +1350,8 @@ export default class GameScene extends Phaser.Scene {
                 Math.random() * this.scale.width,
                 Math.random() * this.scale.height,
                 1.6 + Math.random() * 2.5,
-                0xffffff,
-                0.58
+                0xeefbff,
+                0.78
             ).setScrollFactor(0).setDepth(5200);
 
             flake._weatherSpeed = 35 + Math.random() * 75;
@@ -1383,6 +1384,178 @@ export default class GameScene extends Phaser.Scene {
                 fx.y = -20 - Math.random() * 60;
             }
         });
+    }
+
+    _showWeatherNotice(kind = 'rain') {
+        if (this._weatherNotice && this._weatherNotice.active) {
+            this._weatherNotice.destroy(true);
+        }
+
+        const isSnow = kind === 'snow' || kind === 'shiver';
+        const label = isSnow ? 'SNOWY STAGE' : 'RAINY STAGE';
+        const subLabel = isSnow ? 'Slippery chill patches ahead' : 'Puddles and slick turf ahead';
+        const accent = isSnow ? 0xbff3ff : 0x66d9ff;
+        const safe = getSafeBounds(this, 10);
+        const compact = this.scale.width < 760 || this.scale.height < 620;
+        const w = Math.min(compact ? 238 : 310, safe.width - 24);
+        const h = compact ? 48 : 58;
+        const container = this.add.container(0, 0).setScrollFactor(0).setDepth(6100);
+        const bg = this.add.graphics();
+        const icon = this.add.graphics();
+        const title = this.add.text(0, -8, label, {
+            fontSize: compact ? '15px' : '18px',
+            fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+            color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 4
+        }).setOrigin(0, 0.5);
+        const body = this.add.text(0, 13, subLabel, {
+            fontSize: compact ? '10px' : '12px',
+            fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+            color: '#ffec9a',
+            stroke: '#000000',
+            strokeThickness: 3
+        }).setOrigin(0, 0.5);
+
+        bg.fillStyle(0x111111, 0.86);
+        bg.fillRoundedRect(-w / 2, -h / 2, w, h, 12);
+        bg.lineStyle(3, accent, 0.9);
+        bg.strokeRoundedRect(-w / 2, -h / 2, w, h, 12);
+
+        icon.fillStyle(0xffffff, 0.92);
+        icon.fillCircle(-w / 2 + 28, -10, 11);
+        icon.fillCircle(-w / 2 + 42, -12, 14);
+        icon.fillCircle(-w / 2 + 56, -8, 10);
+        icon.fillRect(-w / 2 + 25, -8, 42, 14);
+        icon.fillStyle(accent, 0.95);
+        if (isSnow) {
+            for (let i = 0; i < 3; i++) {
+                const x = -w / 2 + 34 + i * 13;
+                const y = 13 + (i % 2) * 4;
+                icon.fillCircle(x, y, 3);
+                icon.fillRect(x - 1, y - 7, 2, 14);
+                icon.fillRect(x - 7, y - 1, 14, 2);
+            }
+        } else {
+            for (let i = 0; i < 3; i++) {
+                const x = -w / 2 + 34 + i * 13;
+                icon.fillTriangle(x, 8, x - 5, 21, x + 5, 21);
+                icon.fillCircle(x, 20, 5);
+            }
+        }
+
+        title.setX(-w / 2 + 78);
+        body.setX(-w / 2 + 78);
+        container.add([bg, icon, title, body]);
+        this._weatherNotice = container;
+        this._positionWeatherNotice();
+
+        container.setAlpha(0);
+        container.setScale(0.88);
+        this.tweens.add({
+            targets: container,
+            alpha: 1,
+            scaleX: 1,
+            scaleY: 1,
+            duration: 260,
+            ease: 'Back.easeOut'
+        });
+        this.tweens.add({
+            targets: container,
+            alpha: 0,
+            duration: 700,
+            delay: 7600,
+            onComplete: () => {
+                if (container && container.active) container.destroy(true);
+                if (this._weatherNotice === container) this._weatherNotice = null;
+            }
+        });
+    }
+
+    _positionWeatherNotice() {
+        if (!this._weatherNotice) return;
+
+        const safe = getSafeBounds(this, 10);
+        const compact = this.scale.width < 760 || this.scale.height < 620;
+        const y = compact ? safe.top + 72 : safe.top + 112;
+        const x = compact ? safe.centerX : Math.min(safe.centerX, safe.right - 190);
+        this._weatherNotice.setPosition(x, y);
+    }
+
+    _startLightningStorm() {
+        if (this._lightningStormStarted) return;
+        this._lightningStormStarted = true;
+
+        const scheduleNext = () => {
+            if (this.isEnding || this.isDead || this.currentWeather !== 'rain') return;
+            this._lightningEvent = this.time.delayedCall(Phaser.Math.Between(12000, 23000), () => {
+                if (this.isEnding || this.isDead || this.currentWeather !== 'rain') return;
+                this._flashLightning();
+                initAudio()
+                    .then(() => this.time.delayedCall(Phaser.Math.Between(220, 920), () => playThunderClap(Phaser.Math.FloatBetween(0.62, 0.92))))
+                    .catch(() => {});
+                scheduleNext();
+            });
+        };
+
+        this._lightningEvent = this.time.delayedCall(Phaser.Math.Between(5000, 8500), () => {
+            if (this.isEnding || this.isDead || this.currentWeather !== 'rain') return;
+            this._flashLightning();
+            initAudio()
+                .then(() => this.time.delayedCall(Phaser.Math.Between(250, 700), () => playThunderClap(0.68)))
+                .catch(() => {});
+            scheduleNext();
+        });
+    }
+
+    _flashLightning() {
+        const { width, height } = this.scale;
+        const flash = this.add.rectangle(width / 2, height / 2, width, height, 0xdff7ff, 0)
+            .setScrollFactor(0)
+            .setDepth(6000);
+        const bolt = this.add.graphics().setScrollFactor(0).setDepth(6001);
+        const startX = Phaser.Math.Between(Math.round(width * 0.18), Math.round(width * 0.82));
+        const points = [
+            [startX, -20],
+            [startX + Phaser.Math.Between(-50, 50), height * 0.20],
+            [startX + Phaser.Math.Between(-80, 80), height * 0.38],
+            [startX + Phaser.Math.Between(-70, 70), height * 0.58]
+        ];
+
+        bolt.lineStyle(4, 0xf4fbff, 0.92);
+        bolt.beginPath();
+        bolt.moveTo(points[0][0], points[0][1]);
+        for (let i = 1; i < points.length; i++) bolt.lineTo(points[i][0], points[i][1]);
+        bolt.strokePath();
+        bolt.lineStyle(9, 0x9fdfff, 0.28);
+        bolt.beginPath();
+        bolt.moveTo(points[0][0], points[0][1]);
+        for (let i = 1; i < points.length; i++) bolt.lineTo(points[i][0], points[i][1]);
+        bolt.strokePath();
+
+        this.tweens.add({
+            targets: flash,
+            alpha: 0.32,
+            duration: 60,
+            yoyo: true,
+            repeat: 1,
+            onComplete: () => flash.destroy()
+        });
+        this.tweens.add({
+            targets: bolt,
+            alpha: 0,
+            duration: 220,
+            delay: 120,
+            onComplete: () => bolt.destroy()
+        });
+    }
+
+    _clearLightningStorm() {
+        this._lightningStormStarted = false;
+        if (this._lightningEvent) {
+            try { this._lightningEvent.remove(false); } catch (_) {}
+            this._lightningEvent = null;
+        }
     }
 
     _getInputHelpText() {
@@ -1685,6 +1858,7 @@ export default class GameScene extends Phaser.Scene {
         if (this.bossAlertText) this.bossAlertText.setPosition(safe.centerX, safe.centerY - 60);
         if (this.bossSubText) this.bossSubText.setPosition(safe.centerX, safe.centerY + 10);
         if (this.stageBadge) this.stageBadge.setPosition(safe.centerX, safe.top + 10);
+        this._positionWeatherNotice?.();
         this._positionSpawnProtectionUI?.();
         if (this._exitBtn) {
             const size = this._exitBtnSize || { w: 82, h: 34, margin: 10 };
@@ -3032,6 +3206,7 @@ export default class GameScene extends Phaser.Scene {
 
         const overlay = this.add.container(0, 0).setScrollFactor(0).setDepth(overlayDepth);
         const shade = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.88);
+        const backdrop = this._createDemoCompleteBackdrop(panelX, panelY, panelW, panelH, compact);
         const panel = this.add.graphics();
         panel.fillStyle(0x111111, 0.98);
         panel.fillRoundedRect(panelX - panelW / 2, panelTop, panelW, panelH, 22);
@@ -3058,9 +3233,7 @@ export default class GameScene extends Phaser.Scene {
             `Best Demo Score: ${record.bestScore || 0}`,
             `Time: ${this._formatDuration(elapsed)}`,
             `Kills: ${this.runStats?.kills || 0}  |  Recruits: ${this.runStats?.recruits || 0}`,
-            `Turfs Claimed: ${this.runStats?.turfsClaimed || 0}  |  Turfs Held: ${playerTerritories}/${this.territories?.length || 0}`,
-            '',
-            'Wishlist the full game to unlock every stage, boss, mini-game, Chigga Wear, and progression system.'
+            `Turfs Claimed: ${this.runStats?.turfsClaimed || 0}  |  Turfs Held: ${playerTerritories}/${this.territories?.length || 0}`
         ];
 
         const body = this.add.text(panelX, panelTop + (compact ? 82 : 112), bodyLines.join('\n'), {
@@ -3074,25 +3247,154 @@ export default class GameScene extends Phaser.Scene {
             wordWrap: { width: panelW - 48 }
         }).setOrigin(0.5, 0);
 
+        const pitch = this.add.text(panelX, panelBottom - (compact ? 144 : 166), 'Wishlist the full game for every stage, boss, mini-game, Chigga Wear, and progression system.', {
+            fontSize: compact ? '12px' : '16px',
+            fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+            color: '#ffec9a',
+            stroke: '#000000',
+            strokeThickness: compact ? 3 : 4,
+            align: 'center',
+            wordWrap: { width: panelW - 64 }
+        }).setOrigin(0.5);
+
+        const escapeHint = this.add.text(panelX, panelBottom - (compact ? 18 : 22), 'ESC / Back: Title Menu', {
+            fontSize: compact ? '10px' : '13px',
+            fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+            color: '#cfefff',
+            stroke: '#000000',
+            strokeThickness: 3,
+            align: 'center'
+        }).setOrigin(0.5);
+
         const btnH = compact ? 38 : 48;
-        const btnW = compact ? 138 : 190;
-        const btnY = panelBottom - (compact ? 42 : 54);
-        const gap = Math.min(compact ? 146 : 210, panelW * 0.30);
+        const btnW = compact ? 140 : 190;
+        const wishlistY = panelBottom - (compact ? 100 : 112);
+        const btnY = panelBottom - (compact ? 55 : 62);
+        const gap = Math.min(compact ? 88 : 122, panelW * 0.20);
+
+        const goTitle = () => {
+            this._cleanupDemoCompleteInput?.();
+            this.scene.start('MenuScene');
+        };
+
+        const openWishlist = async () => {
+            const result = await openFullGameStorePage('demo_complete_panel');
+            this.showFeedback?.(result?.ok ? 'STEAM PAGE OPENED' : 'OPEN FULL GAME PAGE', 0xffdd00, this.player?.x || CONFIG.WORLD_SIZE / 2, (this.player?.y || CONFIG.WORLD_SIZE / 2) - 120);
+        };
 
         const playAgain = this._createStageClearButton(panelX - gap, btnY, 'PLAY AGAIN', 0xaa1111, () => {
+            this._cleanupDemoCompleteInput?.();
             this.scene.start('StageIntroScene', { targetGameData: createScoreAttackGameData(this.controlMode || 'gamepad') });
         }, overlay, btnW, btnH, compact ? 13 : 17);
 
-        const wishlist = this._createStageClearButton(panelX, btnY, 'WISHLIST', 0x225522, async () => {
-            const result = await openFullGameStorePage('demo_complete_panel');
-            this.showFeedback?.(result?.ok ? 'STEAM PAGE OPENED' : 'OPEN FULL GAME PAGE', 0xffdd00, this.player?.x || CONFIG.WORLD_SIZE / 2, (this.player?.y || CONFIG.WORLD_SIZE / 2) - 120);
-        }, overlay, btnW, btnH, compact ? 13 : 17);
+        const wishlist = this._createStageClearButton(panelX, wishlistY, 'WISHLIST NOW', 0x1f8f2f, openWishlist, overlay, compact ? 230 : 310, compact ? 44 : 56, compact ? 16 : 23);
 
-        const titleBtn = this._createStageClearButton(panelX + gap, btnY, 'TITLE', 0x333333, () => {
-            this.scene.start('MenuScene');
-        }, overlay, btnW, btnH, compact ? 13 : 17);
+        const titleBtn = this._createStageClearButton(panelX + gap, btnY, 'TITLE MENU', 0x333333, goTitle, overlay, btnW, btnH, compact ? 12 : 16);
 
-        overlay.add([shade, panel, title, body, playAgain, wishlist, titleBtn]);
+        const keyHandler = event => {
+            if (event?.key === 'Escape' || event?.code === 'Escape') {
+                goTitle();
+            } else if (event?.key === 'Enter' || event?.code === 'Enter' || event?.code === 'Space') {
+                openWishlist();
+            }
+        };
+        const gamepadHandler = (_pad, button, index) => {
+            const buttonIndex = button?.index ?? index;
+            if (isGamepadActionButton('menu', 'back', buttonIndex) || isGamepadActionButton('gameplay', 'back', buttonIndex)) {
+                goTitle();
+            } else if (isGamepadActionButton('menu', 'confirm', buttonIndex) || isGamepadActionButton('gameplay', 'recruit', buttonIndex)) {
+                openWishlist();
+            }
+        };
+        this.input.keyboard?.on('keydown', keyHandler);
+        if (this.input.gamepad) this.input.gamepad.on('down', gamepadHandler);
+        this._cleanupDemoCompleteInput = () => {
+            try { this.input.keyboard?.off('keydown', keyHandler); } catch (_) {}
+            try { if (this.input.gamepad) this.input.gamepad.off('down', gamepadHandler); } catch (_) {}
+            this._cleanupDemoCompleteInput = null;
+        };
+        this.events.once('shutdown', () => this._cleanupDemoCompleteInput?.());
+
+        overlay.add([shade, ...backdrop, panel, title, body, pitch, escapeHint, playAgain, wishlist, titleBtn]);
+    }
+
+    _createDemoCompleteBackdrop(panelX, panelY, panelW, panelH, compact = false) {
+        const visuals = [];
+        const backW = Math.min(this.scale.width - 10, panelW + (compact ? 54 : 96));
+        const backH = Math.min(this.scale.height - 8, panelH + (compact ? 48 : 82));
+        const left = panelX - backW / 2;
+        const top = panelY - backH / 2;
+        const bg = this.add.graphics();
+
+        bg.fillStyle(0xd49a72, 0.86);
+        bg.fillRoundedRect(left, top, backW, backH, 30);
+        bg.lineStyle(5, 0x39ff14, 0.6);
+        bg.strokeRoundedRect(left + 5, top + 5, backW - 10, backH - 10, 26);
+        bg.lineStyle(2, 0x6b2f1b, 0.24);
+        for (let i = 0; i < 18; i++) {
+            const x = left + 22 + Math.random() * (backW - 44);
+            const y = top + 18 + Math.random() * (backH - 36);
+            bg.strokeCircle(x, y, 7 + Math.random() * 16);
+        }
+        visuals.push(bg);
+
+        const addSprite = (key, x, y, size, rotation = 0, flipX = false) => {
+            if (!this.textures.exists(key)) return null;
+            const sprite = this.add.image(x, y, key).setRotation(rotation).setFlipX(flipX);
+            const scale = Math.min(size / Math.max(1, sprite.width), size / Math.max(1, sprite.height));
+            sprite.setScale(scale);
+            visuals.push(sprite);
+            return sprite;
+        };
+
+        const addFallbackBug = (x, y, color, scale = 1) => {
+            const bug = this.add.graphics();
+            bug.fillStyle(color, 0.95);
+            bug.fillCircle(x, y, 14 * scale);
+            bug.fillCircle(x - 17 * scale, y, 10 * scale);
+            bug.fillCircle(x + 18 * scale, y, 18 * scale);
+            bug.lineStyle(3 * scale, 0x111111, 0.85);
+            for (let i = -1; i <= 1; i++) {
+                bug.lineBetween(x - 2 * scale, y + i * 8 * scale, x - 30 * scale, y + i * 17 * scale);
+                bug.lineBetween(x + 4 * scale, y + i * 8 * scale, x + 36 * scale, y + i * 17 * scale);
+            }
+            visuals.push(bug);
+        };
+
+        if (!addSprite('player', left + backW * 0.18, top + backH * 0.28, compact ? 78 : 120, -0.12, false)) {
+            addFallbackBug(left + backW * 0.18, top + backH * 0.28, 0xcc1111, compact ? 0.7 : 1);
+        }
+        if (!addSprite('chigga-blue', left + backW * 0.82, top + backH * 0.30, compact ? 74 : 112, 0.14, true)) {
+            addFallbackBug(left + backW * 0.82, top + backH * 0.30, 0x2288ff, compact ? 0.7 : 1);
+        }
+        if (!addSprite('chigga-green', left + backW * 0.18, top + backH * 0.76, compact ? 66 : 100, 0.18, false)) {
+            addFallbackBug(left + backW * 0.18, top + backH * 0.76, 0x2ebd35, compact ? 0.65 : 0.92);
+        }
+        if (!addSprite('mite-wild', left + backW * 0.84, top + backH * 0.76, compact ? 70 : 108, -0.2, true)) {
+            addFallbackBug(left + backW * 0.84, top + backH * 0.76, 0x6b4a2c, compact ? 0.65 : 0.92);
+        }
+
+        const ribbonW = Math.min(backW * 0.44, compact ? 210 : 310);
+        const ribbonH = compact ? 36 : 48;
+        const ribbonX = panelX + backW * 0.22;
+        const ribbonY = top + (compact ? 42 : 58);
+        const ribbon = this.add.container(ribbonX, ribbonY).setRotation(-0.16);
+        const ribbonBg = this.add.graphics();
+        const ribbonText = this.add.text(0, 0, 'WISHLIST NOW', {
+            fontSize: compact ? '18px' : '28px',
+            fontFamily: 'Arial Black, Impact, Dhurjati, sans-serif',
+            color: '#ffee00',
+            stroke: '#000000',
+            strokeThickness: compact ? 4 : 6
+        }).setOrigin(0.5);
+        ribbonBg.fillStyle(0x39ff14, 1);
+        ribbonBg.fillRoundedRect(-ribbonW / 2, -ribbonH / 2, ribbonW, ribbonH, 6);
+        ribbonBg.lineStyle(4, 0x000000, 0.9);
+        ribbonBg.strokeRoundedRect(-ribbonW / 2, -ribbonH / 2, ribbonW, ribbonH, 6);
+        ribbon.add([ribbonBg, ribbonText]);
+        visuals.push(ribbon);
+
+        return visuals;
     }
 
     _formatDuration(totalSeconds) {
@@ -5743,6 +6045,8 @@ const canCharge = this.player.followers.length > 0;
 
         if (weather === 'rain' || weather === 'sweat') {
             this._startRainVisuals();
+            this._showWeatherNotice('rain');
+            this._startLightningStorm();
             initAudio().then(() => startRainAmbience(0.82)).catch(() => {});
 
             for (let i = 0; i < 16; i++) {
@@ -5759,6 +6063,7 @@ const canCharge = this.player.followers.length > 0;
             });
         } else if (weather === 'snow' || weather === 'shiver') {
             this._startSnowVisuals();
+            this._showWeatherNotice('snow');
             initAudio().then(() => startSnowWindAmbience(0.82)).catch(() => {});
             this._spawnSnowHazards(18);
 

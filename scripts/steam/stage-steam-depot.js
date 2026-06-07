@@ -3,7 +3,8 @@ const path = require('path');
 const { STEAM_DIR } = require('../lib/paths');
 const { exists } = require('../lib/file-utils');
 
-const source = path.join(STEAM_DIR, 'dist', 'win-unpacked');
+const demoBuild = process.env.CHIGGAS_STEAM_DEMO_BUILD === '1' || process.env.STEAM_DEMO === '1';
+const source = path.join(STEAM_DIR, 'dist', demoBuild ? 'win-demo-unpacked' : 'win-unpacked');
 const target = path.join(STEAM_DIR, 'steam_depot_build', 'windows');
 
 function normalizeRel(rel) {
@@ -39,7 +40,9 @@ function copyRecursive(from, to, rel = '') {
 
 if (!exists(source)) {
   console.error(`Missing Electron Builder output: ${source}`);
-  console.error('Run `npm run steam:pack:win` before staging the Steam depot.');
+  console.error(demoBuild
+    ? 'Run `npm run steam:demo:stage` before staging the Steam demo depot.'
+    : 'Run `npm run steam:pack:win` before staging the Steam depot.');
   process.exit(1);
 }
 
@@ -51,7 +54,8 @@ copyRecursive(source, target);
 
 console.log(JSON.stringify({
   ok: true,
-  status: 'steam_depot_staged',
+  status: demoBuild ? 'steam_demo_depot_staged' : 'steam_depot_staged',
+  demoBuild,
   source,
   target
 }, null, 2));

@@ -20,7 +20,7 @@ npm run release:artifacts
 The staged SteamPipe content lands at:
 
 ```text
-C:\ChiggasUnified\platforms\steam-electron\steam_depot_build\windows
+C:\ChiggasUnified\platforms\steam-electron\steam_depot_build\main\windows
 ```
 
 The generated SteamPipe VDF is:

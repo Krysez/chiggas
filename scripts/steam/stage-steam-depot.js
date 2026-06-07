@@ -4,8 +4,9 @@ const { STEAM_DIR } = require('../lib/paths');
 const { exists } = require('../lib/file-utils');
 
 const demoBuild = process.env.CHIGGAS_STEAM_DEMO_BUILD === '1' || process.env.STEAM_DEMO === '1';
+const targetName = demoBuild ? 'demo' : 'main';
 const source = path.join(STEAM_DIR, 'dist', demoBuild ? 'win-demo-unpacked' : 'win-unpacked');
-const target = path.join(STEAM_DIR, 'steam_depot_build', 'windows');
+const target = path.join(STEAM_DIR, 'steam_depot_build', targetName, 'windows');
 
 function normalizeRel(rel) {
   return rel.replace(/\\/g, '/');
@@ -56,6 +57,7 @@ console.log(JSON.stringify({
   ok: true,
   status: demoBuild ? 'steam_demo_depot_staged' : 'steam_depot_staged',
   demoBuild,
+  targetName,
   source,
   target
 }, null, 2));

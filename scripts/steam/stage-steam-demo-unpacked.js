@@ -23,9 +23,7 @@ fs.writeFileSync(markerFile, 'Steam Fest score attack demo mode\n', 'utf8');
 
 const exePath = path.join(demoDir, exeName);
 const demoExePath = path.join(demoDir, demoExeName);
-if (fs.existsSync(exePath)) {
-  fs.copyFileSync(exePath, demoExePath);
-}
+if (fs.existsSync(demoExePath)) fs.rmSync(demoExePath, { force: true });
 
 console.log(JSON.stringify({
   ok: true,
@@ -33,5 +31,5 @@ console.log(JSON.stringify({
   sourceDir,
   demoDir,
   markerFile,
-  demoExePath: fs.existsSync(demoExePath) ? demoExePath : null
+  exePath: fs.existsSync(exePath) ? exePath : null
 }, null, 2));

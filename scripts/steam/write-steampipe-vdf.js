@@ -48,7 +48,7 @@ if (!/^\d+$/.test(depotId)) {
   process.exit(1);
 }
 
-const contentRoot = path.relative(outputDir, path.join(ROOT, 'platforms', 'steam-electron', 'steam_depot_build', 'windows')).replace(/\//g, '\\');
+const contentRoot = path.relative(outputDir, path.join(ROOT, 'platforms', 'steam-electron', 'steam_depot_build', targetName, 'windows')).replace(/\//g, '\\');
 const buildOutput = path.relative(outputDir, path.join(ROOT, 'platforms', 'steam-electron', 'steam_build_output')).replace(/\//g, '\\');
 
 const text = fs.readFileSync(template, 'utf8')

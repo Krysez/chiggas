@@ -22,14 +22,14 @@ const artifacts = [
     platform: 'steam',
     required: true,
     buildCommand: 'npm run steam:depot:stage',
-    file: path.join(STEAM_DIR, 'steam_depot_build', 'windows', 'Chiggas - Survival of the Mitiest.exe')
+    file: path.join(STEAM_DIR, 'steam_depot_build', 'main', 'windows', 'Chiggas - Survival of the Mitiest.exe')
   },
   {
     label: 'SteamPipe staged app archive',
     platform: 'steam',
     required: true,
     buildCommand: 'npm run steam:depot:stage',
-    file: path.join(STEAM_DIR, 'steam_depot_build', 'windows', 'resources', 'app.asar')
+    file: path.join(STEAM_DIR, 'steam_depot_build', 'main', 'windows', 'resources', 'app.asar')
   },
   {
     label: 'SteamPipe generated VDF',
@@ -61,7 +61,7 @@ const artifacts = [
   }
 ];
 
-const stagedDepotRoot = path.join(STEAM_DIR, 'steam_depot_build', 'windows');
+const stagedDepotRoot = path.join(STEAM_DIR, 'steam_depot_build', 'main', 'windows');
 
 function formatBytes(bytes) {
   if (!Number.isFinite(bytes)) return null;

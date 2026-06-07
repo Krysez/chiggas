@@ -26,7 +26,7 @@ C:\ChiggasUnified\integrations\steam\steamworks\generated\app_build_4788490.vdf
 The staged depot content is:
 
 ```text
-C:\ChiggasUnified\platforms\steam-electron\steam_depot_build\windows
+C:\ChiggasUnified\platforms\steam-electron\steam_depot_build\main\windows
 ```
 
 ## Google Play
